@@ -29,32 +29,6 @@ import ftputil
 import warnings
 
 
-def serial_ports():
-    if sys.platform.startswith('win'):
-        ports = ['COM%s' % (i + 1) for i in range(256)]
-    elif sys.platform.startswith('linux') or sys.platform.startswith('cygwin'):
-        # this excludes your current terminal "/dev/tty"
-        ports = glob.glob('/dev/tty[A-Za-z]*')
-    elif sys.platform.startswith('darwin'):
-        ports = glob.glob('/dev/tty.*')
-    else:
-        raise EnvironmentError('Unsupported platform')
-
-    result = []
-    for port in ports:
-        try:
-            s = serial.Serial(port)
-            s.close()
-            result.append(port)
-        except (OSError, serial.SerialException):
-            pass
-    return result
-
-
-speeds = ['300', '1200', '2400', '4800', '9600', '19200', '38400', '57600', '74880', '115200', '230400', '250000',
-          '500000', '1000000', '2000000']
-
-
 # ******************************************* MAIN *******************************************
 class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
     def __init__(self):
@@ -66,10 +40,10 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         # self.comboBox_speed.setCurrentIndex(4)  # ВЫСТАВЛЕНИЕ СКОРОСТИ 9600 В COMBOBOX
         self.realport = None
 
-        self.pushButton_connect.clicked.connect(self.connect)  # ОБРАБОТКА ПОДКЛЮЧЕНИЯ К ПОРТУ
-        self.pushButton_refresh.clicked.connect(self.refresh)  # ПОИСК НОВЫХ ПОРТОВ
-        self.pushButton_send.clicked.connect(self.send)  # ОТПРАВКА СООБЩЕНИЯ
-        self.pushButton_clear.clicked.connect(self.clear)  # ЧИСТКА ОКНА ПРИХОДЯЩИХ ДАННЫХ С КОМ ПОРТА
+        self.pushButton_connect.clicked.connect(self.com_connect)  # ОБРАБОТКА ПОДКЛЮЧЕНИЯ К ПОРТУ
+        self.pushButton_refresh.clicked.connect(self.com_refresh)  # ПОИСК НОВЫХ ПОРТОВ
+        self.pushButton_send.clicked.connect(self.com_send)  # ОТПРАВКА СООБЩЕНИЯ
+        self.pushButton_clear.clicked.connect(self.com_clear)  # ЧИСТКА ОКНА ПРИХОДЯЩИХ ДАННЫХ С КОМ ПОРТА
 
         self.connection_list = []
 
@@ -82,12 +56,12 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
 
         self.read_text_Thread_instance = ReadTextThread(mainwindow=self)  # ЗАПУСК ПОТОКА ЧТЕНИЯ ДАННЫХ ИЗ КОМ ПОРТА
 
-        self.action_exit.triggered.connect(self.save_exit)
+        self.action_exit.triggered.connect(self.ini_save_exit)
         # ------------- .INI
         self.path_ini = "conf.ini"
-        self.action_save_config.triggered.connect(self.save_ini)
-        self.action_reset_config.triggered.connect(self.reset_ini)
-        self.start_ini()
+        self.action_save_config.triggered.connect(self.ini_save)
+        self.action_reset_config.triggered.connect(self.ini_reset)
+        self.ini_start()
 
         # -------------str2str
         self.filename_tcpcli = ""
@@ -101,19 +75,24 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.ntrip_list = []
         self.path_ntrip = ""
 
-        self.action_start_str2str.triggered.connect(self.start_str2str)  # СТАРТ TCP CLIENT
-        self.action_stop_str2str.triggered.connect(self.stop_str2str)
-        self.action_close_xterm.triggered.connect(self.stop_xterm)
-        self.input_str2str()
-        self.comboBox_str2str_input.currentIndexChanged.connect(self.input_str2str)
-        self.checkBox_str2str_file.stateChanged.connect(self.check_outputflile)
-        self.Button_str2str_outputfile.clicked.connect(self.outputfile_path)
+        self.action_start_str2str.triggered.connect(self.str2str_start)  # СТАРТ TCP CLIENT
+        self.action_stop_str2str.triggered.connect(self.str2str_stop)
+        self.action_close_xterm.triggered.connect(self.str2str_stop_xterm)
+        self.str2str_input()
+        self.comboBox_str2str_input.currentIndexChanged.connect(self.str2str_input)
+        self.checkBox_str2str_file.stateChanged.connect(self.str2str_check_outputflile)
+        self.Button_str2str_outputfile.clicked.connect(self.str2str_outputfile_path)
 
         # -------------covnbin
-        self.Button_convert.clicked.connect(self.convert)
-        self.Button_input.clicked.connect(self.input_path)
-        self.Button_obs.clicked.connect(self.obs_path)
-        self.Button_nav.clicked.connect(self.nav_path)
+        self.Button_convert.clicked.connect(self.convbin_convert)
+        self.Button_input.clicked.connect(self.convbin_input_path)
+        self.Button_obs.clicked.connect(self.convbin_obs_path)
+        self.Button_nav.clicked.connect(self.convbin_nav_path)
+        self.Button_convbin_gnav.clicked.connect(self.convbin_gnav_path)
+        self.Button_convbin_hnav.clicked.connect(self.convbin_hnav_path)
+        self.Button_convbin_qnav.clicked.connect(self.convbin_qnav_path)
+        self.Button_convbin_lnav.clicked.connect(self.convbin_lnav_path)
+        self.Button_convbin_sbas.clicked.connect(self.convbin_sbas_path)
 
         self.format = ['rtcm2', 'rtcm3', 'nov', 'oem3', 'ubx', 'ss2', 'hemis', 'stq', 'javad', 'nvs', 'binex', 'rinex',
                        'rt17']
@@ -137,11 +116,6 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.checkBox_convbin_sbas.stateChanged.connect(self.convbin_check_sbas)
         self.checkBox_time_start.stateChanged.connect(self.convbin_check_time_start)
         self.checkBox_time_end.stateChanged.connect(self.convbin_check_time_end)
-        self.Button_convbin_gnav.clicked.connect(self.gnav_path)
-        self.Button_convbin_hnav.clicked.connect(self.hnav_path)
-        self.Button_convbin_qnav.clicked.connect(self.qnav_path)
-        self.Button_convbin_lnav.clicked.connect(self.lnav_path)
-        self.Button_convbin_sbas.clicked.connect(self.sbas_path)
 
         # -------------rnx2rtkp
         self.Button_rnx2rtkp_input_conf.clicked.connect(self.rnx2rtkp_input_conf)
@@ -161,14 +135,14 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.checkBox_rnx2rtkp_time_end.stateChanged.connect(self.rnx2rtkp_time_end_check)
 
         # ------------- DATABASE
-        self.Button_db_new_create.clicked.connect(self.create_db)
-        self.Button_db_new_path.clicked.connect(self.path_new_db)
-        self.Button_db_con_path.clicked.connect(self.path_connect_db)
-        self.Button_db_connect.clicked.connect(self.connect_db)
-        self.Button_db_start.clicked.connect(self.start_str2str_db)
-        self.Button_db_save.clicked.connect(self.dir_save_db)
+        self.Button_db_new_create.clicked.connect(self.db_create)
+        self.Button_db_new_path.clicked.connect(self.db_path_new)
+        self.Button_db_con_path.clicked.connect(self.db_path_connect)
+        self.Button_db_connect.clicked.connect(self.db_connect)
+        self.Button_db_start.clicked.connect(self.db_start_str2str)
+        self.Button_db_save.clicked.connect(self.db_dir_save)
         self.open_db = sqlite3.connect("")
-        self.connect_db()
+        self.db_connect()
         self.post_pro_db = []
         self.bool_ok_db = False
         self.temp_time_db = 0
@@ -176,10 +150,10 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.time_reset_str2str_Thread_instance = TimeResetStr2strThread(mainwindow=self)
         self.time_reset_str2str_Thread_instance.start()
 
-        self.checkBox_db_reset.stateChanged.connect(self.check_str2str_db)
-        self.checkBox_db_post.stateChanged.connect(self.check_post_db)
-        self.Button_db_timepost_ok.clicked.connect(self.ok_posttime_db)
-        self.Button_db_sql.clicked.connect(self.sql_command)
+        self.checkBox_db_reset.stateChanged.connect(self.db_check_str2str)
+        self.checkBox_db_post.stateChanged.connect(self.db_check_post)
+        self.Button_db_timepost_ok.clicked.connect(self.db_posttime)
+        self.Button_db_sql.clicked.connect(self.db_sql_command)
 
     # *************************** SHOW LOGS ***************************
     def show_logs(self, text):
@@ -190,8 +164,26 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         f.write(str(today) + " -> " + text + "\n")
         f.close()
 
+    # *************************** E-MAIL ***************************
+    def send_email(self, message):
+        email = "moncenter.result@gmail.com"
+        smtp_obj = smtplib.SMTP('smtp.gmail.com', 587)
+        smtp_obj.starttls()
+        smtp_obj.login(email, 'tsoekbtboewzuxyy')
+
+        now = datetime.today().strftime("%m.%d.%Y-%H:%M:%S")
+        msg = MIMEText(message, 'plain', 'utf-8')
+        msg['Subject'] = Header(now, 'utf-8')
+        msg['From'] = email
+        msg['To'] = self.lineEdit_settings_email.text()
+        if not self.lineEdit_settings_email.text() == "":
+            smtp_obj.sendmail(msg['From'], self.lineEdit_settings_email.text(), msg.as_string())
+            smtp_obj.quit()
+        else:
+            self.show_logs("Не указана электронная почта для отправки уведомлений.")
+
     # *************************** Google Drive ***************************
-    def delete_all_gdrive(self):
+    """def delete_all_gdrive(self):
         SCOPES = ['https://www.googleapis.com/auth/drive']
         service_account_file = self.lineEdit_settings_google_json.text()
         try:
@@ -204,7 +196,7 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
             list_res = results['files']
             print(list_res)
             for i in range(len(list_res)):
-                service.files().delete(fileId=list_res[i]['id']).execute()
+                service.files().delete(fileId=list_res[i]['id']).execute()"""
 
     def gdrive_connect(self, path):
         # Подключение к Google Drive
@@ -306,11 +298,11 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
 
         # *************************** FILE .INI ***************************
 
-    def save_exit(self):
-        self.save_ini()
+    def ini_save_exit(self):
+        self.ini_save()
         sys.exit()
 
-    def reset_ini(self):
+    def ini_reset(self):
         config = configparser.ConfigParser()
         try:
             config.read(self.path_ini)
@@ -372,9 +364,9 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         else:
             with open(self.path_ini, "w") as config_file:
                 config.write(config_file)
-            self.start_ini()
+            self.ini_start()
 
-    def save_ini(self):
+    def ini_save(self):
         config = configparser.ConfigParser()
         try:
             config.read(self.path_ini)
@@ -437,7 +429,7 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
             with open(self.path_ini, "w") as config_file:
                 config.write(config_file)
 
-    def start_ini(self):
+    def ini_start(self):
         if not os.path.exists(self.path_ini):
             self.show_logs("The file conf.ini does not exist!")
             return
@@ -515,25 +507,8 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         except Exception:
             self.show_logs("The file conf.ini is corrupted.")
 
-    def send_email(self, message):
-        email = "moncenter.result@gmail.com"
-        smtp_obj = smtplib.SMTP('smtp.gmail.com', 587)
-        smtp_obj.starttls()
-        smtp_obj.login(email, 'tsoekbtboewzuxyy')
-
-        now = datetime.today().strftime("%m.%d.%Y-%H:%M:%S")
-        msg = MIMEText(message, 'plain', 'utf-8')
-        msg['Subject'] = Header(now, 'utf-8')
-        msg['From'] = email
-        msg['To'] = self.lineEdit_settings_email.text()
-        if not self.lineEdit_settings_email.text() == "":
-            smtp_obj.sendmail(msg['From'], self.lineEdit_settings_email.text(), msg.as_string())
-            smtp_obj.quit()
-        else:
-            self.show_logs("Не указана электронная почта для отправки уведомлений.")
-
     # *************************** ВКЛАДКА DATABASE ***************************
-    def sql_command(self):
+    def db_sql_command(self):
         sql_com = self.lineEdit_db_sql.text()
         cursor = self.open_db.cursor()
         cursor.execute(sql_com)
@@ -542,7 +517,7 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
             self.show_logs(str(out[i]))
         self.open_db.commit()
 
-    def create_db(self):
+    def db_create(self):
         if os.path.exists(self.lineEdit_db_new.text()):
             self.show_logs("Database exists.")
             return
@@ -644,15 +619,15 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         conn.commit()
         self.show_logs("Database is was created!")
 
-    def path_new_db(self):
+    def db_path_new(self):
         path = QFileDialog.getExistingDirectory(None)
         self.lineEdit_db_new.setText(path + "/database.db")
 
-    def path_connect_db(self):
+    def db_path_connect(self):
         fname, _ = QFileDialog.getOpenFileName(None)
         self.lineEdit_db_con_path.setText(fname)
 
-    def connect_db(self):
+    def db_connect(self):
         db_table = ['BASELINES', 'CONV_CONF', 'POINTS', 'POS_CONF', 'RECEIVERS', 'SOLUTIONS']
         temp_table = ""
         if self.lineEdit_db_con_path.text() != "":
@@ -669,11 +644,11 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
             else:
                 self.show_logs("Database is was connected!")
 
-    def dir_save_db(self):
+    def db_dir_save(self):
         path = QFileDialog.getExistingDirectory(None)
         self.lineEdit_db_save.setText(path)
 
-    def start_str2str_db(self):
+    def db_start_str2str(self):
         self.post_pro_db = []
         try:
             cursor = self.open_db.cursor()
@@ -785,7 +760,7 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         except Exception:
             self.show_logs("Problem with the database.")
 
-    def start_convbin_db(self, list_path):
+    def db_start_convbin(self, list_path):
         try:
             cursor = self.open_db.cursor()
             sql = """SELECT COUNT(*) FROM RECEIVERS, CONV_CONF 
@@ -867,7 +842,7 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         except Exception:
             self.show_logs("Problem with the database.")
 
-    def start_rnx2rtkp_db(self, list_path):
+    def db_start_rnx2rtkp(self, list_path):
         try:
             cursor = self.open_db.cursor()
             sql = """SELECT * FROM BASELINES, POS_CONF WHERE BASELINES.id_pos = POS_CONF.id_pos AND 
@@ -1073,14 +1048,13 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         except Exception as e:
             self.show_logs("Problem with the database. " + str(e))
 
-    # *************************** ВКЛАДКА SETTINGS ***************************
-    def check_str2str_db(self, state):
+    def db_check_str2str(self, state):
         if state != self.checkBox_db_reset.isChecked():
             self.timeEdit_db.setEnabled(True)
         else:
             self.timeEdit_db.setEnabled(False)
 
-    def check_post_db(self, state):
+    def db_check_post(self, state):
         if state != self.checkBox_db_post.isChecked():
             self.lineEdit_db_hours.setEnabled(True)
             self.lineEdit_db_minutes.setEnabled(True)
@@ -1093,7 +1067,7 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
             self.Button_db_timepost_ok.setEnabled(False)
             self.bool_ok_db = False
 
-    def ok_posttime_db(self):
+    def db_posttime(self):
         if not self.bool_ok_db:
             self.bool_ok_db = True
             self.show_logs("On")
@@ -1283,7 +1257,7 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         else:
             self.dateTimeEdit_end.setEnabled(False)
 
-    def convert(self):
+    def convbin_convert(self):
         command_convbin = "RTKLIB_2.4.3_b33/app/convbin/gcc/convbin"
         command_convbin += " -r " + self.comboBox_format.currentText()
         command_convbin += " -f " + self.comboBox_freq.currentText()
@@ -1329,7 +1303,7 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         os.system("\n" + command_convbin)
         time.sleep(1)
 
-    def input_path(self):
+    def convbin_input_path(self):
         fname, _ = QFileDialog.getOpenFileName(None)
         if fname == "":
             return
@@ -1366,55 +1340,55 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.lineEdit_convbin_lnav.setText(self.lineEdit_input.text() + ".lnav")
         self.lineEdit_convbin_sbas.setText(self.lineEdit_input.text() + ".sbas")
 
-    def output_path(self):
+    def convbin_output_path(self):
         path = QFileDialog.getExistingDirectory(None)
         if path == "":
             return
         self.lineEdit_output.setText(path)
 
-    def obs_path(self):
+    def convbin_obs_path(self):
         path = QFileDialog.getExistingDirectory(None)
         if path == "":
             return
         path += '/' + self.fname_input + '.obs'
         self.lineEdit_obs.setText(path)
 
-    def nav_path(self):
+    def convbin_nav_path(self):
         path = QFileDialog.getExistingDirectory(None)
         if path == "":
             return
         path += '/' + self.fname_input + '.nav'
         self.lineEdit_nav.setText(path)
 
-    def gnav_path(self):
+    def convbin_gnav_path(self):
         path = QFileDialog.getExistingDirectory(None)
         if path == "":
             return
         path += '/' + self.fname_input + '.gnav'
         self.lineEdit_convbin_gnav.setText(path)
 
-    def hnav_path(self):
+    def convbin_hnav_path(self):
         path = QFileDialog.getExistingDirectory(None)
         if path == "":
             return
         path += '/' + self.fname_input + '.hnav'
         self.lineEdit_convbin_hnav.setText(path)
 
-    def qnav_path(self):
+    def convbin_qnav_path(self):
         path = QFileDialog.getExistingDirectory(None)
         if path == "":
             return
         path += '/' + self.fname_input + '.qnav'
         self.lineEdit_convbin_qnav.setText(path)
 
-    def lnav_path(self):
+    def convbin_lnav_path(self):
         path = QFileDialog.getExistingDirectory(None)
         if path == "":
             return
         path += '/' + self.fname_input + '.lnav'
         self.lineEdit_convbin_lnav.setText(path)
 
-    def sbas_path(self):
+    def convbin_sbas_path(self):
         path = QFileDialog.getExistingDirectory(None)
         if path == "":
             return
@@ -1422,7 +1396,7 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.lineEdit_convbin_sbas.setText(path)
 
     # ***************************ВКЛАДКА STR2STR***************************
-    def input_str2str(self):
+    def str2str_input(self):
         if self.comboBox_str2str_input.currentIndex() == 0:
             self.lineEdit_tcpcli.setEnabled(True)
             self.lineEdit_ntrip.setEnabled(False)
@@ -1445,7 +1419,7 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
             self.lineEdit_password.setEnabled(False)
             self.lineEdit_tcpsvr.setEnabled(True)
 
-    def check_outputflile(self, state):
+    def str2str_check_outputflile(self, state):
         if state != self.checkBox_str2str_file.isChecked():
             self.lineEdit_str2str_outputfile.setEnabled(True)
             self.Button_str2str_outputfile.setEnabled(True)
@@ -1453,11 +1427,11 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
             self.lineEdit_str2str_outputfile.setEnabled(False)
             self.Button_str2str_outputfile.setEnabled(False)
 
-    def outputfile_path(self):
+    def str2str_outputfile_path(self):
         path, _ = QFileDialog.getSaveFileName()
         self.lineEdit_str2str_outputfile.setText(path + ".log")
 
-    def start_str2str(self):
+    def str2str_start(self):
         command_str2str = "xterm -e \"/bin/bash -c '" + os.getcwd() + "/RTKLIB_2.4.3_b33/app/str2str/gcc/" + \
                           "str2str -in "
         if self.comboBox_str2str_input.currentIndex() == 0:
@@ -1481,15 +1455,15 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         os.system(command_str2str)
 
     @staticmethod
-    def stop_str2str():
+    def str2str_stop():
         os.system("killall str2str")
 
     @staticmethod
-    def stop_xterm():
+    def str2str_stop_xterm():
         os.system("killall xterm")
 
     # *************************** ВКЛАДКА COM ***************************
-    def connect(self):
+    def com_connect(self):
         if self.button_com_flag:
             try:
                 self.realport = serial.Serial(self.comboBox_port.currentText(), int(self.comboBox_speed.currentText()))
@@ -1508,17 +1482,17 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
             self.button_com_flag = True
             self.pushButton_connect.setText("Connect")
 
-    def send(self):
+    def com_send(self):
         if self.realport:
             send_text = self.comboBox_comm.currentText()
             self.realport.write(bytearray(send_text, 'utf8'))
         self.comboBox_comm.setEditText("")
 
-    def refresh(self):
+    def com_refresh(self):
         self.comboBox_port.clear()
         self.comboBox_port.addItems(serial_ports())
 
-    def clear(self):
+    def com_clear(self):
         self.textEdit_read.clear()
 
 
@@ -1531,13 +1505,13 @@ class TimeResetStr2strThread(QThread):
     def run(self):
         while True:
             if (datetime.today().strftime(
-                "%H:%M:%S") == self.mainwindow.timeEdit_db.text() and self.mainwindow.checkBox_db_reset.isChecked()):
+                    "%H:%M:%S") == self.mainwindow.timeEdit_db.text() and self.mainwindow.checkBox_db_reset.isChecked()):
                 temp_list = self.mainwindow.post_pro_db
                 self.mainwindow.stop_str2str()
-                self.mainwindow.start_str2str_db()
+                self.mainwindow.db_start_str2str()
                 if self.mainwindow.checkBox_db_lastpost.isChecked():
-                    self.mainwindow.start_convbin_db(temp_list)
-                    self.mainwindow.start_rnx2rtkp_db(temp_list)
+                    self.mainwindow.db_start_convbin(temp_list)
+                    self.mainwindow.db_start_rnx2rtkp(temp_list)
 
                 for path in temp_list:
                     if self.mainwindow.checkBox_settings_ftp_autoconnect.isChecked():
@@ -1555,12 +1529,38 @@ class TimeResetStr2strThread(QThread):
                         self.mainwindow.lineEdit_db_seconds.text())
                     if self.mainwindow.post_pro_db != []:
                         temp_list = self.mainwindow.post_pro_db
-                        self.mainwindow.start_convbin_db(temp_list)
-                        self.mainwindow.start_rnx2rtkp_db(temp_list)
+                        self.mainwindow.db_start_convbin(temp_list)
+                        self.mainwindow.db_start_rnx2rtkp(temp_list)
             time.sleep(1)
 
 
 # ДАННЫЙ КЛАСС НУЖЕН ДЛЯ ЧТЕНИЯ ДАННЫХ С COM ПОРТА В ОТДЕЛЬНОМ ПОТОКЕ
+def serial_ports():
+    if sys.platform.startswith('win'):
+        ports = ['COM%s' % (i + 1) for i in range(256)]
+    elif sys.platform.startswith('linux') or sys.platform.startswith('cygwin'):
+        # this excludes your current terminal "/dev/tty"
+        ports = glob.glob('/dev/tty[A-Za-z]*')
+    elif sys.platform.startswith('darwin'):
+        ports = glob.glob('/dev/tty.*')
+    else:
+        raise EnvironmentError('Unsupported platform')
+
+    result = []
+    for port in ports:
+        try:
+            s = serial.Serial(port)
+            s.close()
+            result.append(port)
+        except (OSError, serial.SerialException):
+            pass
+    return result
+
+
+speeds = ['300', '1200', '2400', '4800', '9600', '19200', '38400', '57600', '74880', '115200', '230400', '250000',
+          '500000', '1000000', '2000000']
+
+
 class ReadTextThread(QThread):
     def __init__(self, mainwindow):
         super().__init__()
