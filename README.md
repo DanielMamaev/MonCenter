@@ -16,7 +16,6 @@ Linux:
 * Run ``python3 setup.py``
 * Run ``python3 moncenter.py``
 
-
 ## Usage example
 
 Soon
