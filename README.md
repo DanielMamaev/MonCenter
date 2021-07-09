@@ -7,10 +7,9 @@ One to two paragraph statement about your product and what it does.
 
 ## Installation
 
-Linux:
-
-
 > On the main page of the project (where you are reading this text), at the top right, there is a green Clone or download button, click it, there will be a Download ZIP
+
+Linux:
 
 ```sh
 cd/../MonCenter-master
@@ -35,4 +34,4 @@ Artem Mareev – mareevavssugt@gmail.com
 
 Distributed under the XYZ license. See ``LICENSE`` for more information.
 
-[https://github.com/yourname/github-link](https://github.com/dbader/)
+[https://github.com/DanielMamaev](https://github.com/DanielMamaev)
