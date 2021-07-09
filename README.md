@@ -9,26 +9,18 @@ One to two paragraph statement about your product and what it does.
 
 Linux:
 
+
+> On the main page of the project (where you are reading this text), at the top right, there is a green Clone or download button, click it, there will be a Download ZIP
+
 ```sh
-pyt
+cd/../MonCenter-master
+python3 setup.py
+python3 moncenter.py
 ```
-
-
 
 ## Usage example
 
-A few motivating and useful examples of how your product can be used. Spice this up with code blocks and potentially more screenshots.
-
-_For more examples and usage, please refer to the [Wiki][wiki]._
-
-## Development setup
-
-Describe how to install all development dependencies and how to run an automated test-suite of some kind. Potentially do this for multiple platforms.
-
-```sh
-make install
-npm test
-```
+Soon
 
 ## Release History
 
@@ -37,7 +29,9 @@ npm test
 
 ## Meta
 
-DanielMamaev – mamaev.s.d@gmail.com
+Daniel Mamaev – mamaev.s.d@gmail.com
+
+Artem Mareev – mareevavssugt@gmail.com
 
 Distributed under the XYZ license. See ``LICENSE`` for more information.
 
