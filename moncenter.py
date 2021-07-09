@@ -687,6 +687,7 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
                 today = datetime.today().strftime("%m.%d.%y")
                 for i in range(len(host)):
                     temp_host = host[i][0].replace(":", ".")
+                    filepath = ""
                     if os.path.exists(
                             path_save + "/" + datetime.today().strftime("%m.%d.%y") + "/" + temp_host) == True:
                         self.show_logs("Directory exists.")
@@ -751,6 +752,7 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
                 if self.action_debug_stream.isChecked():
                     str_folder = "logs/xterm"
                     today = datetime.today().strftime("%d.%m.%y")
+                    filepath = ""
                     if os.path.exists(str_folder + "/" + today + "/") == True:
                         self.show_logs("Directory exists for str output.")
                         command_str2str += " &>> " + str_folder + "/" + today + "/" + str(
@@ -892,11 +894,15 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
                 if sol_format[i][0] == 0:
                     pass
                 elif sol_format[i][0] == 1:
-                    command_rnx2rtkp += " -g"
+                    #command_rnx2rtkp += " -g"
+                    pass
                 elif sol_format[i][0] == 2:
                     command_rnx2rtkp += " -e"
                 elif sol_format[i][0] == 3:
                     command_rnx2rtkp += " -a"
+                elif sol_format[i][0] == 4:
+                    #command_rnx2rtkp += " -a"
+                    pass
 
                 command_rnx2rtkp += " -t"
 
