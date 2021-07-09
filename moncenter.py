@@ -80,7 +80,7 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
                              '#reset']  # КОМАНДЫ ДЛЯ УПРАВЛЕНИЯ WEMOS ЧЕРЕЗ КОМ ПОРТ
         self.comboBox_comm.addItems(self.command_list)  # ДОБАВЛЕНИЕ КОМАНД В COMBOBOX
 
-        self.read_text_Thread_instance = read_text_Thread(mainwindow=self)  # ЗАПУСК ПОТОКА ЧТЕНИЯ ДАННЫХ ИЗ КОМ ПОРТА
+        self.read_text_Thread_instance = ReadTextThread(mainwindow=self)  # ЗАПУСК ПОТОКА ЧТЕНИЯ ДАННЫХ ИЗ КОМ ПОРТА
 
         self.action_exit.triggered.connect(self.save_exit)
         # ------------- .INI
@@ -173,7 +173,7 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.bool_ok_db = False
         self.temp_time_db = 0
 
-        self.time_reset_str2str_Thread_instance = time_reset_str2str_Thread(mainwindow=self)
+        self.time_reset_str2str_Thread_instance = TimeResetStr2strThread(mainwindow=self)
         self.time_reset_str2str_Thread_instance.start()
 
         self.checkBox_db_reset.stateChanged.connect(self.check_str2str_db)
@@ -193,9 +193,9 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
     # *************************** Google Drive ***************************
     def delete_all_gdrive(self):
         SCOPES = ['https://www.googleapis.com/auth/drive']
-        SERVICE_ACCOUNT_FILE = self.lineEdit_settings_google_json.text()
+        service_account_file = self.lineEdit_settings_google_json.text()
         try:
-            credentials = service_account.Credentials.from_service_account_file(SERVICE_ACCOUNT_FILE, scopes=SCOPES)
+            credentials = service_account.Credentials.from_service_account_file(service_account_file, scopes=SCOPES)
         except Exception:
             self.show_logs("Файл не найден, либо проблема с файлом json")
         else:
@@ -210,9 +210,9 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         # Подключение к Google Drive
 
         SCOPES = ['https://www.googleapis.com/auth/drive']
-        SERVICE_ACCOUNT_FILE = self.lineEdit_settings_google_json.text()
+        service_account_file = self.lineEdit_settings_google_json.text()
         try:
-            credentials = service_account.Credentials.from_service_account_file(SERVICE_ACCOUNT_FILE, scopes=SCOPES)
+            credentials = service_account.Credentials.from_service_account_file(service_account_file, scopes=SCOPES)
         except Exception:
             self.show_logs("Файл не найден, либо проблема с файлом json")
         else:
@@ -517,9 +517,9 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
 
     def send_email(self, message):
         email = "moncenter.result@gmail.com"
-        self.smtpObj = smtplib.SMTP('smtp.gmail.com', 587)
-        self.smtpObj.starttls()
-        self.smtpObj.login(email, 'tsoekbtboewzuxyy')
+        smtp_obj = smtplib.SMTP('smtp.gmail.com', 587)
+        smtp_obj.starttls()
+        smtp_obj.login(email, 'tsoekbtboewzuxyy')
 
         now = datetime.today().strftime("%m.%d.%Y-%H:%M:%S")
         msg = MIMEText(message, 'plain', 'utf-8')
@@ -527,8 +527,8 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         msg['From'] = email
         msg['To'] = self.lineEdit_settings_email.text()
         if not self.lineEdit_settings_email.text() == "":
-            self.smtpObj.sendmail(msg['From'], self.lineEdit_settings_email.text(), msg.as_string())
-            self.smtpObj.quit()
+            smtp_obj.sendmail(msg['From'], self.lineEdit_settings_email.text(), msg.as_string())
+            smtp_obj.quit()
         else:
             self.show_logs("Не указана электронная почта для отправки уведомлений.")
 
@@ -543,104 +543,104 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.open_db.commit()
 
     def create_db(self):
-        if os.path.exists(self.lineEdit_db_new.text()) == True:
+        if os.path.exists(self.lineEdit_db_new.text()):
             self.show_logs("Database exists.")
             return
         conn = sqlite3.connect(self.lineEdit_db_new.text())
         cursor = conn.cursor()
         cursor.execute("""
-        CREATE TABLE "BASELINES" (
-	"id_line"	INTEGER UNIQUE,
-	"enable"	INTEGER,
-	"name_r_base"	INTEGER,
-	"name_r_rover"	INTEGER,
-	"id_pos"	INTEGER,
-	"comment"	TEXT,
-	PRIMARY KEY("id_line")
-);
-                                """)
+            CREATE TABLE "BASELINES" (
+            "id_line"	INTEGER UNIQUE,
+            "enable"	INTEGER,
+            "name_r_base"	INTEGER,
+            "name_r_rover"	INTEGER,
+            "id_pos"	INTEGER,
+            "comment"	TEXT,
+            PRIMARY KEY("id_line")
+            );
+        """)
         cursor.execute("""
         CREATE TABLE "CONV_CONF" (
-	"id_conv"	INTEGER UNIQUE,
-	"name"	TEXT,
-	"comment"	TEXT,
-	"format"	TEXT,
-	"freq"	INTEGER,
-	"rinex"	TEXT,
-	"satellite"	TEXT,
-	"obs"	INTEGER,
-	"nav"	INTEGER,
-	PRIMARY KEY("id_conv")
-);
+        "id_conv"	INTEGER UNIQUE,
+		"name"	TEXT,
+		"comment"	TEXT,
+        "format"	TEXT,
+        "freq"	INTEGER,
+        "rinex"	TEXT,
+        "satellite"	TEXT,
+        "obs"	INTEGER,
+        "nav"	INTEGER,
+        PRIMARY KEY("id_conv")
+    );
                                """)
         cursor.execute("""
         CREATE TABLE "POINTS" (
-	"id_poi"	INTEGER UNIQUE,
-	"lat_x"	REAL,
-	"lon_y"	REAL,
-	"hei_z"	REAL,
-	"name_r"	INTEGER,
-	"comment"	TEXT,
-	PRIMARY KEY("id_poi")
-);
-                               """)
+        "id_poi"	INTEGER UNIQUE,
+        "lat_x"	REAL,
+        "lon_y"	REAL,
+        "hei_z"	REAL,
+        "name_r"	INTEGER,
+        "comment"	TEXT,
+        PRIMARY KEY("id_poi")
+        );
+        """)
         cursor.execute("""
-                CREATE TABLE "POS_CONF" (
-	"id_pos"	INTEGER UNIQUE,
-	"name"	TEXT,
-	"comment"	TEXT,
-	"pos_mode"	INTEGER,
-	"freq"	INTEGER,
-	"sol_format"	INTEGER,
-	"elevation"	INTEGER,
-	"decimals"	INTEGER,
-	"format_base"	INTEGER,
-	"base_lat_x"	REAL,
-	"base_lon_y"	REAL,
-	"base_hei_z"	REAL,
-	PRIMARY KEY("id_pos")
-);
-                               """)
+            CREATE TABLE "POS_CONF" (
+            "id_pos"	INTEGER UNIQUE,
+            "name"	TEXT,
+            "comment"	TEXT,
+            "pos_mode"	INTEGER,
+            "freq"	INTEGER,
+            "sol_format"	INTEGER,
+            "elevation"	INTEGER,
+            "decimals"	INTEGER,
+            "format_base"	INTEGER,
+            "base_lat_x"	REAL,
+            "base_lon_y"	REAL,
+            "base_hei_z"	REAL,
+            PRIMARY KEY("id_pos")
+            );
+            """)
         cursor.execute("""
         CREATE TABLE "RECEIVERS" (
-	"name_r"	TEXT,
-	"enable"	INTEGER,
-	"protocol"	INTEGER,
-	"ip_host"	TEXT,
-	"username"	TEXT,
-	"password"	TEXT,
-	"mountpoint"	TEXT,
-	"type"	TEXT,
-	"id_conv"	INTEGER,
-	"id_poi"	INTEGER,
-	PRIMARY KEY("name_r")
-);
-                               """)
+        "name_r"	TEXT,
+        "enable"	INTEGER,
+        "protocol"	INTEGER,
+        "ip_host"	TEXT,
+        "username"	TEXT,
+        "password"	TEXT,
+        "mountpoint"	TEXT,
+        "type"	TEXT,
+        "id_conv"	INTEGER,
+        "id_poi"	INTEGER,
+        PRIMARY KEY("name_r")
+        );
+        """)
         cursor.execute("""
         CREATE TABLE "SOLUTIONS" (
-	"id_sol"	INTEGER UNIQUE,
-	"id_line"	INTEGER,
-	"name_r"	INTEGER,
-	"date"	TEXT,
-	"time"	TEXT,
-	"coord_1"	REAL,
-	"coord_2"	REAL,
-	"coord_3"	REAL,
-	"q"	INTEGER,
-	"ns"	INTEGER,
-	"sdx"	REAL,
-	"sdy"	REAL,
-	"sdz"	REAL,
-	"sdxy"	REAL,
-	"sdyz"	REAL,
-	"sdzx"	REAL,
-	"age"	REAL,
-	"ratio"	REAL,
-	"comment"	TEXT,
-	"work_time"	TEXT,
-	PRIMARY KEY("id_sol")
-);
-                               """)
+        "id_sol"	INTEGER UNIQUE,
+        "id_line"	INTEGER,
+        "name_r"	INTEGER,
+        "date"	TEXT,
+        "time"	TEXT,
+        "coord_1"	REAL,
+        "coord_2"	REAL,
+        "coord_3"	REAL,
+        "q"	INTEGER,
+        "ns"	INTEGER,
+        "sdx"	REAL,
+        "sdy"	REAL,
+        "sdz"	REAL,
+        "sdxy"	REAL,
+        "sdyz"	REAL,
+        "sdzx"	REAL,
+        "age"	REAL,
+        "ratio"	REAL,
+        "comment"	TEXT,
+        "work_time"	TEXT,
+        PRIMARY KEY("id_sol")
+        );
+        """)
         conn.commit()
         self.show_logs("Database is was created!")
 
@@ -655,7 +655,7 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
     def connect_db(self):
         db_table = ['BASELINES', 'CONV_CONF', 'POINTS', 'POS_CONF', 'RECEIVERS', 'SOLUTIONS']
         temp_table = ""
-        if (self.lineEdit_db_con_path.text() != ""):
+        if self.lineEdit_db_con_path.text() != "":
             try:
                 self.open_db = sqlite3.connect(self.lineEdit_db_con_path.text(), check_same_thread=False)
                 for i in db_table:
@@ -683,13 +683,13 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
 
             path_save = self.lineEdit_db_save.text()
             dir_path_list = []
-            if (path_save != ""):
+            if path_save != "":
                 today = datetime.today().strftime("%m.%d.%y")
                 for i in range(len(host)):
                     temp_host = host[i][0].replace(":", ".")
                     filepath = ""
                     if os.path.exists(
-                            path_save + "/" + datetime.today().strftime("%m.%d.%y") + "/" + temp_host) == True:
+                            path_save + "/" + datetime.today().strftime("%m.%d.%y") + "/" + temp_host):
                         self.show_logs("Directory exists.")
                         filepath = path_save + "/" + datetime.today().strftime("%m.%d.%y") + "/" + temp_host
                         dir_path_list.append(filepath + "/")
@@ -719,15 +719,16 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
             cursor.execute(sql)
             host = cursor.fetchall()
             for i in range(len(host)):
-                command_str2str = "xterm -e \"/bin/bash -c '" + os.getcwd() + "/RTKLIB_2.4.3_b33/app/str2str/gcc/" + "str2str -in "
-                if (host[i][2] == 0):
+                command_str2str = "xterm -e \"/bin/bash -c '" + os.getcwd() + "/RTKLIB_2.4.3_b33/app/str2str/gcc/" + \
+                                  "str2str -in "
+                if host[i][2] == 0:
                     command_str2str += "tcpcli://"
                     command_str2str += host[i][3]
-                if (host[i][2] == 1):
+                if host[i][2] == 1:
                     command_str2str += "ntrip://"
                     command_str2str += host[i][4] + ":" + host[i][5] + "@"
                     command_str2str += host[i][3] + "/" + host[i][6]
-                if (host[i][2] == 2):
+                if host[i][2] == 2:
                     command_str2str += "serial://"
                     pass
 
@@ -745,15 +746,17 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
 
                 else:
                     self.show_logs(
-                        "(STR2STR) Не все директории были созданы. Запись в файлы отменена. Не соответствие кол-во хостов и созданных директорий")
+                        "(STR2STR) Не все директории были созданы. Запись в файлы отменена. Не соответствие кол-во "
+                        "хостов и созданных директорий")
                     self.send_email(
-                        message="(STR2STR) Не все директории были созданы. Запись в файлы отменена. Не соответствие кол-во хостов и созданных директорий")
+                        message="(STR2STR) Не все директории были созданы. Запись в файлы отменена. Не соответствие "
+                                "кол-во хостов и созданных директорий")
 
                 if self.action_debug_stream.isChecked():
                     str_folder = "logs/xterm"
                     today = datetime.today().strftime("%d.%m.%y")
                     filepath = ""
-                    if os.path.exists(str_folder + "/" + today + "/") == True:
+                    if os.path.exists(str_folder + "/" + today + "/"):
                         self.show_logs("Directory exists for str output.")
                         command_str2str += " &>> " + str_folder + "/" + today + "/" + str(
                             os.path.basename(self.post_pro_db[i][1]))
@@ -772,7 +775,7 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
                 self.show_logs(command_str2str)
                 os.system(command_str2str)
                 time.sleep(1)
-                if (self.action_autoclose_xterm.isChecked() == True):
+                if self.action_autoclose_xterm.isChecked():
                     os.system("killall xterm")
 
             free = psutil.disk_usage(path_save).free / (1024 * 1024 * 1024)
@@ -795,23 +798,27 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
             for y in range(count[0][0]):
                 command_convbin = "RTKLIB_2.4.3_b33/app/convbin/gcc/convbin"
 
-                sql = "SELECT format FROM RECEIVERS, CONV_CONF WHERE RECEIVERS.enable=1 AND RECEIVERS.id_conv = CONV_CONF.id_conv"
+                sql = "SELECT format FROM RECEIVERS, CONV_CONF WHERE RECEIVERS.enable=1 AND " \
+                      "RECEIVERS.id_conv = CONV_CONF.id_conv"
                 cursor.execute(sql)
                 format = cursor.fetchall()
                 command_convbin += " -r " + (format[y][0])
 
-                sql = "SELECT freq FROM RECEIVERS, CONV_CONF WHERE RECEIVERS.enable=1 AND RECEIVERS.id_conv = CONV_CONF.id_conv"
+                sql = "SELECT freq FROM RECEIVERS, CONV_CONF WHERE RECEIVERS.enable=1 AND " \
+                      "RECEIVERS.id_conv = CONV_CONF.id_conv"
                 cursor.execute(sql)
                 freq = cursor.fetchall()
                 command_convbin += " -f " + str(freq[y][0])
 
-                sql = "SELECT rinex FROM RECEIVERS, CONV_CONF WHERE RECEIVERS.enable=1 AND RECEIVERS.id_conv = CONV_CONF.id_conv"
+                sql = "SELECT rinex FROM RECEIVERS, CONV_CONF WHERE RECEIVERS.enable=1 AND " \
+                      "RECEIVERS.id_conv = CONV_CONF.id_conv"
                 cursor.execute(sql)
                 rinex = cursor.fetchall()
                 command_convbin += " -v " + rinex[y][0]
                 command_convbin += " -os -od"
 
-                sql = "SELECT satellite FROM RECEIVERS, CONV_CONF WHERE RECEIVERS.enable=1 AND RECEIVERS.id_conv = CONV_CONF.id_conv"
+                sql = "SELECT satellite FROM RECEIVERS, CONV_CONF WHERE RECEIVERS.enable=1 AND " \
+                      "RECEIVERS.id_conv = CONV_CONF.id_conv"
                 cursor.execute(sql)
                 satellite = cursor.fetchall()
 
@@ -822,15 +829,16 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
                 for z in range(len(temp_sat)):
                     command_convbin += " -y " + temp_sat[z]
 
-                sql = "SELECT obs, nav FROM RECEIVERS, CONV_CONF WHERE RECEIVERS.enable=1 AND RECEIVERS.id_conv = CONV_CONF.id_conv"
+                sql = "SELECT obs, nav FROM RECEIVERS, CONV_CONF WHERE RECEIVERS.enable=1 AND " \
+                      "RECEIVERS.id_conv = CONV_CONF.id_conv"
                 cursor.execute(sql)
                 out = cursor.fetchall()
 
                 if list_path != []:
-                    if (out[y][0] == 1):
+                    if out[y][0] == 1:
                         command_convbin += " -o "
                         command_convbin += list_path[y][1] + ".obs"
-                    if (out[y][1] == 1):
+                    if out[y][1] == 1:
                         command_convbin += " -n "
                         command_convbin += list_path[y][1] + ".nav"
 
@@ -839,17 +847,12 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
                     p = p.fileName()
                     p = p.rsplit('_', 2)
                     time_conv = ""
-                    if (len(p) == 3):
+                    if len(p) == 3:
                         p[1] = p[1].rsplit('.', 2)
-                        # print(p[1])
                         p[2] = p[2].rsplit('-', 2)
-
-                        if (len(p[2]) == 3):
+                        if len(p[2]) == 3:
                             p[2][2] = p[2][2].rsplit('.', 1)
-
-                        # print(p[2])
-
-                        if (len(p[1]) == 3 and len(p[2]) == 3):
+                        if len(p[1]) == 3 and len(p[2]) == 3:
                             time_conv = p[1][2] + "/" + p[1][0] + "/" + p[1][1] + " "
                             time_conv += p[2][0] + ":" + p[2][1] + ":" + p[2][2][0]
 
@@ -867,46 +870,52 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
     def start_rnx2rtkp_db(self, list_path):
         try:
             cursor = self.open_db.cursor()
-            sql = """SELECT * FROM BASELINES, POS_CONF WHERE BASELINES.id_pos = POS_CONF.id_pos AND BASELINES.enable = 1"""
+            sql = """SELECT * FROM BASELINES, POS_CONF WHERE BASELINES.id_pos = POS_CONF.id_pos AND 
+            BASELINES.enable = 1"""
             cursor.execute(sql)
             id_pos = cursor.fetchall()
 
             for i in range(len(id_pos)):
                 command_rnx2rtkp = "RTKLIB_2.4.3_b33/app/rnx2rtkp/gcc/rnx2rtkp"
-                sql = """SELECT pos_mode FROM BASELINES, POS_CONF WHERE BASELINES.id_pos = POS_CONF.id_pos AND BASELINES.enable = 1"""
+                sql = """SELECT pos_mode FROM BASELINES, POS_CONF WHERE BASELINES.id_pos = POS_CONF.id_pos AND 
+                BASELINES.enable = 1"""
                 cursor.execute(sql)
                 pos_mode = cursor.fetchall()
                 command_rnx2rtkp += " -p " + str(pos_mode[i][0])
 
-                sql = """SELECT elevation FROM BASELINES, POS_CONF WHERE BASELINES.id_pos = POS_CONF.id_pos AND BASELINES.enable = 1"""
+                sql = """SELECT elevation FROM BASELINES, POS_CONF WHERE BASELINES.id_pos = POS_CONF.id_pos AND 
+                BASELINES.enable = 1"""
                 cursor.execute(sql)
                 elev = cursor.fetchall()
                 command_rnx2rtkp += " -m " + str(elev[i][0])
 
-                sql = """SELECT freq FROM BASELINES, POS_CONF WHERE BASELINES.id_pos = POS_CONF.id_pos AND BASELINES.enable = 1"""
+                sql = """SELECT freq FROM BASELINES, POS_CONF WHERE BASELINES.id_pos = POS_CONF.id_pos AND 
+                BASELINES.enable = 1"""
                 cursor.execute(sql)
                 freq = cursor.fetchall()
                 command_rnx2rtkp += " -f " + str(freq[i][0])
 
-                sql = """SELECT sol_format FROM BASELINES, POS_CONF WHERE BASELINES.id_pos = POS_CONF.id_pos AND BASELINES.enable = 1"""
+                sql = """SELECT sol_format FROM BASELINES, POS_CONF WHERE BASELINES.id_pos = POS_CONF.id_pos AND 
+                BASELINES.enable = 1"""
                 cursor.execute(sql)
                 sol_format = cursor.fetchall()
                 if sol_format[i][0] == 0:
                     pass
                 elif sol_format[i][0] == 1:
-                    #command_rnx2rtkp += " -g"
+                    # command_rnx2rtkp += " -g"
                     pass
                 elif sol_format[i][0] == 2:
                     command_rnx2rtkp += " -e"
                 elif sol_format[i][0] == 3:
                     command_rnx2rtkp += " -a"
                 elif sol_format[i][0] == 4:
-                    #command_rnx2rtkp += " -a"
+                    # command_rnx2rtkp += " -a"
                     pass
 
                 command_rnx2rtkp += " -t"
 
-                sql = """SELECT decimals FROM BASELINES, POS_CONF WHERE BASELINES.id_pos = POS_CONF.id_pos AND BASELINES.enable = 1"""
+                sql = """SELECT decimals FROM BASELINES, POS_CONF WHERE BASELINES.id_pos = POS_CONF.id_pos AND 
+                BASELINES.enable = 1"""
                 cursor.execute(sql)
                 decimals = cursor.fetchall()
                 command_rnx2rtkp += " -d " + str(decimals[i][0])
@@ -922,8 +931,8 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
                     command_rnx2rtkp += " -r " + str(format_base[i][1]) + " " + str(
                         format_base[i][2]) + " " + str(format_base[i][3])
 
-                sql = """SELECT name_r_base, name_r_rover 
-                            FROM BASELINES, POS_CONF WHERE BASELINES.id_pos = POS_CONF.id_pos AND BASELINES.enable = 1"""
+                sql = """SELECT name_r_base, name_r_rover FROM 
+                            BASELINES, POS_CONF WHERE BASELINES.id_pos = POS_CONF.id_pos AND BASELINES.enable = 1"""
                 cursor.execute(sql)
                 base_rover = cursor.fetchall()
 
@@ -932,18 +941,18 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
 
                 if list_path != []:
                     for y in range(len(list_path)):
-                        if (base_rover[i][1] == list_path[y][0]):
+                        if base_rover[i][1] == list_path[y][0]:
                             command_rnx2rtkp += " -o " + list_path[y][1] + ".pos"
-                            if os.path.exists(list_path[y][1] + ".obs") == True:
+                            if os.path.exists(list_path[y][1] + ".obs"):
                                 command_rnx2rtkp += " " + list_path[y][1] + ".obs"
                                 error_path = list_path[y][1] + ".obs"
                                 pars_pos = True
                             else:
                                 pars_pos = False
 
-                    if pars_pos == True:
+                    if pars_pos:
                         for y in range(len(list_path)):
-                            if (base_rover[i][0] == list_path[y][0]):
+                            if base_rover[i][0] == list_path[y][0]:
                                 command_rnx2rtkp += " " + list_path[y][1] + ".obs"
                                 command_rnx2rtkp += " " + list_path[y][1] + ".nav"
 
@@ -953,8 +962,8 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
 
                         # -------------------------------
                         for y in range(len(list_path)):
-                            if (base_rover[i][1] == list_path[y][0]):
-                                if os.path.exists(list_path[y][1] + ".pos") == True:  # True
+                            if base_rover[i][1] == list_path[y][0]:
+                                if os.path.exists(list_path[y][1] + ".pos"):  # True
                                     self.show_logs("Post processing OK")
 
                                     # ВЫТАСКИВАЕМ ПОСЛЕДНЮЮ СТРОЧКУ В ФАЙЛЕ
@@ -968,23 +977,23 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
                                         a = line.split(" ", 100)
                                         while "" in a:
                                             a.remove("")
-                                        if (a[0] != "%" and a[0] != "%\n"):
+                                        if a[0] != "%" and a[0] != "%\n":
                                             time_list.append(a[1])
 
-                                            D = float(a[7]) ** 2 + float(a[8]) ** 2 + float(a[9]) ** 2
-                                            if frs == True:
+                                            d = float(a[7]) ** 2 + float(a[8]) ** 2 + float(a[9]) ** 2
+                                            if frs:
                                                 min_str = a
-                                                min = D
+                                                min = d
                                                 frs = False
-                                            if (D < min):
+                                            if d < min:
                                                 min_str = a
-                                                min = D
+                                                min = d
                                         for j in range(len(min_str)):
-                                            if (j == len(min_str) - 1):
+                                            if j == len(min_str) - 1:
                                                 min_str[j] = min_str[j].replace("\n", "")
                                     # print(min_str)
 
-                                    if (min_str != []):
+                                    if min_str != []:
 
                                         work_time = 0
                                         for j in range(len(time_list)):
@@ -1020,7 +1029,8 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
                                         id_line = cursor.fetchall()
 
                                         sql = """SELECT BASELINES.name_r_rover FROM BASELINES, POS_CONF 
-                                                                WHERE BASELINES.id_pos = POS_CONF.id_pos AND BASELINES.enable = 1"""
+                                                                WHERE BASELINES.id_pos = POS_CONF.id_pos AND B
+                                                                ASELINES.enable = 1"""
                                         cursor.execute(sql)
                                         name_r = cursor.fetchall()
 
@@ -1037,7 +1047,8 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
                                         kor.append("")
                                         kor.append(str(timedelta(seconds=work_time)))
 
-                                        sql = "INSERT INTO SOLUTIONS VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+                                        sql = "INSERT INTO SOLUTIONS " \
+                                              "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
                                         # print(kor)
                                         cursor.execute(sql, kor)
                                         self.open_db.commit()
@@ -1048,15 +1059,14 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
                                             message += min_str[j] + " "
 
                                         self.send_email(message)
-
-
                                     else:
                                         self.show_logs(list_path[y][1] + ".pos" + " Not Found")
                     else:
                         self.show_logs(
                             "(RNX2RTKP) Постобработка не произошла. Не существует RINEX файл ровера. " + error_path)
                         self.send_email(
-                            message="(RNX2RTKP) Постобработка не произошла. Не существует RINEX файл ровера. " + error_path)
+                            message="(RNX2RTKP) Постобработка не произошла. Не существует RINEX "
+                                    "файл ровера. " + error_path)
                 else:
                     self.show_logs("(RNX2RTKP) Постобработка не произошла")
                     self.send_email(message="(RNX2RTKP) Постобработка не произошла")
@@ -1084,7 +1094,7 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
             self.bool_ok_db = False
 
     def ok_posttime_db(self):
-        if (self.bool_ok_db == False):
+        if not self.bool_ok_db:
             self.bool_ok_db = True
             self.show_logs("On")
             self.temp_time_db = int(datetime.today().timestamp()) + int(self.lineEdit_db_hours.text()) * 3600 + int(
@@ -1120,14 +1130,14 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
 
     def rnx2rtkp_input_rover(self):
         fname, _ = QFileDialog.getOpenFileName(None)
-        if (fname == ""):
+        if fname == "":
             return
         self.lineEdit_rnx2rtkp_rover.setText(fname)
 
         p = QUrl.fromLocalFile(fname)
         p = p.fileName()
         p = p.rsplit('.', 1)
-        if (len(p) == 2):
+        if len(p) == 2:
             self.show_logs(str(p))
             self.fname_input_rnx2rtkp = p[0]
             pa = fname
@@ -1155,14 +1165,14 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
             command_rnx2rtkp += " -k " + self.lineEdit_rnx2rtkp_conf.text()
         else:
             if self.checkBox_rnx2rtkp_time_start.isChecked():
-                DT = self.dateTimeEdit_rnx2rtkp_start.text()
-                DTS = DT.rsplit(" ")
-                command_rnx2rtkp += " -ts " + str(DTS[0]) + " " + str(DTS[1])
+                dt = self.dateTimeEdit_rnx2rtkp_start.text()
+                dts = dt.rsplit(" ")
+                command_rnx2rtkp += " -ts " + str(dts[0]) + " " + str(dts[1])
 
             if self.checkBox_rnx2rtkp_time_end.isChecked():
-                DT = self.dateTimeEdit_rnx2rtkp_end.text()
-                DTS = DT.rsplit(" ")
-                command_rnx2rtkp += " -te " + str(DTS[0]) + " " + str(DTS[1])
+                dt = self.dateTimeEdit_rnx2rtkp_end.text()
+                dts = dt.rsplit(" ")
+                command_rnx2rtkp += " -te " + str(dts[0]) + " " + str(dts[1])
 
             command_rnx2rtkp += " -p " + str(self.comboBox_rnx2rtkp_pos_mode.currentIndex())
             command_rnx2rtkp += " -m " + self.lineEdit_rnx2rtkp_mask.text()
@@ -1198,7 +1208,7 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         os.system(command_rnx2rtkp)
         time.sleep(1)
 
-        if os.path.exists(self.lineEdit_rnx2rtkp_output.text()) == True:
+        if os.path.exists(self.lineEdit_rnx2rtkp_output.text()):
             self.show_logs("ok")
         else:
             self.show_logs(self.lineEdit_rnx2rtkp_output.text() + " Not Found")
@@ -1279,24 +1289,24 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         command_convbin += " -f " + self.comboBox_freq.currentText()
         command_convbin += " -v " + self.comboBox_rinex.currentText()
         command_convbin += " -os -od"
-        if (self.checkBox_time_start.isChecked() == True):
+        if self.checkBox_time_start.isChecked():
             command_convbin += " -ts "
             command_convbin += self.dateTimeEdit_start.text()
-        if (self.checkBox_time_end.isChecked() == True):
+        if self.checkBox_time_end.isChecked():
             command_convbin += " -te "
             command_convbin += self.dateTimeEdit_end.text()
 
-        if self.checkBox_gps.isChecked() == False:
+        if not self.checkBox_gps.isChecked():
             command_convbin += " -y G"
-        if self.checkBox_glo.isChecked() == False:
+        if not self.checkBox_glo.isChecked():
             command_convbin += " -y R"
-        if self.checkBox_galileo.isChecked() == False:
+        if not self.checkBox_galileo.isChecked():
             command_convbin += " -y E"
-        if self.checkBox_qzss.isChecked() == False:
+        if not self.checkBox_qzss.isChecked():
             command_convbin += " -y J"
-        if self.checkBox_sbas.isChecked() == False:
+        if not self.checkBox_sbas.isChecked():
             command_convbin += " -y S"
-        if self.checkBox_beidou.isChecked() == False:
+        if not self.checkBox_beidou.isChecked():
             command_convbin += " -y C"
 
         if self.lineEdit_obs != "" and self.checkBox_convbin_obs.isChecked():
@@ -1321,22 +1331,22 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
 
     def input_path(self):
         fname, _ = QFileDialog.getOpenFileName(None)
-        if (fname == ""):
+        if fname == "":
             return
 
         p = QUrl.fromLocalFile(fname)
         p = p.fileName()
         p = p.rsplit('_', 2)
-        if (len(p) == 3):
+        if len(p) == 3:
             p[1] = p[1].rsplit('.', 2)
             # print(p[1])
             p[2] = p[2].rsplit('-', 2)
 
-            if (len(p[2]) == 3):
+            if len(p[2]) == 3:
                 p[2][2] = p[2][2].rsplit('.', 1)
 
             # print(p[2])
-            if (len(p[1]) == 3 and len(p[2]) == 3):
+            if len(p[1]) == 3 and len(p[2]) == 3:
                 time_start = QDateTime(int(p[1][2]), int(p[1][0]), int(p[1][1]), int(p[2][0]), int(p[2][1]),
                                        int(p[2][2][0]))
                 self.dateTimeEdit_start.setDateTime(time_start)
@@ -1358,76 +1368,76 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
 
     def output_path(self):
         path = QFileDialog.getExistingDirectory(None)
-        if (path == ""):
+        if path == "":
             return
         self.lineEdit_output.setText(path)
 
     def obs_path(self):
         path = QFileDialog.getExistingDirectory(None)
-        if (path == ""):
+        if path == "":
             return
         path += '/' + self.fname_input + '.obs'
         self.lineEdit_obs.setText(path)
 
     def nav_path(self):
         path = QFileDialog.getExistingDirectory(None)
-        if (path == ""):
+        if path == "":
             return
         path += '/' + self.fname_input + '.nav'
         self.lineEdit_nav.setText(path)
 
     def gnav_path(self):
         path = QFileDialog.getExistingDirectory(None)
-        if (path == ""):
+        if path == "":
             return
         path += '/' + self.fname_input + '.gnav'
         self.lineEdit_convbin_gnav.setText(path)
 
     def hnav_path(self):
         path = QFileDialog.getExistingDirectory(None)
-        if (path == ""):
+        if path == "":
             return
         path += '/' + self.fname_input + '.hnav'
         self.lineEdit_convbin_hnav.setText(path)
 
     def qnav_path(self):
         path = QFileDialog.getExistingDirectory(None)
-        if (path == ""):
+        if path == "":
             return
         path += '/' + self.fname_input + '.qnav'
         self.lineEdit_convbin_qnav.setText(path)
 
     def lnav_path(self):
         path = QFileDialog.getExistingDirectory(None)
-        if (path == ""):
+        if path == "":
             return
         path += '/' + self.fname_input + '.lnav'
         self.lineEdit_convbin_lnav.setText(path)
 
     def sbas_path(self):
         path = QFileDialog.getExistingDirectory(None)
-        if (path == ""):
+        if path == "":
             return
         path += '/' + self.fname_input + '.sbas'
         self.lineEdit_convbin_sbas.setText(path)
 
     # ***************************ВКЛАДКА STR2STR***************************
     def input_str2str(self):
-        if (self.comboBox_str2str_input.currentIndex() == 0):
+        if self.comboBox_str2str_input.currentIndex() == 0:
             self.lineEdit_tcpcli.setEnabled(True)
             self.lineEdit_ntrip.setEnabled(False)
             self.lineEdit_userid.setEnabled(False)
             self.lineEdit_mountpoint.setEnabled(False)
             self.lineEdit_password.setEnabled(False)
             self.lineEdit_tcpsvr.setEnabled(False)
-        elif (self.comboBox_str2str_input.currentIndex() == 1):
+        elif self.comboBox_str2str_input.currentIndex() == 1:
             self.lineEdit_tcpcli.setEnabled(False)
             self.lineEdit_ntrip.setEnabled(True)
             self.lineEdit_userid.setEnabled(True)
             self.lineEdit_mountpoint.setEnabled(True)
             self.lineEdit_password.setEnabled(True)
             self.lineEdit_tcpsvr.setEnabled(False)
-        elif (self.comboBox_str2str_input.currentIndex() == 2):
+        elif self.comboBox_str2str_input.currentIndex() == 2:
             self.lineEdit_tcpcli.setEnabled(False)
             self.lineEdit_ntrip.setEnabled(False)
             self.lineEdit_userid.setEnabled(False)
@@ -1448,31 +1458,34 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.lineEdit_str2str_outputfile.setText(path + ".log")
 
     def start_str2str(self):
-        command_str2str = "xterm -e \"/bin/bash -c '" + os.getcwd() + "/RTKLIB_2.4.3_b33/app/str2str/gcc/" + "str2str -in "
-        if (self.comboBox_str2str_input.currentIndex() == 0):
+        command_str2str = "xterm -e \"/bin/bash -c '" + os.getcwd() + "/RTKLIB_2.4.3_b33/app/str2str/gcc/" + \
+                          "str2str -in "
+        if self.comboBox_str2str_input.currentIndex() == 0:
             command_str2str += "tcpcli://"
             command_str2str += self.lineEdit_tcpcli.text()
 
-        elif (self.comboBox_str2str_input.currentIndex() == 1):
+        elif self.comboBox_str2str_input.currentIndex() == 1:
             command_str2str += "ntrip://"
             command_str2str += self.lineEdit_userid.text() + ":" + self.lineEdit_password.text()
             command_str2str += "@" + self.lineEdit_ntrip.text() + "/" + self.lineEdit_mountpoint.text()
 
-        elif (self.comboBox_str2str_input.currentIndex() == 2):
+        elif self.comboBox_str2str_input.currentIndex() == 2:
             command_str2str += "tcpsvr://:"
             command_str2str += self.lineEdit_tcpsvr.text()
 
-        if (self.checkBox_str2str_file.isChecked() and self.lineEdit_str2str_outputfile.text() != ""):
+        if self.checkBox_str2str_file.isChecked() and self.lineEdit_str2str_outputfile.text() != "":
             command_str2str += " -out file://" + self.lineEdit_str2str_outputfile.text()
 
         command_str2str += "'\"&"
         self.show_logs(command_str2str)
         os.system(command_str2str)
 
-    def stop_str2str(self):
+    @staticmethod
+    def stop_str2str():
         os.system("killall str2str")
 
-    def stop_xterm(self):
+    @staticmethod
+    def stop_xterm():
         os.system("killall xterm")
 
     # *************************** ВКЛАДКА COM ***************************
@@ -1497,8 +1510,8 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
 
     def send(self):
         if self.realport:
-            sendText = self.comboBox_comm.currentText()
-            self.realport.write(bytearray(sendText, 'utf8'))
+            send_text = self.comboBox_comm.currentText()
+            self.realport.write(bytearray(send_text, 'utf8'))
         self.comboBox_comm.setEditText("")
 
     def refresh(self):
@@ -1510,19 +1523,19 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
 
 
 # даННЫЙ КЛАСС НУЖЕН ДЛЯ ПЕРЕЗАПУСКА STR2STR В ОПРЕДЕЛЕННОЕ ВРЕМЯ
-class time_reset_str2str_Thread(QThread):
-    def __init__(self, mainwindow, parent=None):
+class TimeResetStr2strThread(QThread):
+    def __init__(self, mainwindow):
         super().__init__()
         self.mainwindow = mainwindow
 
     def run(self):
         while True:
             if (datetime.today().strftime(
-                    "%H:%M:%S") == self.mainwindow.timeEdit_db.text() and self.mainwindow.checkBox_db_reset.isChecked()):
+                "%H:%M:%S") == self.mainwindow.timeEdit_db.text() and self.mainwindow.checkBox_db_reset.isChecked()):
                 temp_list = self.mainwindow.post_pro_db
                 self.mainwindow.stop_str2str()
                 self.mainwindow.start_str2str_db()
-                if (self.mainwindow.checkBox_db_lastpost.isChecked()):
+                if self.mainwindow.checkBox_db_lastpost.isChecked():
                     self.mainwindow.start_convbin_db(temp_list)
                     self.mainwindow.start_rnx2rtkp_db(temp_list)
 
@@ -1534,7 +1547,7 @@ class time_reset_str2str_Thread(QThread):
                     if self.mainwindow.checkBox_settings_google_autoconnect.isChecked():
                         self.mainwindow.gdrive_connect(path[1])
 
-            if self.mainwindow.checkBox_db_post.isChecked() and (self.mainwindow.bool_ok_db == True):
+            if self.mainwindow.checkBox_db_post.isChecked() and self.mainwindow.bool_ok_db:
                 if int(datetime.today().timestamp()) > self.mainwindow.temp_time_db:
                     self.mainwindow.temp_time_db = int(datetime.today().timestamp()) + int(
                         self.mainwindow.lineEdit_db_hours.text()) * 3600 + int(
@@ -1548,8 +1561,8 @@ class time_reset_str2str_Thread(QThread):
 
 
 # ДАННЫЙ КЛАСС НУЖЕН ДЛЯ ЧТЕНИЯ ДАННЫХ С COM ПОРТА В ОТДЕЛЬНОМ ПОТОКЕ
-class read_text_Thread(QThread):
-    def __init__(self, mainwindow, parent=None):
+class ReadTextThread(QThread):
+    def __init__(self, mainwindow):
         super().__init__()
         self.mainwindow = mainwindow
 
@@ -1570,12 +1583,12 @@ class read_text_Thread(QThread):
 
                     if self.mainwindow.receivedMessage != "":
                         if self.mainwindow.checkBox_time.isChecked():
-                            self.today = datetime.today().strftime("%H.%M.%S")
-                            self.mainwindow.textEdit_read.append(self.today + " -> " + self.mainwindow.receivedMessage)
+                            today = datetime.today().strftime("%H.%M.%S")
+                            self.mainwindow.textEdit_read.append(today + " -> " + self.mainwindow.receivedMessage)
                             if self.log_write:
                                 self.f = open(self.name_f, "a")
-                                self.today = datetime.today().strftime("%H.%M.%S")
-                                self.f.write(self.today + "-> " + self.mainwindow.receivedMessage + "\n")
+                                today = datetime.today().strftime("%H.%M.%S")
+                                self.f.write(today + "-> " + self.mainwindow.receivedMessage + "\n")
                                 self.f.close()
                         else:
                             self.mainwindow.textEdit_read.append(self.mainwindow.receivedMessage)
@@ -1594,8 +1607,8 @@ class read_text_Thread(QThread):
     def com_log(self):
         if self.log_flag:
             self.mainwindow.pushButton_log_com.setText("Stop Log")
-            self.today = datetime.today().strftime("%d%m%y-%H%M%S")
-            self.name_f = "logs/com/COM-Log-" + self.today + ".txt"
+            today = datetime.today().strftime("%d%m%y-%H%M%S")
+            self.name_f = "logs/com/COM-Log-" + today + ".txt"
             self.f = open(self.name_f, "w")
             self.f.close()
             self.log_flag = False
