@@ -9,7 +9,7 @@ One to two paragraph statement about your product and what it does.
 
 > On the main page of the project (where you are reading this text), at the top right, there is a green Clone or download button, click it, there will be a Download ZIP
 
-Linux:
+Linux (Raspbian OS, Ubuntu):
 
 * Go to the directory `cd /../MonCenter-master`
 
