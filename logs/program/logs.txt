@@ -1,0 +1,10 @@
+06-06-2021 20:49:52 -> Database is was connected!
+06-06-2021 20:50:04 -> Успешно создана директория /home/pi/Desktop/06.06.21 
+06-06-2021 20:50:04 -> Успешно создана директория /home/pi/Desktop/06.06.21/NETR5 
+06-06-2021 20:50:04 -> Создать директорию /home/pi/Desktop/06.06.21 не удалось
+06-06-2021 20:50:04 -> Успешно создана директория /home/pi/Desktop/06.06.21/M8N 
+06-06-2021 20:50:04 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB_2.4.3_b33/app/str2str/gcc/str2str -in ntrip://danisimo:599bcf@caster.emlid.com:2101/MP2717 -out file:///home/pi/Desktop/06.06.21/NETR5/NETR5_06.06.2021_13-50-04.log'"&
+06-06-2021 20:50:05 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB_2.4.3_b33/app/str2str/gcc/str2str -in ntrip://danisimo:599bcf@caster.emlid.com:2101/MP2717a -out file:///home/pi/Desktop/06.06.21/M8N/M8N_06.06.2021_13-50-05.log'"&
+09-07-2021 21:05:48 -> Database is was connected!
+09-07-2021 21:23:47 -> Database is was connected!
+09-07-2021 21:26:19 -> Database is was connected!
