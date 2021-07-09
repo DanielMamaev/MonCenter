@@ -11,11 +11,11 @@ One to two paragraph statement about your product and what it does.
 
 Linux:
 
-*```sh
-cd/../MonCenter-master
-python3 setup.py
-python3 moncenter.py
-```
+* Go to the directory `cd /../MonCenter-master`
+
+* Run ``python3 setup.py``
+* Run ``python3 moncenter.py``
+
 
 ## Usage example
 
@@ -23,7 +23,7 @@ Soon
 
 ## Release History
 
-* 0.0.1
+* 0.1
     * Work in progress
 
 ## Meta
@@ -32,6 +32,6 @@ Daniel Mamaev – mamaev.s.d@gmail.com
 
 Artem Mareev – mareevavssugt@gmail.com
 
-Distributed under the XYZ license. See ``LICENSE`` for more information.
+Distributed under the BSD 2-Clause License license. See ``LICENSE`` for more information.
 
 [https://github.com/DanielMamaev](https://github.com/DanielMamaev)
