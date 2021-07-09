@@ -11,7 +11,7 @@ One to two paragraph statement about your product and what it does.
 
 Linux:
 
-```sh
+*```sh
 cd/../MonCenter-master
 python3 setup.py
 python3 moncenter.py
