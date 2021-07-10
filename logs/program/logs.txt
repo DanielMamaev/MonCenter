@@ -77,3 +77,27 @@
 10-07-2021 13:39:55 -> Database is was connected!
 10-07-2021 13:40:07 -> Database is was created!
 10-07-2021 13:40:14 -> Database is was connected!
+10-07-2021 13:47:17 -> Database is was connected!
+10-07-2021 13:59:22 -> Database is was connected!
+10-07-2021 13:59:25 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in tcpcli://192.168.0.100:23'"&
+10-07-2021 13:59:35 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in tcpcli://192.168.0.100:23'"&
+10-07-2021 14:18:44 -> Database is was connected!
+10-07-2021 14:18:53 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://:@192.168.0.100:23/'"&
+10-07-2021 14:20:21 -> Database is was connected!
+10-07-2021 14:20:23 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in tcpsvr://:60000'"&
+10-07-2021 14:20:34 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in tcpcli://192.168.0.100:23'"&
+10-07-2021 14:20:41 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://:@192.168.0.100:23/'"&
+10-07-2021 14:20:55 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://user:pass@192.168.0.100:23/mount'"&
+10-07-2021 15:30:16 -> Database is was connected!
+10-07-2021 15:30:52 -> Database is was connected!
+10-07-2021 15:34:46 -> Database is was connected!
+10-07-2021 15:35:26 -> Database is was connected!
+10-07-2021 15:35:32 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in serial://COM5:9600:8 bits:None:1 bit:None'"&
+10-07-2021 15:41:11 -> Database is was connected!
+10-07-2021 15:41:15 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in tcpcli://192.168.0.100:23'"&
+10-07-2021 15:41:38 -> Database is was connected!
+10-07-2021 15:41:47 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://user:pass@192.168.0.100:23/mou'"&
+10-07-2021 15:43:23 -> Database is was connected!
+10-07-2021 15:44:03 -> Database is was connected!
+10-07-2021 15:44:40 -> Database is was connected!
+10-07-2021 15:44:50 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in file:///home/pi/Desktop/MonCenter/conf.ini.log'"&

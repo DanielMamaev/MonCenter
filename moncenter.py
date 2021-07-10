@@ -28,6 +28,26 @@ import time
 import ftputil
 import warnings
 
+def serial_ports():
+    if sys.platform.startswith('win'):
+        ports = ['COM%s' % (i + 1) for i in range(256)]
+    elif sys.platform.startswith('linux') or sys.platform.startswith('cygwin'):
+        # this excludes your current terminal "/dev/tty"
+        ports = glob.glob('/dev/tty[A-Za-z]*')
+    elif sys.platform.startswith('darwin'):
+        ports = glob.glob('/dev/tty.*')
+    else:
+        raise EnvironmentError('Unsupported platform')
+
+    result = []
+    for port in ports:
+        try:
+            s = serial.Serial(port)
+            s.close()
+            result.append(port)
+        except (OSError, serial.SerialException):
+            pass
+    return result
 
 # ******************************************* MAIN *******************************************
 class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
@@ -36,7 +56,6 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.setupUi(self)
 
         self.comboBox_port.addItems(serial_ports())  # ДОБАВЛЕНИЕ НАЙДЕННЫХ ПОРТОВ В COMBOBOX
-        self.comboBox_speed.addItems(speeds)  # ДОБАВЛЕНИЕ СКОРОСТЕЙ В COMBOBOX
         # self.comboBox_speed.setCurrentIndex(4)  # ВЫСТАВЛЕНИЕ СКОРОСТИ 9600 В COMBOBOX
         self.realport = None
 
@@ -78,10 +97,8 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.action_start_str2str.triggered.connect(self.str2str_start)  # СТАРТ TCP CLIENT
         self.action_stop_str2str.triggered.connect(self.str2str_stop)
         self.action_close_xterm.triggered.connect(self.str2str_stop_xterm)
-        self.str2str_input()
-        self.comboBox_str2str_input.currentIndexChanged.connect(self.str2str_input)
-        self.checkBox_str2str_file.stateChanged.connect(self.str2str_check_outputflile)
-        self.Button_str2str_outputfile.clicked.connect(self.str2str_outputfile_path)
+        self.Button_str2str_in_file.clicked.connect(self.str2str_inputfile_path)
+        self.Button_str2str_out_file.clicked.connect(self.str2str_outputfile_path)
 
         # -------------covnbin
         self.Button_convert.clicked.connect(self.convbin_convert)
@@ -1031,7 +1048,7 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
                                             kor.append(min_str[j])
                                         kor.append("")
                                         kor.append(str(timedelta(seconds=work_time)))
-                                        kor.append(list_path+".pos")
+                                        kor.append(list_path + ".pos")
 
                                         sql = "INSERT INTO SOLUTIONS " \
                                               "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
@@ -1407,29 +1424,6 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.lineEdit_convbin_sbas.setText(path)
 
     # ***************************ВКЛАДКА STR2STR***************************
-    def str2str_input(self):
-        if self.comboBox_str2str_input.currentIndex() == 0:
-            self.lineEdit_tcpcli.setEnabled(True)
-            self.lineEdit_ntrip.setEnabled(False)
-            self.lineEdit_userid.setEnabled(False)
-            self.lineEdit_mountpoint.setEnabled(False)
-            self.lineEdit_password.setEnabled(False)
-            self.lineEdit_tcpsvr.setEnabled(False)
-        elif self.comboBox_str2str_input.currentIndex() == 1:
-            self.lineEdit_tcpcli.setEnabled(False)
-            self.lineEdit_ntrip.setEnabled(True)
-            self.lineEdit_userid.setEnabled(True)
-            self.lineEdit_mountpoint.setEnabled(True)
-            self.lineEdit_password.setEnabled(True)
-            self.lineEdit_tcpsvr.setEnabled(False)
-        elif self.comboBox_str2str_input.currentIndex() == 2:
-            self.lineEdit_tcpcli.setEnabled(False)
-            self.lineEdit_ntrip.setEnabled(False)
-            self.lineEdit_userid.setEnabled(False)
-            self.lineEdit_mountpoint.setEnabled(False)
-            self.lineEdit_password.setEnabled(False)
-            self.lineEdit_tcpsvr.setEnabled(True)
-
     def str2str_check_outputflile(self, state):
         if state != self.checkBox_str2str_file.isChecked():
             self.lineEdit_str2str_outputfile.setEnabled(True)
@@ -1440,37 +1434,88 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
 
     def str2str_outputfile_path(self):
         path, _ = QFileDialog.getSaveFileName()
-        self.lineEdit_str2str_outputfile.setText(path + ".log")
+        self.lineEdit_str2str_out_file.setText(path + ".log")
+
+    def str2str_inputfile_path(self):
+        path,_ = QFileDialog.getOpenFileName()
+        self.lineEdit_str2str_in_file.setText(path + ".log")
 
     def str2str_start(self):
         command_str2str = "xterm -e \"/bin/bash -c '" + os.getcwd() + "/RTKLIB-2.4.3-b33/app/str2str/gcc/" + \
                           "str2str -in "
-        if self.comboBox_str2str_input.currentIndex() == 0:
-            command_str2str += "tcpcli://"
-            command_str2str += self.lineEdit_tcpcli.text()
+        if self.tabWidget_str2str_in.currentIndex() == 0:
+            command_str2str += "serial://"
+            command_str2str += self.comboBox_str2str_in_ser_port.currentText()
+            command_str2str += ":" + self.comboBox_str2str_in_ser_speed.currentText()
+            command_str2str += ":" + self.comboBox_str2str_in_ser_bsize.currentText()
+            command_str2str += ":" + self.comboBox_str2str_in_ser_parity.currentText()
+            command_str2str += ":" + self.comboBox_str2str_in_ser_stopb.currentText()
+            command_str2str += ":" + self.comboBox_str2str_in_ser_fctr.currentText()
 
-        elif self.comboBox_str2str_input.currentIndex() == 1:
-            command_str2str += "ntrip://"
-            command_str2str += self.lineEdit_userid.text() + ":" + self.lineEdit_password.text()
-            command_str2str += "@" + self.lineEdit_ntrip.text() + "/" + self.lineEdit_mountpoint.text()
-
-        elif self.comboBox_str2str_input.currentIndex() == 2:
+        elif self.tabWidget_str2str_in.currentIndex() == 1:
             command_str2str += "tcpsvr://:"
-            command_str2str += self.lineEdit_tcpsvr.text()
+            command_str2str += self.lineEdit_str2str_in_tcpsvr_port.text()
 
-        if self.checkBox_str2str_file.isChecked() and self.lineEdit_str2str_outputfile.text() != "":
-            command_str2str += " -out file://" + self.lineEdit_str2str_outputfile.text()
+        elif self.tabWidget_str2str_in.currentIndex() == 2:
+            command_str2str += "tcpcli://"
+            command_str2str += self.lineEdit_str2str_in_tcpcli_host.text()
+
+        elif self.tabWidget_str2str_in.currentIndex() == 3:
+            command_str2str += "ntrip://"
+            command_str2str += self.lineEdit_str2str_in_ntrip_userid.text() + ":" + \
+                               self.lineEdit_str2str_in_ntrip_pass.text()
+
+            command_str2str += "@" + self.lineEdit_str2str_in_ntrip_host.text() + "/" + \
+                               self.lineEdit_str2str_in_ntrip_mountpoint.text()
+
+        elif self.tabWidget_str2str_in.currentIndex() == 4:
+            command_str2str += "file://"
+            command_str2str += self.lineEdit_str2str_in_file.text()
+
+        command_str2str += " -out"
+        if self.checkBox_str2str_out_serial.isChecked():
+            command_str2str += " serial://"
+            command_str2str += self.comboBox_str2str_out_ser_port.currentText()
+            command_str2str += ":" + self.comboBox_str2str_out_ser_speed.currentText()
+            command_str2str += ":" + self.comboBox_str2str_out_ser_bsize.currentText()
+            command_str2str += ":" + self.comboBox_str2str_out_ser_parity.currentText()
+            command_str2str += ":" + self.comboBox_str2str_out_ser_stopb.currentText()
+            command_str2str += ":" + self.comboBox_str2str_out_ser_fctr.currentText()
+
+        if self.checkBox_str2str_out_tcpser.isChecked():
+            command_str2str += " tcpsvr://:"
+            command_str2str += self.lineEdit_str2str_out_tcpsvr_port.text()
+
+        if self.checkBox_str2str_out_tcpcli.isChecked():
+            command_str2str += " tcpcli://"
+            command_str2str += self.lineEdit_str2str_out_tcpcli_host.text()
+
+        if self.checkBox_str2str_out_ntrip.isChecked():
+            command_str2str += " ntrip://"
+            command_str2str += self.lineEdit_str2str_out_ntrip_userid.text() + ":" + \
+                               self.lineEdit_str2str_out_ntrip_pass.text()
+
+            command_str2str += "@" + self.lineEdit_str2str_out_ntrip_host.text() + "/" + \
+                               self.lineEdit_str2str_out_ntrip_mountpoint.text()
+
+        if self.checkBox_str2str_out_ntrips:
+            command_str2str += " ntrips://"
+            pass
+
+        if self.checkBox_str2str_out_file.isChecked():
+            command_str2str += " file://"
+            command_str2str += self.lineEdit_str2str_out_file.text()
 
         command_str2str += "'\"&"
         self.show_logs(command_str2str)
         os.system(command_str2str)
 
-    @staticmethod
-    def str2str_stop():
+
+    def str2str_stop(self):
         os.system("killall str2str")
 
-    @staticmethod
-    def str2str_stop_xterm():
+
+    def str2str_stop_xterm(self):
         os.system("killall xterm")
 
     # *************************** ВКЛАДКА COM ***************************
@@ -1546,32 +1591,6 @@ class TimeResetStr2strThread(QThread):
 
 
 # ДАННЫЙ КЛАСС НУЖЕН ДЛЯ ЧТЕНИЯ ДАННЫХ С COM ПОРТА В ОТДЕЛЬНОМ ПОТОКЕ
-def serial_ports():
-    if sys.platform.startswith('win'):
-        ports = ['COM%s' % (i + 1) for i in range(256)]
-    elif sys.platform.startswith('linux') or sys.platform.startswith('cygwin'):
-        # this excludes your current terminal "/dev/tty"
-        ports = glob.glob('/dev/tty[A-Za-z]*')
-    elif sys.platform.startswith('darwin'):
-        ports = glob.glob('/dev/tty.*')
-    else:
-        raise EnvironmentError('Unsupported platform')
-
-    result = []
-    for port in ports:
-        try:
-            s = serial.Serial(port)
-            s.close()
-            result.append(port)
-        except (OSError, serial.SerialException):
-            pass
-    return result
-
-
-speeds = ['300', '1200', '2400', '4800', '9600', '19200', '38400', '57600', '74880', '115200', '230400', '250000',
-          '500000', '1000000', '2000000']
-
-
 class ReadTextThread(QThread):
     def __init__(self, mainwindow):
         super().__init__()
