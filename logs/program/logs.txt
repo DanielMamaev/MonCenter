@@ -11,3 +11,66 @@
 09-07-2021 21:50:13 -> Database is was connected!
 09-07-2021 23:03:41 -> Database is was connected!
 09-07-2021 23:18:49 -> Database is was connected!
+10-07-2021 11:47:52 -> Database is was connected!
+10-07-2021 11:47:56 -> Успешно создана директория /home/pi/Desktop/07.10.21 
+10-07-2021 11:47:57 -> Успешно создана директория /home/pi/Desktop/07.10.21/NETR5 
+10-07-2021 11:47:57 -> Создать директорию /home/pi/Desktop/07.10.21 не удалось
+10-07-2021 11:47:57 -> Успешно создана директория /home/pi/Desktop/07.10.21/M8N 
+10-07-2021 11:47:57 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB_2.4.3_b33/app/str2str/gcc/str2str -in ntrip://danisimo:599bcf@caster.emlid.com:2101/MP2717 -out file:///home/pi/Desktop/07.10.21/NETR5/NETR5_07.10.2021_04-47-57.log'"&
+10-07-2021 11:47:58 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB_2.4.3_b33/app/str2str/gcc/str2str -in ntrip://danisimo:599bcf@caster.emlid.com:2101/MP2717a -out file:///home/pi/Desktop/07.10.21/M8N/M8N_07.10.2021_04-47-58.log'"&
+10-07-2021 11:47:59 -> Не указана электронная почта для отправки уведомлений.
+10-07-2021 11:50:33 -> Database is was connected!
+10-07-2021 11:50:35 -> Directory exists.
+10-07-2021 11:50:35 -> Directory exists.
+10-07-2021 11:50:35 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://danisimo:599bcf@caster.emlid.com:2101/MP2717 -out file:///home/pi/Desktop/07.10.21/NETR5/NETR5_07.10.2021_04-50-35.log'"&
+10-07-2021 11:50:36 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://danisimo:599bcf@caster.emlid.com:2101/MP2717a -out file:///home/pi/Desktop/07.10.21/M8N/M8N_07.10.2021_04-50-36.log'"&
+10-07-2021 11:50:37 -> Не указана электронная почта для отправки уведомлений.
+10-07-2021 11:50:43 -> Directory exists.
+10-07-2021 11:50:43 -> Directory exists.
+10-07-2021 11:50:43 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://danisimo:599bcf@caster.emlid.com:2101/MP2717 -out file:///home/pi/Desktop/07.10.21/NETR5/NETR5_07.10.2021_04-50-43.log'"&
+10-07-2021 11:50:44 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://danisimo:599bcf@caster.emlid.com:2101/MP2717a -out file:///home/pi/Desktop/07.10.21/M8N/M8N_07.10.2021_04-50-44.log'"&
+10-07-2021 11:50:46 -> Не указана электронная почта для отправки уведомлений.
+10-07-2021 11:53:39 -> Database is was connected!
+10-07-2021 11:53:41 -> Directory exists.
+10-07-2021 11:53:41 -> Directory exists.
+10-07-2021 11:53:41 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://danisimo:599bcf@caster.emlid.com:2101/MP2717 -out file:///home/pi/Desktop/07.10.21/NETR5/NETR5_07.10.2021_04-53-41.log'"&
+10-07-2021 11:53:42 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://danisimo:599bcf@caster.emlid.com:2101/MP2717a -out file:///home/pi/Desktop/07.10.21/M8N/M8N_07.10.2021_04-53-42.log'"&
+10-07-2021 11:53:44 -> Не указана электронная почта для отправки уведомлений.
+10-07-2021 11:53:47 -> Directory exists.
+10-07-2021 11:53:47 -> Directory exists.
+10-07-2021 11:53:47 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://danisimo:599bcf@caster.emlid.com:2101/MP2717 -out file:///home/pi/Desktop/07.10.21/NETR5/NETR5_07.10.2021_04-53-47.log'"&
+10-07-2021 11:53:48 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://danisimo:599bcf@caster.emlid.com:2101/MP2717a -out file:///home/pi/Desktop/07.10.21/M8N/M8N_07.10.2021_04-53-48.log'"&
+10-07-2021 11:53:49 -> Не указана электронная почта для отправки уведомлений.
+10-07-2021 11:59:48 -> Database is was connected!
+10-07-2021 12:00:36 -> Database is was connected!
+10-07-2021 12:01:05 -> Database is was connected!
+10-07-2021 12:03:18 -> Database is was connected!
+10-07-2021 12:03:30 -> Database is was connected!
+10-07-2021 12:04:42 -> Database is was connected!
+10-07-2021 12:04:58 -> Directory exists.
+10-07-2021 12:04:58 -> Directory exists.
+10-07-2021 12:04:58 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://danisimo:599bcf@caster.emlid.com:2101/MP2717 -out file:///home/pi/Desktop/07.10.21/NETR5/NETR5_07.10.2021_05-04-58.log'"&
+10-07-2021 12:04:59 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://danisimo:599bcf@caster.emlid.com:2101/MP2717a -out file:///home/pi/Desktop/07.10.21/M8N/M8N_07.10.2021_05-04-59.log'"&
+10-07-2021 12:05:00 -> Не указана электронная почта для отправки уведомлений.
+10-07-2021 12:05:51 -> Database is was connected!
+10-07-2021 12:06:46 -> Directory exists.
+10-07-2021 12:06:46 -> Directory exists.
+10-07-2021 12:06:46 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://danisimo:599bcf@caster.emlid.com:2101/MP2717 -out file:///home/pi/Desktop/07.10.21/NETR5/NETR5_07.10.2021_05-06-46.log'"&
+10-07-2021 12:06:47 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://danisimo:599bcf@caster.emlid.com:2101/MP2717a -out file:///home/pi/Desktop/07.10.21/M8N/M8N_07.10.2021_05-06-47.log'"&
+10-07-2021 12:06:49 -> Не указана электронная почта для отправки уведомлений.
+10-07-2021 12:06:56 -> Directory exists.
+10-07-2021 12:06:56 -> Directory exists.
+10-07-2021 12:06:56 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://danisimo:599bcf@caster.emlid.com:2101/MP2717 -out file:///home/pi/Desktop/07.10.21/NETR5/NETR5_07.10.2021_05-06-56.log'"&
+10-07-2021 12:06:57 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://danisimo:599bcf@caster.emlid.com:2101/MP2717a -out file:///home/pi/Desktop/07.10.21/M8N/M8N_07.10.2021_05-06-57.log'"&
+10-07-2021 12:06:58 -> Не указана электронная почта для отправки уведомлений.
+10-07-2021 12:07:39 -> Database is was connected!
+10-07-2021 12:07:43 -> Directory exists.
+10-07-2021 12:07:43 -> Directory exists.
+10-07-2021 12:07:43 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://danisimo:599bcf@caster.emlid.com:2101/MP2717 -out file:///home/pi/Desktop/07.10.21/NETR5/NETR5_07.10.2021_05-07-43.log'"&
+10-07-2021 12:07:44 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://danisimo:599bcf@caster.emlid.com:2101/MP2717a -out file:///home/pi/Desktop/07.10.21/M8N/M8N_07.10.2021_05-07-44.log'"&
+10-07-2021 12:07:45 -> Не указана электронная почта для отправки уведомлений.
+10-07-2021 12:07:49 -> Directory exists.
+10-07-2021 12:07:49 -> Directory exists.
+10-07-2021 12:07:49 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://danisimo:599bcf@caster.emlid.com:2101/MP2717 -out file:///home/pi/Desktop/07.10.21/NETR5/NETR5_07.10.2021_05-07-49.log'"&
+10-07-2021 12:07:50 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://danisimo:599bcf@caster.emlid.com:2101/MP2717a -out file:///home/pi/Desktop/07.10.21/M8N/M8N_07.10.2021_05-07-50.log'"&
+10-07-2021 12:07:52 -> Не указана электронная почта для отправки уведомлений.

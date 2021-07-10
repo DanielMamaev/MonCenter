@@ -382,6 +382,11 @@
         <string>TCP Server</string>
        </property>
       </item>
+      <item>
+       <property name="text">
+        <string>Serial</string>
+       </property>
+      </item>
      </widget>
      <widget class="QLabel" name="label_2">
       <property name="geometry">
@@ -2155,7 +2160,7 @@
       </property>
       <property name="geometry">
        <rect>
-        <x>450</x>
+        <x>390</x>
         <y>360</y>
         <width>41</width>
         <height>25</height>
@@ -2171,7 +2176,7 @@
       </property>
       <property name="geometry">
        <rect>
-        <x>400</x>
+        <x>340</x>
         <y>360</y>
         <width>31</width>
         <height>25</height>
@@ -2187,7 +2192,7 @@
      <widget class="QLabel" name="label_50">
       <property name="geometry">
        <rect>
-        <x>338</x>
+        <x>278</x>
         <y>360</y>
         <width>10</width>
         <height>25</height>
@@ -2212,7 +2217,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>Time start postprocessing with DB</string>
+       <string>Time start postprocessing</string>
       </property>
      </widget>
      <widget class="QLineEdit" name="lineEdit_db_minutes">
@@ -2221,7 +2226,7 @@
       </property>
       <property name="geometry">
        <rect>
-        <x>350</x>
+        <x>290</x>
         <y>360</y>
         <width>31</width>
         <height>25</height>
@@ -2244,7 +2249,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>Time reset STR2STR with DB</string>
+       <string>Time reset STR2STR</string>
       </property>
       <property name="checked">
        <bool>false</bool>
@@ -2256,7 +2261,7 @@
       </property>
       <property name="geometry">
        <rect>
-        <x>260</x>
+        <x>200</x>
         <y>320</y>
         <width>118</width>
         <height>26</height>
@@ -2276,7 +2281,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>Last postprocessing in moment reset STR2STR with DB</string>
+       <string>Last postprocessing in moment reset STR2STR</string>
       </property>
       <property name="checked">
        <bool>false</bool>
@@ -2285,7 +2290,7 @@
      <widget class="QLabel" name="label_51">
       <property name="geometry">
        <rect>
-        <x>388</x>
+        <x>328</x>
         <y>360</y>
         <width>10</width>
         <height>25</height>
@@ -2306,7 +2311,7 @@
       </property>
       <property name="geometry">
        <rect>
-        <x>300</x>
+        <x>240</x>
         <y>360</y>
         <width>31</width>
         <height>25</height>
@@ -2322,9 +2327,9 @@
      <widget class="QPushButton" name="Button_db_start">
       <property name="geometry">
        <rect>
-        <x>580</x>
+        <x>530</x>
         <y>400</y>
-        <width>101</width>
+        <width>71</width>
         <height>30</height>
        </rect>
       </property>
@@ -2485,14 +2490,37 @@
      <widget class="QLabel" name="label_9">
       <property name="geometry">
        <rect>
-        <x>540</x>
+        <x>530</x>
         <y>320</y>
-        <width>71</width>
+        <width>81</width>
         <height>30</height>
        </rect>
       </property>
       <property name="text">
        <string>Delta(sec)</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="Button_db_stop">
+      <property name="geometry">
+       <rect>
+        <x>610</x>
+        <y>400</y>
+        <width>71</width>
+        <height>30</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Stop</string>
+      </property>
+      <property name="icon">
+       <iconset>
+        <normaloff>icon/stop.png</normaloff>icon/stop.png</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>16</width>
+        <height>16</height>
+       </size>
       </property>
      </widget>
     </widget>

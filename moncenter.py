@@ -141,6 +141,7 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.Button_db_connect.clicked.connect(self.db_connect)
         self.Button_db_start.clicked.connect(self.db_start_str2str)
         self.Button_db_save.clicked.connect(self.db_dir_save)
+        self.Button_db_stop.clicked.connect(self.db_stop)
         self.open_db = sqlite3.connect("")
         self.db_connect()
         self.post_pro_db = []
@@ -488,6 +489,8 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
             self.lineEdit_db_con_path.setText(config.get("DATABASE", "connect_to"))
             self.lineEdit_db_save.setText(config.get("DATABASE", "save_to"))
             self.lineEdit_db_delta.setText(config.get("DATABASE", "delta"))
+            if self.checkBox_db_reset.isChecked():
+                self.timeEdit_db.setEnabled(True)
 
             # --- SETTINGS
             self.lineEdit_settings_email.setText(config.get("SETTINGS", "email"))
@@ -648,8 +651,12 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         path = QFileDialog.getExistingDirectory(None)
         self.lineEdit_db_save.setText(path)
 
-    def db_start_str2str(self):
+    def db_stop(self):
         self.post_pro_db = []
+        os.system("killall str2str")
+
+    def db_start_str2str(self):
+        self.db_stop()
         try:
             cursor = self.open_db.cursor()
             sql = "SELECT name_r FROM RECEIVERS WHERE enable=1"
@@ -694,7 +701,7 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
             cursor.execute(sql)
             host = cursor.fetchall()
             for i in range(len(host)):
-                command_str2str = "xterm -e \"/bin/bash -c '" + os.getcwd() + "/RTKLIB_2.4.3_b33/app/str2str/gcc/" + \
+                command_str2str = "xterm -e \"/bin/bash -c '" + os.getcwd() + "/RTKLIB-2.4.3-b33/app/str2str/gcc/" + \
                                   "str2str -in "
                 if host[i][2] == 0:
                     command_str2str += "tcpcli://"
@@ -760,6 +767,8 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         except Exception:
             self.show_logs("Problem with the database.")
 
+        print(self.post_pro_db)
+
     def db_start_convbin(self, list_path):
         try:
             cursor = self.open_db.cursor()
@@ -771,7 +780,7 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
             # print(count)
 
             for y in range(count[0][0]):
-                command_convbin = "RTKLIB_2.4.3_b33/app/convbin/gcc/convbin"
+                command_convbin = "RTKLIB-2.4.3-b33/app/convbin/gcc/convbin"
 
                 sql = "SELECT format FROM RECEIVERS, CONV_CONF WHERE RECEIVERS.enable=1 AND " \
                       "RECEIVERS.id_conv = CONV_CONF.id_conv"
@@ -851,7 +860,7 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
             id_pos = cursor.fetchall()
 
             for i in range(len(id_pos)):
-                command_rnx2rtkp = "RTKLIB_2.4.3_b33/app/rnx2rtkp/gcc/rnx2rtkp"
+                command_rnx2rtkp = "RTKLIB-2.4.3-b33/app/rnx2rtkp/gcc/rnx2rtkp"
                 sql = """SELECT pos_mode FROM BASELINES, POS_CONF WHERE BASELINES.id_pos = POS_CONF.id_pos AND 
                 BASELINES.enable = 1"""
                 cursor.execute(sql)
@@ -1134,7 +1143,7 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.lineEdit_rnx2rtkp_output.setText(fname)
 
     def rnx2rtkp_input_start(self):
-        command_rnx2rtkp = "RTKLIB_2.4.3_b33/app/rnx2rtkp/gcc/rnx2rtkp"
+        command_rnx2rtkp = "RTKLIB-2.4.3-b33/app/rnx2rtkp/gcc/rnx2rtkp"
         if self.checkBox_rnx2rtkp_conf.isChecked():
             command_rnx2rtkp += " -k " + self.lineEdit_rnx2rtkp_conf.text()
         else:
@@ -1258,7 +1267,7 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
             self.dateTimeEdit_end.setEnabled(False)
 
     def convbin_convert(self):
-        command_convbin = "RTKLIB_2.4.3_b33/app/convbin/gcc/convbin"
+        command_convbin = "RTKLIB-2.4.3-b33/app/convbin/gcc/convbin"
         command_convbin += " -r " + self.comboBox_format.currentText()
         command_convbin += " -f " + self.comboBox_freq.currentText()
         command_convbin += " -v " + self.comboBox_rinex.currentText()
@@ -1432,7 +1441,7 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.lineEdit_str2str_outputfile.setText(path + ".log")
 
     def str2str_start(self):
-        command_str2str = "xterm -e \"/bin/bash -c '" + os.getcwd() + "/RTKLIB_2.4.3_b33/app/str2str/gcc/" + \
+        command_str2str = "xterm -e \"/bin/bash -c '" + os.getcwd() + "/RTKLIB-2.4.3-b33/app/str2str/gcc/" + \
                           "str2str -in "
         if self.comboBox_str2str_input.currentIndex() == 0:
             command_str2str += "tcpcli://"
