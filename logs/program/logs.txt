@@ -74,3 +74,6 @@
 10-07-2021 12:07:49 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://danisimo:599bcf@caster.emlid.com:2101/MP2717 -out file:///home/pi/Desktop/07.10.21/NETR5/NETR5_07.10.2021_05-07-49.log'"&
 10-07-2021 12:07:50 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://danisimo:599bcf@caster.emlid.com:2101/MP2717a -out file:///home/pi/Desktop/07.10.21/M8N/M8N_07.10.2021_05-07-50.log'"&
 10-07-2021 12:07:52 -> Не указана электронная почта для отправки уведомлений.
+10-07-2021 13:39:55 -> Database is was connected!
+10-07-2021 13:40:07 -> Database is was created!
+10-07-2021 13:40:14 -> Database is was connected!

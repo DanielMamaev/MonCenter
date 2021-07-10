@@ -549,8 +549,8 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         "obs"	INTEGER,
         "nav"	INTEGER,
         PRIMARY KEY("id_conv")
-    );
-                               """)
+        );
+        """)
         cursor.execute("""
         CREATE TABLE "POINTS" (
         "id_poi"	INTEGER UNIQUE,
@@ -616,6 +616,7 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         "ratio"	REAL,
         "comment"	TEXT,
         "work_time"	TEXT,
+        "path"	TEXT,
         PRIMARY KEY("id_sol")
         );
         """)
@@ -1030,9 +1031,10 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
                                             kor.append(min_str[j])
                                         kor.append("")
                                         kor.append(str(timedelta(seconds=work_time)))
+                                        kor.append(list_path+".pos")
 
                                         sql = "INSERT INTO SOLUTIONS " \
-                                              "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+                                              "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
                                         # print(kor)
                                         cursor.execute(sql, kor)
                                         self.open_db.commit()
