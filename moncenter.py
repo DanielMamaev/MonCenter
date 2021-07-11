@@ -55,9 +55,11 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         super().__init__()
         self.setupUi(self)
 
-        self.comboBox_port.addItems(serial_ports())  # ДОБАВЛЕНИЕ НАЙДЕННЫХ ПОРТОВ В COMBOBOX
-        # self.comboBox_speed.setCurrentIndex(4)  # ВЫСТАВЛЕНИЕ СКОРОСТИ 9600 В COMBOBOX
+        self.serial_update()
+
         self.realport = None
+
+        self.action_refresh_ports.triggered.connect(self.serial_update)
 
         self.pushButton_connect.clicked.connect(self.com_connect)  # ОБРАБОТКА ПОДКЛЮЧЕНИЯ К ПОРТУ
         self.pushButton_refresh.clicked.connect(self.com_refresh)  # ПОИСК НОВЫХ ПОРТОВ
@@ -99,6 +101,8 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.action_close_xterm.triggered.connect(self.str2str_stop_xterm)
         self.Button_str2str_in_file.clicked.connect(self.str2str_inputfile_path)
         self.Button_str2str_out_file.clicked.connect(self.str2str_outputfile_path)
+        self.Button_str2str_out_file_2.clicked.connect(self.str2str_outputfile_path_2)
+        self.Button_str2str_out_file_3.clicked.connect(self.str2str_outputfile_path_3)
 
         # -------------covnbin
         self.Button_convert.clicked.connect(self.convbin_convert)
@@ -173,6 +177,10 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.Button_db_timepost_ok.clicked.connect(self.db_posttime)
         self.Button_db_sql.clicked.connect(self.db_sql_command)
 
+
+    def serial_update(self):
+        self.comboBox_port.addItems(serial_ports())  # ДОБАВЛЕНИЕ НАЙДЕННЫХ ПОРТОВ В COMBOBOX
+        self.comboBox_str2str_in_ser_port.addItems(serial_ports())
     # *************************** SHOW LOGS ***************************
     def show_logs(self, text):
         print("\n" + text)
@@ -1436,6 +1444,14 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         path, _ = QFileDialog.getSaveFileName()
         self.lineEdit_str2str_out_file.setText(path + ".log")
 
+    def str2str_outputfile_path_2(self):
+        path, _ = QFileDialog.getSaveFileName()
+        self.lineEdit_str2str_out_file_2.setText(path + ".log")
+
+    def str2str_outputfile_path_3(self):
+        path, _ = QFileDialog.getSaveFileName()
+        self.lineEdit_str2str_out_file_3.setText(path + ".log")
+
     def str2str_inputfile_path(self):
         path,_ = QFileDialog.getOpenFileName()
         self.lineEdit_str2str_in_file.setText(path + ".log")
@@ -1472,39 +1488,110 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
             command_str2str += "file://"
             command_str2str += self.lineEdit_str2str_in_file.text()
 
-        command_str2str += " -out"
-        if self.checkBox_str2str_out_serial.isChecked():
-            command_str2str += " serial://"
-            command_str2str += self.comboBox_str2str_out_ser_port.currentText()
-            command_str2str += ":" + self.comboBox_str2str_out_ser_speed.currentText()
-            command_str2str += ":" + self.comboBox_str2str_out_ser_bsize.currentText()
-            command_str2str += ":" + self.comboBox_str2str_out_ser_parity.currentText()
-            command_str2str += ":" + self.comboBox_str2str_out_ser_stopb.currentText()
-            command_str2str += ":" + self.comboBox_str2str_out_ser_fctr.currentText()
 
-        if self.checkBox_str2str_out_tcpser.isChecked():
-            command_str2str += " tcpsvr://:"
-            command_str2str += self.lineEdit_str2str_out_tcpsvr_port.text()
+        # ПЕРВАЯ ФОРМА
+        if self.checkBox_str2str_out1.isChecked():
+            command_str2str += " -out "
+            if self.tabWidget_str2str_out_1.currentIndex() == 0:
+                command_str2str += "serial://"
+                command_str2str += self.comboBox_str2str_out_ser_port.currentText()
+                command_str2str += ":" + self.comboBox_str2str_out_ser_speed.currentText()
+                command_str2str += ":" + self.comboBox_str2str_out_ser_bsize.currentText()
+                command_str2str += ":" + self.comboBox_str2str_out_ser_parity.currentText()
+                command_str2str += ":" + self.comboBox_str2str_out_ser_stopb.currentText()
+                command_str2str += ":" + self.comboBox_str2str_out_ser_fctr.currentText()
 
-        if self.checkBox_str2str_out_tcpcli.isChecked():
-            command_str2str += " tcpcli://"
-            command_str2str += self.lineEdit_str2str_out_tcpcli_host.text()
+            if self.tabWidget_str2str_out_1.currentIndex() == 1:
+                command_str2str += "tcpsvr://:"
+                command_str2str += self.lineEdit_str2str_out_tcpsvr_port.text()
 
-        if self.checkBox_str2str_out_ntrip.isChecked():
-            command_str2str += " ntrip://"
-            command_str2str += self.lineEdit_str2str_out_ntrip_userid.text() + ":" + \
-                               self.lineEdit_str2str_out_ntrip_pass.text()
+            if self.tabWidget_str2str_out_1.currentIndex() == 2:
+                command_str2str += "tcpcli://"
+                command_str2str += self.lineEdit_str2str_out_tcpcli_host.text()
 
-            command_str2str += "@" + self.lineEdit_str2str_out_ntrip_host.text() + "/" + \
-                               self.lineEdit_str2str_out_ntrip_mountpoint.text()
+            if self.tabWidget_str2str_out_1.currentIndex() == 3:
+                command_str2str += "ntrip://"
+                command_str2str += self.lineEdit_str2str_out_ntrip_userid.text() + ":" + \
+                                   self.lineEdit_str2str_out_ntrip_pass.text()
 
-        if self.checkBox_str2str_out_ntrips:
-            command_str2str += " ntrips://"
-            pass
+                command_str2str += "@" + self.lineEdit_str2str_out_ntrip_host.text() + "/" + \
+                                   self.lineEdit_str2str_out_ntrip_mountpoint.text()
 
-        if self.checkBox_str2str_out_file.isChecked():
-            command_str2str += " file://"
-            command_str2str += self.lineEdit_str2str_out_file.text()
+            if self.tabWidget_str2str_out_1.currentIndex() == 4:
+                pass
+            if self.tabWidget_str2str_out_1.currentIndex() == 5:
+                command_str2str += "file://"
+                command_str2str += self.lineEdit_str2str_out_file.text()
+
+        # ВТОРАЯ ФОРМА
+        if self.checkBox_str2str_out2.isChecked():
+            command_str2str += " -out "
+            if self.tabWidget_str2str_out_2.currentIndex() == 0:
+                command_str2str += "serial://"
+                command_str2str += self.comboBox_str2str_out_ser_port_2.currentText()
+                command_str2str += ":" + self.comboBox_str2str_out_ser_speed_2.currentText()
+                command_str2str += ":" + self.comboBox_str2str_out_ser_bsize_2.currentText()
+                command_str2str += ":" + self.comboBox_str2str_out_ser_parity_2.currentText()
+                command_str2str += ":" + self.comboBox_str2str_out_ser_stopb_2.currentText()
+                command_str2str += ":" + self.comboBox_str2str_out_ser_fctr_2.currentText()
+
+            if self.tabWidget_str2str_out_2.currentIndex() == 1:
+                command_str2str += "tcpsvr://:"
+                command_str2str += self.lineEdit_str2str_out_tcpsvr_port_2.text()
+
+            if self.tabWidget_str2str_out_2.currentIndex() == 2:
+                command_str2str += "tcpcli://"
+                command_str2str += self.lineEdit_str2str_out_tcpcli_host_2.text()
+
+            if self.tabWidget_str2str_out_2.currentIndex() == 3:
+                command_str2str += "ntrip://"
+                command_str2str += self.lineEdit_str2str_out_ntrip_userid_2.text() + ":" + \
+                                   self.lineEdit_str2str_out_ntrip_pass_2.text()
+
+                command_str2str += "@" + self.lineEdit_str2str_out_ntrip_host_2.text() + "/" + \
+                                   self.lineEdit_str2str_out_ntrip_mountpoint_2.text()
+
+            if self.tabWidget_str2str_out_2.currentIndex() == 4:
+                pass
+
+            if self.tabWidget_str2str_out_2.currentIndex() == 5:
+                command_str2str += "file://"
+                command_str2str += self.lineEdit_str2str_out_file_2.text()
+
+        #ТРЕТЬЯ ФОРМА
+        if self.checkBox_str2str_out3.isChecked():
+            command_str2str += " -out "
+            if self.tabWidget_str2str_out_3.currentIndex() == 0:
+                command_str2str += "serial://"
+                command_str2str += self.comboBox_str2str_out_ser_port_3.currentText()
+                command_str2str += ":" + self.comboBox_str2str_out_ser_speed_3.currentText()
+                command_str2str += ":" + self.comboBox_str2str_out_ser_bsize_3.currentText()
+                command_str2str += ":" + self.comboBox_str2str_out_ser_parity_3.currentText()
+                command_str2str += ":" + self.comboBox_str2str_out_ser_stopb_3.currentText()
+                command_str2str += ":" + self.comboBox_str2str_out_ser_fctr_3.currentText()
+
+            if self.tabWidget_str2str_out_3.currentIndex() == 1:
+                command_str2str += "tcpsvr://:"
+                command_str2str += self.lineEdit_str2str_out_tcpsvr_port_3.text()
+
+            if self.tabWidget_str2str_out_3.currentIndex() == 2:
+                command_str2str += "tcpcli://"
+                command_str2str += self.lineEdit_str2str_out_tcpcli_host_3.text()
+
+            if self.tabWidget_str2str_out_3.currentIndex() == 3:
+                command_str2str += "ntrip://"
+                command_str2str += self.lineEdit_str2str_out_ntrip_userid_3.text() + ":" + \
+                                   self.lineEdit_str2str_out_ntrip_pass_3.text()
+
+                command_str2str += "@" + self.lineEdit_str2str_out_ntrip_host_3.text() + "/" + \
+                                   self.lineEdit_str2str_out_ntrip_mountpoint_3.text()
+
+            if self.tabWidget_str2str_out_3.currentIndex() == 4:
+                pass
+
+            if self.tabWidget_str2str_out_3.currentIndex() == 5:
+                command_str2str += "file://"
+                command_str2str += self.lineEdit_str2str_out_file_3.text()
 
         command_str2str += "'\"&"
         self.show_logs(command_str2str)
