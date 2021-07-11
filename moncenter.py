@@ -266,7 +266,8 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
                 else:
                     folder_id = r['id']
 
-            # Загрузка файла
+            # Загрузка файла измерений
+            self.show_logs("Загрузка файла измерений")
             name = os.path.basename(path)
             file_path = path
             file_metadata = {
@@ -278,7 +279,25 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
             try:
                 media = MediaFileUpload(file_path, resumable=True)
             except Exception:
-                self.show_logs("Не удалось загрузить файл")
+                self.show_logs("Не удалось загрузить файл измерений")
+            try:
+                service.files().create(body=file_metadata, media_body=media, fields='id').execute()
+            except Exception:
+                self.show_logs("Неверный id папки")
+
+            # Загрузка файла базы данных
+            self.show_logs("Загрузка файла базы данных")
+            name = os.path.basename(self.lineEdit_db_con_path.text())
+            file_path = self.lineEdit_db_con_path.text()
+            file_metadata = {
+                'name': name,
+                'parents': [folder_id]
+            }
+            media = ""
+            try:
+                media = MediaFileUpload(file_path, resumable=True)
+            except Exception:
+                self.show_logs("Не удалось загрузить файл базы данных")
 
             try:
                 service.files().create(body=file_metadata, media_body=media, fields='id').execute()
@@ -608,13 +627,19 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         CREATE TABLE "RECEIVERS" (
         "name_r"	TEXT,
         "enable"	INTEGER,
+        "id_conv"	INTEGER,
         "protocol"	INTEGER,
         "ip_host"	TEXT,
         "username"	TEXT,
         "password"	TEXT,
         "mountpoint"	TEXT,
         "type"	TEXT,
-        "id_conv"	INTEGER,
+        "com_port" TEXT,
+        "baudrate" INTEGER,
+        "bit_size" INTEGER,
+        "patity" TEXT,
+        "stop_bit" INTEGER,
+        "flow_ctr" TEXT,
         "id_poi"	INTEGER,
         PRIMARY KEY("name_r")
         );
@@ -731,14 +756,15 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
                                   "str2str -in "
                 if host[i][2] == 0:
                     command_str2str += "tcpcli://"
-                    command_str2str += host[i][3]
+                    command_str2str += host[i][4]
                 if host[i][2] == 1:
                     command_str2str += "ntrip://"
-                    command_str2str += host[i][4] + ":" + host[i][5] + "@"
-                    command_str2str += host[i][3] + "/" + host[i][6]
+                    command_str2str += host[i][5] + ":" + host[i][6] + "@"
+                    command_str2str += host[i][4] + "/" + host[i][7]
                 if host[i][2] == 2:
                     command_str2str += "serial://"
-                    pass
+                    command_str2str += host[i][9] + ":" + host[i][10] + ":" + host[i][11] + ":" + host[i][12]\
+                                       + ":" + host[i][13] + ":" + host[i][14]
 
                 if len(dir_path_list) == len(host):
                     command_str2str += " -out file://"
