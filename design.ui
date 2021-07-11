@@ -314,7 +314,7 @@
        <widget class="QComboBox" name="comboBox_str2str_in_ser_bsize">
         <property name="geometry">
          <rect>
-          <x>180</x>
+          <x>190</x>
           <y>30</y>
           <width>71</width>
           <height>32</height>
@@ -337,7 +337,7 @@
        <widget class="QComboBox" name="comboBox_str2str_in_ser_parity">
         <property name="geometry">
          <rect>
-          <x>180</x>
+          <x>190</x>
           <y>90</y>
           <width>71</width>
           <height>32</height>
@@ -422,7 +422,7 @@
        <widget class="QLabel" name="label_22">
         <property name="geometry">
          <rect>
-          <x>180</x>
+          <x>190</x>
           <y>10</y>
           <width>90</width>
           <height>21</height>
@@ -442,7 +442,7 @@
        <widget class="QLabel" name="label_23">
         <property name="geometry">
          <rect>
-          <x>180</x>
+          <x>190</x>
           <y>70</y>
           <width>90</width>
           <height>21</height>
@@ -873,7 +873,7 @@
          <widget class="QLabel" name="label_55">
           <property name="geometry">
            <rect>
-            <x>180</x>
+            <x>190</x>
             <y>70</y>
             <width>90</width>
             <height>21</height>
@@ -933,7 +933,7 @@
          <widget class="QComboBox" name="comboBox_str2str_out_ser_parity">
           <property name="geometry">
            <rect>
-            <x>180</x>
+            <x>190</x>
             <y>90</y>
             <width>71</width>
             <height>32</height>
@@ -958,7 +958,7 @@
          <widget class="QComboBox" name="comboBox_str2str_out_ser_bsize">
           <property name="geometry">
            <rect>
-            <x>180</x>
+            <x>190</x>
             <y>30</y>
             <width>71</width>
             <height>32</height>
@@ -981,7 +981,7 @@
          <widget class="QLabel" name="label_58">
           <property name="geometry">
            <rect>
-            <x>180</x>
+            <x>190</x>
             <y>10</y>
             <width>90</width>
             <height>21</height>
@@ -1593,7 +1593,7 @@
          <widget class="QLabel" name="label_66">
           <property name="geometry">
            <rect>
-            <x>180</x>
+            <x>190</x>
             <y>70</y>
             <width>90</width>
             <height>21</height>
@@ -1653,7 +1653,7 @@
          <widget class="QComboBox" name="comboBox_str2str_out_ser_parity_2">
           <property name="geometry">
            <rect>
-            <x>180</x>
+            <x>190</x>
             <y>90</y>
             <width>71</width>
             <height>32</height>
@@ -1678,7 +1678,7 @@
          <widget class="QComboBox" name="comboBox_str2str_out_ser_bsize_2">
           <property name="geometry">
            <rect>
-            <x>180</x>
+            <x>190</x>
             <y>30</y>
             <width>71</width>
             <height>32</height>
@@ -1701,7 +1701,7 @@
          <widget class="QLabel" name="label_69">
           <property name="geometry">
            <rect>
-            <x>180</x>
+            <x>190</x>
             <y>10</y>
             <width>90</width>
             <height>21</height>
@@ -2313,7 +2313,7 @@
          <widget class="QLabel" name="label_79">
           <property name="geometry">
            <rect>
-            <x>180</x>
+            <x>190</x>
             <y>70</y>
             <width>90</width>
             <height>21</height>
@@ -2373,7 +2373,7 @@
          <widget class="QComboBox" name="comboBox_str2str_out_ser_parity_3">
           <property name="geometry">
            <rect>
-            <x>180</x>
+            <x>190</x>
             <y>90</y>
             <width>71</width>
             <height>32</height>
@@ -2398,7 +2398,7 @@
          <widget class="QComboBox" name="comboBox_str2str_out_ser_bsize_3">
           <property name="geometry">
            <rect>
-            <x>180</x>
+            <x>190</x>
             <y>30</y>
             <width>71</width>
             <height>32</height>
@@ -2421,7 +2421,7 @@
          <widget class="QLabel" name="label_82">
           <property name="geometry">
            <rect>
-            <x>180</x>
+            <x>190</x>
             <y>10</y>
             <width>90</width>
             <height>21</height>
