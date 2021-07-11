@@ -103,6 +103,12 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.Button_str2str_out_file.clicked.connect(self.str2str_outputfile_path)
         self.Button_str2str_out_file_2.clicked.connect(self.str2str_outputfile_path_2)
         self.Button_str2str_out_file_3.clicked.connect(self.str2str_outputfile_path_3)
+        self.tab_output1.setEnabled(False)
+        self.tab_output2.setEnabled(False)
+        self.tab_output3.setEnabled(False)
+        self.checkBox_str2str_out1.stateChanged.connect(self.str2str_flag_output1)
+        self.checkBox_str2str_out2.stateChanged.connect(self.str2str_flag_output2)
+        self.checkBox_str2str_out3.stateChanged.connect(self.str2str_flag_output3)
 
         # -------------covnbin
         self.Button_convert.clicked.connect(self.convbin_convert)
@@ -1432,6 +1438,24 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.lineEdit_convbin_sbas.setText(path)
 
     # ***************************ВКЛАДКА STR2STR***************************
+    def str2str_flag_output1(self, state):
+        if state == self.checkBox_str2str_out1.isChecked():
+            self.tab_output1.setEnabled(False)
+        else:
+            self.tab_output1.setEnabled(True)
+
+    def str2str_flag_output2(self, state):
+        if state == self.checkBox_str2str_out2.isChecked():
+            self.tab_output2.setEnabled(False)
+        else:
+            self.tab_output2.setEnabled(True)
+
+    def str2str_flag_output3(self, state):
+        if state == self.checkBox_str2str_out3.isChecked():
+            self.tab_output3.setEnabled(False)
+        else:
+            self.tab_output3.setEnabled(True)
+
     def str2str_check_outputflile(self, state):
         if state != self.checkBox_str2str_file.isChecked():
             self.lineEdit_str2str_outputfile.setEnabled(True)
@@ -1518,7 +1542,11 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
                                    self.lineEdit_str2str_out_ntrip_mountpoint.text()
 
             if self.tabWidget_str2str_out_1.currentIndex() == 4:
-                pass
+                command_str2str += "ntrips://"
+                command_str2str += ":" + self.lineEdit_str2str_out_ntrips_pass.text()
+                command_str2str += "@" + self.lineEdit_str2str_out_ntrips_host.text() + "/" + \
+                                   self.lineEdit_str2str_out_ntrips_mountpoint.text()
+
             if self.tabWidget_str2str_out_1.currentIndex() == 5:
                 command_str2str += "file://"
                 command_str2str += self.lineEdit_str2str_out_file.text()
@@ -1552,7 +1580,10 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
                                    self.lineEdit_str2str_out_ntrip_mountpoint_2.text()
 
             if self.tabWidget_str2str_out_2.currentIndex() == 4:
-                pass
+                command_str2str += "ntrips://"
+                command_str2str += ":" + self.lineEdit_str2str_out_ntrips_pass_2.text()
+                command_str2str += "@" + self.lineEdit_str2str_out_ntrips_host_2.text() + "/" + \
+                                   self.lineEdit_str2str_out_ntrips_mountpoint_2.text()
 
             if self.tabWidget_str2str_out_2.currentIndex() == 5:
                 command_str2str += "file://"
@@ -1587,7 +1618,10 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
                                    self.lineEdit_str2str_out_ntrip_mountpoint_3.text()
 
             if self.tabWidget_str2str_out_3.currentIndex() == 4:
-                pass
+                command_str2str += "ntrips://"
+                command_str2str += ":" + self.lineEdit_str2str_out_ntrips_pass_3.text()
+                command_str2str += "@" + self.lineEdit_str2str_out_ntrips_host_3.text() + "/" + \
+                                   self.lineEdit_str2str_out_ntrips_mountpoint_3.text()
 
             if self.tabWidget_str2str_out_3.currentIndex() == 5:
                 command_str2str += "file://"

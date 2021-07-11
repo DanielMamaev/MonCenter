@@ -150,3 +150,12 @@
 11-07-2021 15:44:20 -> Database is was connected!
 11-07-2021 15:46:01 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://Danisimo:96869686@mgex.igs-ip.net/RTCM3EPH-MGEX-GPS'"&
 11-07-2021 15:46:50 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://Danisimo:96869686@mgex.igs-ip.net/RTCM3EPH-MGEX-GPS -out file:///home/pi/Desktop/1.INI.log -out file:///home/pi/Desktop/2.INI.log'"&
+11-07-2021 20:35:05 -> Database is was connected!
+11-07-2021 20:36:02 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://Danisimo:96869686@mgex.igs-ip.net:2101/RTCM3EPH-MGEX-GPS -out tcpsvr://:60001 -out file:///home/pi/Desktop/123.log -out tcpcli://192.168.0.100:23'"&
+11-07-2021 20:46:11 -> Database is was connected!
+11-07-2021 20:47:27 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://Danisimo:96869686@mgex.igs-ip.net:2101/RTCM3EPH-MGEX-GPS -out ntrip://:763jya@159.89.221.86:2101/MP2717'"&
+11-07-2021 20:49:06 -> Database is was connected!
+11-07-2021 20:50:05 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://Danisimo:96869686@mgex.igs-ip.net:2101/RTCM3EPH-MGEX-GPS -out ntrips://:763jya@159.89.221.86:2101/MP2717'"&
+11-07-2021 20:56:38 -> Database is was connected!
+11-07-2021 20:58:17 -> Database is was connected!
+11-07-2021 20:58:37 -> Database is was connected!
