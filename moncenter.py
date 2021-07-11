@@ -56,35 +56,15 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.setupUi(self)
 
         self.serial_update()
-
-        self.realport = None
-
-        self.action_refresh_ports.triggered.connect(self.serial_update)
-
-        self.pushButton_connect.clicked.connect(self.com_connect)  # ОБРАБОТКА ПОДКЛЮЧЕНИЯ К ПОРТУ
-        self.pushButton_refresh.clicked.connect(self.com_refresh)  # ПОИСК НОВЫХ ПОРТОВ
-        self.pushButton_send.clicked.connect(self.com_send)  # ОТПРАВКА СООБЩЕНИЯ
-        self.pushButton_clear.clicked.connect(self.com_clear)  # ЧИСТКА ОКНА ПРИХОДЯЩИХ ДАННЫХ С КОМ ПОРТА
-
-        self.connection_list = []
-
-        self.receivedMessage = None  # ХРАНИТ ПРИХОДЯЩЕЕ СООБЩЕНИЕ С КОМ ПОРТА
-        self.button_com_flag = True  # ФЛАГ ДЛЯ ПОДКЛЮЧЕНИЯ К КОМ ПОРТУ
-
-        self.command_list = ['#ser', '#num', '#ip', '#tcp_res', '#restart',
-                             '#reset']  # КОМАНДЫ ДЛЯ УПРАВЛЕНИЯ WEMOS ЧЕРЕЗ КОМ ПОРТ
-        self.comboBox_comm.addItems(self.command_list)  # ДОБАВЛЕНИЕ КОМАНД В COMBOBOX
-
-        self.read_text_Thread_instance = ReadTextThread(mainwindow=self)  # ЗАПУСК ПОТОКА ЧТЕНИЯ ДАННЫХ ИЗ КОМ ПОРТА
-
         self.action_exit.triggered.connect(self.ini_save_exit)
+
         # ------------- .INI
         self.path_ini = "conf.ini"
         self.action_save_config.triggered.connect(self.ini_save)
         self.action_reset_config.triggered.connect(self.ini_reset)
         self.ini_start()
 
-        # -------------str2str
+        # -------------STR2STR
         self.filename_tcpcli = ""
         self.path_tcpcli = ""
         self.tcpcli_list = []
@@ -110,7 +90,7 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.checkBox_str2str_out2.stateChanged.connect(self.str2str_flag_output2)
         self.checkBox_str2str_out3.stateChanged.connect(self.str2str_flag_output3)
 
-        # -------------covnbin
+        # -------------CONVBIN
         self.Button_convert.clicked.connect(self.convbin_convert)
         self.Button_input.clicked.connect(self.convbin_input_path)
         self.Button_obs.clicked.connect(self.convbin_obs_path)
@@ -144,7 +124,7 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.checkBox_time_start.stateChanged.connect(self.convbin_check_time_start)
         self.checkBox_time_end.stateChanged.connect(self.convbin_check_time_end)
 
-        # -------------rnx2rtkp
+        # -------------RNX2RTKP
         self.Button_rnx2rtkp_input_conf.clicked.connect(self.rnx2rtkp_input_conf)
         self.Button_rnx2rtkp_input_rover.clicked.connect(self.rnx2rtkp_input_rover)
         self.Button_rnx2rtkp_input_base.clicked.connect(self.rnx2rtkp_input_base)
@@ -183,6 +163,20 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.Button_db_timepost_ok.clicked.connect(self.db_posttime)
         self.Button_db_sql.clicked.connect(self.db_sql_command)
 
+
+        # ------------- COM
+        self.realport = None
+        self.action_refresh_ports.triggered.connect(self.serial_update)
+        self.pushButton_connect.clicked.connect(self.com_connect)  # ОБРАБОТКА ПОДКЛЮЧЕНИЯ К ПОРТУ
+        self.pushButton_refresh.clicked.connect(self.com_refresh)  # ПОИСК НОВЫХ ПОРТОВ
+        self.pushButton_send.clicked.connect(self.com_send)  # ОТПРАВКА СООБЩЕНИЯ
+        self.pushButton_clear.clicked.connect(self.com_clear)  # ЧИСТКА ОКНА ПРИХОДЯЩИХ ДАННЫХ С КОМ ПОРТА
+        self.receivedMessage = None  # ХРАНИТ ПРИХОДЯЩЕЕ СООБЩЕНИЕ С КОМ ПОРТА
+        self.button_com_flag = True  # ФЛАГ ДЛЯ ПОДКЛЮЧЕНИЯ К КОМ ПОРТУ
+        self.command_list = ['#ser', '#num', '#ip', '#tcp_res', '#restart',
+                             '#reset']  # КОМАНДЫ ДЛЯ УПРАВЛЕНИЯ WEMOS ЧЕРЕЗ КОМ ПОРТ
+        self.comboBox_comm.addItems(self.command_list)  # ДОБАВЛЕНИЕ КОМАНД В COMBOBOX
+        self.read_text_Thread_instance = ReadTextThread(mainwindow=self)  # ЗАПУСК ПОТОКА ЧТЕНИЯ ДАННЫХ ИЗ КОМ ПОРТА
 
     def serial_update(self):
         self.comboBox_port.addItems(serial_ports())  # ДОБАВЛЕНИЕ НАЙДЕННЫХ ПОРТОВ В COMBOBOX
