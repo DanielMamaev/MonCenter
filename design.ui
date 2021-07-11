@@ -5485,8 +5485,8 @@
        <widget class="QLabel" name="label_41">
         <property name="geometry">
          <rect>
-          <x>492</x>
-          <y>10</y>
+          <x>220</x>
+          <y>80</y>
           <width>191</width>
           <height>16</height>
          </rect>
@@ -5505,58 +5505,17 @@
          <rect>
           <x>12</x>
           <y>30</y>
-          <width>171</width>
-          <height>30</height>
-         </rect>
-        </property>
-       </widget>
-       <widget class="QLabel" name="label_42">
-        <property name="geometry">
-         <rect>
-          <x>12</x>
-          <y>70</y>
-          <width>241</width>
-          <height>16</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>10</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>Default folder</string>
-        </property>
-       </widget>
-       <widget class="QCheckBox" name="checkBox_settings_ftp_autoconnect">
-        <property name="geometry">
-         <rect>
-          <x>540</x>
-          <y>90</y>
-          <width>131</width>
-          <height>30</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Activate</string>
-        </property>
-       </widget>
-       <widget class="QLineEdit" name="lineEdit_settings_ftp_username">
-        <property name="geometry">
-         <rect>
-          <x>282</x>
-          <y>30</y>
           <width>191</width>
           <height>30</height>
          </rect>
         </property>
        </widget>
-       <widget class="QLineEdit" name="lineEdit_settings_ftp_folder">
+       <widget class="QLineEdit" name="lineEdit_settings_ftp_username">
         <property name="geometry">
          <rect>
           <x>12</x>
-          <y>90</y>
-          <width>461</width>
+          <y>100</y>
+          <width>191</width>
           <height>30</height>
          </rect>
         </property>
@@ -5564,8 +5523,8 @@
        <widget class="QLabel" name="label_40">
         <property name="geometry">
          <rect>
-          <x>282</x>
-          <y>10</y>
+          <x>12</x>
+          <y>80</y>
           <width>191</width>
           <height>16</height>
          </rect>
@@ -5579,42 +5538,27 @@
          <string>Username</string>
         </property>
        </widget>
-       <widget class="QLineEdit" name="lineEdit_settings_ftp_port">
-        <property name="geometry">
-         <rect>
-          <x>202</x>
-          <y>30</y>
-          <width>61</width>
-          <height>30</height>
-         </rect>
-        </property>
-       </widget>
-       <widget class="QLabel" name="label_43">
-        <property name="geometry">
-         <rect>
-          <x>202</x>
-          <y>10</y>
-          <width>41</width>
-          <height>16</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>10</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>Port</string>
-        </property>
-       </widget>
        <widget class="QLineEdit" name="lineEdit_settings_ftp_password">
         <property name="geometry">
          <rect>
-          <x>492</x>
-          <y>30</y>
+          <x>220</x>
+          <y>100</y>
           <width>191</width>
           <height>30</height>
          </rect>
+        </property>
+       </widget>
+       <widget class="QCheckBox" name="checkBox_settings_ftp_autoconnect">
+        <property name="geometry">
+         <rect>
+          <x>220</x>
+          <y>30</y>
+          <width>141</width>
+          <height>30</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Activate</string>
         </property>
        </widget>
       </widget>

@@ -164,3 +164,29 @@
 11-07-2021 21:13:44 -> Database is was connected!
 11-07-2021 21:13:52 -> Database exists.
 11-07-2021 21:14:02 -> Database is was created!
+11-07-2021 21:52:33 -> Database is was connected!
+11-07-2021 22:03:52 -> Database is was connected!
+11-07-2021 22:04:24 -> Database is was connected!
+11-07-2021 22:06:01 -> Database is was connected!
+11-07-2021 22:06:52 -> Database is was connected!
+11-07-2021 22:15:18 -> Проблема с подключением к FTP серверуgetaddrinfo() argument 1 must be string or None
+11-07-2021 22:15:39 -> The file conf.ini is corrupted.
+11-07-2021 22:15:39 -> Database is was connected!
+11-07-2021 22:17:46 -> Database is was connected!
+11-07-2021 22:18:38 -> Database is was connected!
+11-07-2021 22:18:44 -> Проблема с подключением к FTP серверуgetaddrinfo() argument 1 must be string or None
+11-07-2021 22:19:33 -> Проблема с подключением к FTP серверуgetaddrinfo() argument 1 must be string or None
+11-07-2021 22:20:04 -> Проблема с подключением к FTP серверуgetaddrinfo() argument 1 must be string or None
+11-07-2021 22:20:22 -> Проблема с подключением к FTP серверуgetaddrinfo() argument 1 must be string or None
+11-07-2021 22:20:22 -> Database is was connected!
+11-07-2021 22:20:52 -> Проблема с подключением к FTP серверу getaddrinfo() argument 1 must be string or None
+11-07-2021 22:20:52 -> Database is was connected!
+11-07-2021 22:21:29 -> Проблема с подключением к FTP серверу 'NoneType' object has no attribute 'sendall'
+11-07-2021 22:21:29 -> Database is was connected!
+11-07-2021 22:23:40 -> Проблема с подключением к FTP серверу 'NoneType' object has no attribute 'sendall'
+11-07-2021 22:24:08 -> Проблема с подключением к FTP серверу 530 Login or password incorrect!
+11-07-2021 22:24:09 -> Database is was connected!
+11-07-2021 22:25:12 -> К FTP серверу подключились.
+11-07-2021 22:25:12 -> Database is was connected!
+11-07-2021 22:26:27 -> Database is was connected!
+11-07-2021 22:26:27 -> К FTP серверу подключились.

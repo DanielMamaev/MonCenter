@@ -25,8 +25,7 @@ from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
 import os
 import time
-import ftputil
-import warnings
+
 
 def serial_ports():
     if sys.platform.startswith('win'):
@@ -177,6 +176,11 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
                              '#reset']  # КОМАНДЫ ДЛЯ УПРАВЛЕНИЯ WEMOS ЧЕРЕЗ КОМ ПОРТ
         self.comboBox_comm.addItems(self.command_list)  # ДОБАВЛЕНИЕ КОМАНД В COMBOBOX
         self.read_text_Thread_instance = ReadTextThread(mainwindow=self)  # ЗАПУСК ПОТОКА ЧТЕНИЯ ДАННЫХ ИЗ КОМ ПОРТА
+
+        self.ftp_connect("")
+
+
+
 
     def serial_update(self):
         self.comboBox_port.addItems(serial_ports())  # ДОБАВЛЕНИЕ НАЙДЕННЫХ ПОРТОВ В COMBOBOX
@@ -339,7 +343,16 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
     # *************************** FTP ***************************
 
     def ftp_connect(self, path):
-        pass
+        try:
+            ftp = FTP(self.lineEdit_settings_ftp_host.text())
+            ftp.login(self.lineEdit_settings_ftp_username.text(), self.lineEdit_settings_ftp_password.text())
+        except Exception as e:
+            self.show_logs("Проблема с подключением к FTP серверу " + str(e))
+        else:
+            self.show_logs("К FTP серверу подключились.")
+            print(ftp.retrlines('LIST'))
+
+
 
         # *************************** FILE .INI ***************************
 
@@ -392,10 +405,8 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
             config.set("DATABASE", "delta", "")
             config.set("SETTINGS", "email", "")
             config.set("SETTINGS", "ftp_host", "")
-            config.set("SETTINGS", "ftp_port", "")
             config.set("SETTINGS", "ftp_username", "")
             config.set("SETTINGS", "ftp_password", "")
-            config.set("SETTINGS", "ftp_folder", "")
             config.set("SETTINGS", "ftp_autoconnect", "False")
             config.set("SETTINGS", "ya_token", "")
             config.set("SETTINGS", "ya_folder", "")
@@ -456,10 +467,8 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
             config.set("DATABASE", "delta", self.lineEdit_db_delta.text())
             config.set("SETTINGS", "email", self.lineEdit_settings_email.text())
             config.set("SETTINGS", "ftp_host", self.lineEdit_settings_ftp_host.text())
-            config.set("SETTINGS", "ftp_port", self.lineEdit_settings_ftp_port.text())
             config.set("SETTINGS", "ftp_username", self.lineEdit_settings_ftp_username.text())
             config.set("SETTINGS", "ftp_password", self.lineEdit_settings_ftp_password.text())
-            config.set("SETTINGS", "ftp_folder", self.lineEdit_settings_ftp_folder.text())
             config.set("SETTINGS", "ftp_autoconnect", str(self.checkBox_settings_ftp_autoconnect.isChecked()))
             config.set("SETTINGS", "ya_token", self.lineEdit_settings_ya_token.text())
             config.set("SETTINGS", "ya_folder", self.lineEdit_settings_ya_folder.text())
@@ -539,10 +548,8 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
             # --- SETTINGS
             self.lineEdit_settings_email.setText(config.get("SETTINGS", "email"))
             self.lineEdit_settings_ftp_host.setText(config.get("SETTINGS", "ftp_host"))
-            self.lineEdit_settings_ftp_port.setText(config.get("SETTINGS", "ftp_port"))
             self.lineEdit_settings_ftp_username.setText(config.get("SETTINGS", "ftp_username"))
             self.lineEdit_settings_ftp_password.setText(config.get("SETTINGS", "ftp_password"))
-            self.lineEdit_settings_ftp_folder.setText(config.get("SETTINGS", "ftp_folder"))
             self.checkBox_settings_ftp_autoconnect.setChecked(config.getboolean("SETTINGS", "ftp_autoconnect"))
             self.lineEdit_settings_ya_token.setText(config.get("SETTINGS", "ya_token"))
             self.lineEdit_settings_ya_folder.setText(config.get("SETTINGS", "ya_folder"))
