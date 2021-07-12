@@ -177,7 +177,7 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.comboBox_comm.addItems(self.command_list)  # ДОБАВЛЕНИЕ КОМАНД В COMBOBOX
         self.read_text_Thread_instance = ReadTextThread(mainwindow=self)  # ЗАПУСК ПОТОКА ЧТЕНИЯ ДАННЫХ ИЗ КОМ ПОРТА
 
-        self.ftp_connect("")
+        #self.ftp_connect("")
 
 
 
@@ -350,11 +350,45 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
             self.show_logs("Проблема с подключением к FTP серверу " + str(e))
         else:
             self.show_logs("К FTP серверу подключились.")
-            print(ftp.retrlines('LIST'))
+            #print(ftp.retrlines('LIST')) # отображение всех файлов в каталоге
+            #print(ftp.pwd()) # текущий путь
+
+            today = datetime.today().strftime("%m.%d.%y")
+            flag_dir = False
+            try:
+                ftp.mkd(today) # создание папки
+            except Exception as e:
+                if str(e) == "550 Directory already exists":
+                    self.show_logs("Папка уже созадана: " + str(e))
+                    flag_dir = True
+                else:
+                    self.show_logs("Проблема с созданием папки: " + str(e))
+                    return
+            else:
+                flag_dir = True
+                self.show_logs('Папка создана')
+                #print(ftp.retrlines('LIST'))
+
+            if flag_dir:
+                try:
+                    ftp.cwd('/' + today)
+                except Exception as e:
+                    self.show_logs("Такой папки /" + today + "не существует: " + str(e))
+                    return
+                else:
+                    try:
+                        ftp.storbinary('STOR ' + os.path.basename(path), open(path, "rb"))
+                    except Exception as e:
+                        self.show_logs("Проблема с загрузкой файла: " + str(e))
+
+                try:
+                    ftp.storbinary('STOR ' + os.path.basename(self.lineEdit_db_con_path.text()),
+                                   open(self.lineEdit_db_con_path.text(), "rb"))
+                except Exception as e:
+                    self.show_logs("Проблема с загрузкой БД: " + str(e))
 
 
-
-        # *************************** FILE .INI ***************************
+            # *************************** FILE .INI ***************************
 
     def ini_save_exit(self):
         self.ini_save()
@@ -761,14 +795,14 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
             for i in range(len(host)):
                 command_str2str = "xterm -e \"/bin/bash -c '" + os.getcwd() + "/RTKLIB-2.4.3-b33/app/str2str/gcc/" + \
                                   "str2str -in "
-                if host[i][2] == 0:
+                if host[i][3] == 0:
                     command_str2str += "tcpcli://"
                     command_str2str += host[i][4]
-                if host[i][2] == 1:
+                if host[i][3] == 1:
                     command_str2str += "ntrip://"
                     command_str2str += host[i][5] + ":" + host[i][6] + "@"
                     command_str2str += host[i][4] + "/" + host[i][7]
-                if host[i][2] == 2:
+                if host[i][3] == 2:
                     command_str2str += "serial://"
                     command_str2str += host[i][9] + ":" + host[i][10] + ":" + host[i][11] + ":" + host[i][12]\
                                        + ":" + host[i][13] + ":" + host[i][14]
@@ -823,8 +857,8 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
             if free < 2:
                 self.send_email(message="Внимание! Осталось памяти на диске " + str(free) + " Gb")
 
-        except Exception:
-            self.show_logs("Problem with the database.")
+        except Exception as e:
+            self.show_logs("STR2STR with DB: " + str(e))
 
         print(self.post_pro_db)
 
@@ -903,12 +937,12 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
                     command_convbin += " " + list_path[y][1]
                 else:
                     self.show_logs("(CONVBIN) Декодирование не произошло.")
-                    self.send_email(message="(STR2STR) Декодирование не произошло.")
+                    self.send_email(message="(CONVBIN) Декодирование не произошло.")
                 self.show_logs(command_convbin)
                 os.system(command_convbin)
                 time.sleep(1)
-        except Exception:
-            self.show_logs("Problem with the database.")
+        except Exception as e:
+            self.show_logs("CONVBIN with DB: " + str(e))
 
     def db_start_rnx2rtkp(self, list_path):
         try:
@@ -1072,8 +1106,8 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
                                         id_line = cursor.fetchall()
 
                                         sql = """SELECT BASELINES.name_r_rover FROM BASELINES, POS_CONF 
-                                                                WHERE BASELINES.id_pos = POS_CONF.id_pos AND B
-                                                                ASELINES.enable = 1"""
+                                                                WHERE BASELINES.id_pos = POS_CONF.id_pos AND 
+                                                                BASELINES.enable = 1"""
                                         cursor.execute(sql)
                                         name_r = cursor.fetchall()
 
@@ -1089,7 +1123,7 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
                                             kor.append(min_str[j])
                                         kor.append("")
                                         kor.append(str(timedelta(seconds=work_time)))
-                                        kor.append(list_path + ".pos")
+                                        kor.append(list_path[y][1] + ".pos")
 
                                         sql = "INSERT INTO SOLUTIONS " \
                                               "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
@@ -1115,7 +1149,7 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
                     self.show_logs("(RNX2RTKP) Постобработка не произошла")
                     self.send_email(message="(RNX2RTKP) Постобработка не произошла")
         except Exception as e:
-            self.show_logs("Problem with the database. " + str(e))
+            self.show_logs("RNX2RTKP with DB: " + str(e))
 
     def db_check_str2str(self, state):
         if state != self.checkBox_db_reset.isChecked():
@@ -1711,7 +1745,7 @@ class TimeResetStr2strThread(QThread):
             if (datetime.today().strftime(
                     "%H:%M:%S") == self.mainwindow.timeEdit_db.text() and self.mainwindow.checkBox_db_reset.isChecked()):
                 temp_list = self.mainwindow.post_pro_db
-                self.mainwindow.stop_str2str()
+                self.mainwindow.str2str_stop()
                 self.mainwindow.db_start_str2str()
                 if self.mainwindow.checkBox_db_lastpost.isChecked():
                     self.mainwindow.db_start_convbin(temp_list)

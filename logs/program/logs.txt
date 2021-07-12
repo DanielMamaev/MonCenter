@@ -190,3 +190,279 @@
 11-07-2021 22:25:12 -> Database is was connected!
 11-07-2021 22:26:27 -> Database is was connected!
 11-07-2021 22:26:27 -> К FTP серверу подключились.
+11-07-2021 22:30:42 -> Database is was connected!
+11-07-2021 22:30:42 -> Проблема с подключением к FTP серверу [Errno -2] Name or service not known
+12-07-2021 13:25:58 -> Database is was connected!
+12-07-2021 13:26:00 -> Проблема с подключением к FTP серверу [Errno 111] Connection refused
+12-07-2021 13:26:22 -> Database is was connected!
+12-07-2021 13:26:22 -> К FTP серверу подключились.
+12-07-2021 13:29:24 -> Database is was connected!
+12-07-2021 13:29:24 -> К FTP серверу подключились.
+12-07-2021 13:30:11 -> Database is was connected!
+12-07-2021 13:30:11 -> К FTP серверу подключились.
+12-07-2021 13:30:56 -> Database is was connected!
+12-07-2021 13:30:56 -> К FTP серверу подключились.
+12-07-2021 13:33:05 -> Database is was connected!
+12-07-2021 13:33:05 -> К FTP серверу подключились.
+12-07-2021 13:33:34 -> Database is was connected!
+12-07-2021 13:33:34 -> К FTP серверу подключились.
+12-07-2021 13:33:56 -> Database is was connected!
+12-07-2021 13:33:56 -> К FTP серверу подключились.
+12-07-2021 13:36:19 -> Database is was connected!
+12-07-2021 13:36:19 -> К FTP серверу подключились.
+12-07-2021 13:36:35 -> Database is was connected!
+12-07-2021 13:36:35 -> К FTP серверу подключились.
+12-07-2021 13:37:02 -> Database is was connected!
+12-07-2021 13:37:02 -> К FTP серверу подключились.
+12-07-2021 13:37:29 -> Database is was connected!
+12-07-2021 13:37:29 -> К FTP серверу подключились.
+12-07-2021 13:46:11 -> Database is was connected!
+12-07-2021 13:46:11 -> К FTP серверу подключились.
+12-07-2021 19:50:57 -> Database is was connected!
+12-07-2021 19:50:57 -> К FTP серверу подключились.
+12-07-2021 19:51:14 -> Database is was created!
+12-07-2021 19:51:16 -> Database is was connected!
+12-07-2021 19:54:52 -> Успешно создана директория /home/pi/Desktop/07.12.21 
+12-07-2021 19:54:52 -> Успешно создана директория /home/pi/Desktop/07.12.21/M8N 
+12-07-2021 19:54:52 -> Создать директорию /home/pi/Desktop/07.12.21 не удалось
+12-07-2021 19:54:52 -> Успешно создана директория /home/pi/Desktop/07.12.21/NSKN 
+12-07-2021 19:54:52 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://danisimo:599bcf@159.89.221.86:2101/MP2717a -out file:///home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_12-54-52.log'"&
+12-07-2021 19:54:53 -> Problem with the database.
+12-07-2021 19:56:10 -> Directory exists.
+12-07-2021 19:56:10 -> Directory exists.
+12-07-2021 19:56:10 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://danisimo:599bcf@159.89.221.86:2101/MP2717a -out file:///home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_12-56-10.log'"&
+12-07-2021 19:56:11 -> Problem with the database.
+12-07-2021 19:57:26 -> Database is was connected!
+12-07-2021 19:57:26 -> К FTP серверу подключились.
+12-07-2021 19:57:29 -> Directory exists.
+12-07-2021 19:57:29 -> Directory exists.
+12-07-2021 19:57:49 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://danisimo:599bcf@159.89.221.86:2101/MP2717a -out file:///home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_12-57-43.log'"&
+12-07-2021 19:59:02 -> Database is was connected!
+12-07-2021 19:59:02 -> К FTP серверу подключились.
+12-07-2021 19:59:08 -> Directory exists.
+12-07-2021 19:59:08 -> Directory exists.
+12-07-2021 19:59:08 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://danisimo:599bcf@159.89.221.86:2101/MP2717a -out file:///home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_12-59-08.log'"&
+12-07-2021 19:59:09 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://danisimo:599bcf@159.89.221.86:2101/MP2717 -out file:///home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_12-59-09.log'"&
+12-07-2021 19:59:10 -> Не указана электронная почта для отправки уведомлений.
+12-07-2021 20:00:41 -> Database is was connected!
+12-07-2021 20:00:41 -> К FTP серверу подключились.
+12-07-2021 20:00:44 -> Directory exists.
+12-07-2021 20:00:44 -> Directory exists.
+12-07-2021 20:00:44 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://danisimo:599bcf@159.89.221.86:2101/MP2717a -out file:///home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_13-00-44.log'"&
+12-07-2021 20:00:45 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://danisimo:599bcf@159.89.221.86:2101/MP2717 -out file:///home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_13-00-45.log'"&
+12-07-2021 20:00:47 -> Не указана электронная почта для отправки уведомлений.
+12-07-2021 20:02:00 -> Directory exists.
+12-07-2021 20:02:00 -> Directory exists.
+12-07-2021 20:02:00 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://danisimo:599bcf@159.89.221.86:2101/MP2717a -out file:///home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_13-02-00.log'"&
+12-07-2021 20:02:01 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://danisimo:599bcf@159.89.221.86:2101/MP2717 -out file:///home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_13-02-01.log'"&
+12-07-2021 20:02:03 -> Не указана электронная почта для отправки уведомлений.
+12-07-2021 20:02:17 -> Directory exists.
+12-07-2021 20:02:17 -> Directory exists.
+12-07-2021 20:02:17 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://danisimo:599bcf@159.89.221.86:2101/MP2717a -out file:///home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_13-02-17.log'"&
+12-07-2021 20:02:18 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://danisimo:599bcf@159.89.221.86:2101/MP2717 -out file:///home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_13-02-18.log'"&
+12-07-2021 20:02:20 -> Не указана электронная почта для отправки уведомлений.
+12-07-2021 20:10:35 -> Database is was connected!
+12-07-2021 20:10:35 -> К FTP серверу подключились.
+12-07-2021 20:10:53 -> Database is was connected!
+12-07-2021 20:10:53 -> К FTP серверу подключились.
+12-07-2021 20:11:24 -> Database is was connected!
+12-07-2021 20:11:24 -> К FTP серверу подключились.
+12-07-2021 20:14:49 -> Database is was connected!
+12-07-2021 20:14:49 -> К FTP серверу подключились.
+12-07-2021 20:20:09 -> Database is was connected!
+12-07-2021 20:20:09 -> К FTP серверу подключились.
+12-07-2021 20:26:02 -> Database is was connected!
+12-07-2021 20:26:02 -> К FTP серверу подключились.
+12-07-2021 20:28:27 -> Database is was connected!
+12-07-2021 20:28:27 -> К FTP серверу подключились.
+12-07-2021 20:30:50 -> Database is was connected!
+12-07-2021 20:30:50 -> К FTP серверу подключились.
+12-07-2021 20:30:59 -> Database is was connected!
+12-07-2021 20:31:00 -> К FTP серверу подключились.
+12-07-2021 20:36:11 -> Database is was connected!
+12-07-2021 20:36:30 -> Directory exists.
+12-07-2021 20:36:30 -> Directory exists.
+12-07-2021 20:36:30 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://danisimo:599bcf@159.89.221.86:2101/MP2717a -out file:///home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_13-36-30.log'"&
+12-07-2021 20:36:31 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://danisimo:599bcf@159.89.221.86:2101/MP2717 -out file:///home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_13-36-31.log'"&
+12-07-2021 20:36:32 -> Не указана электронная почта для отправки уведомлений.
+12-07-2021 20:37:00 -> Directory exists.
+12-07-2021 20:37:00 -> Directory exists.
+12-07-2021 20:37:00 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://danisimo:599bcf@159.89.221.86:2101/MP2717a -out file:///home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_13-37-00.log'"&
+12-07-2021 20:37:01 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://danisimo:599bcf@159.89.221.86:2101/MP2717 -out file:///home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_13-37-01.log'"&
+12-07-2021 20:37:02 -> Не указана электронная почта для отправки уведомлений.
+12-07-2021 20:37:02 -> К FTP серверу подключились.
+12-07-2021 20:37:02 -> Папка создана
+12-07-2021 20:37:02 -> К FTP серверу подключились.
+12-07-2021 20:37:02 -> Папка уже созадана: 550 Directory already exists
+12-07-2021 20:39:00 -> Directory exists.
+12-07-2021 20:39:00 -> Directory exists.
+12-07-2021 20:39:00 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://danisimo:599bcf@159.89.221.86:2101/MP2717a -out file:///home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_13-39-00.log'"&
+12-07-2021 20:39:01 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://danisimo:599bcf@159.89.221.86:2101/MP2717 -out file:///home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_13-39-01.log'"&
+12-07-2021 20:39:02 -> Не указана электронная почта для отправки уведомлений.
+12-07-2021 20:39:02 -> К FTP серверу подключились.
+12-07-2021 20:39:02 -> Папка уже созадана: 550 Directory already exists
+12-07-2021 20:39:02 -> К FTP серверу подключились.
+12-07-2021 20:39:02 -> Папка уже созадана: 550 Directory already exists
+12-07-2021 20:41:33 -> Database is was connected!
+12-07-2021 20:41:36 -> Directory exists.
+12-07-2021 20:41:36 -> Directory exists.
+12-07-2021 20:41:36 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://danisimo:599bcf@159.89.221.86:2101/MP2717a -out file:///home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_13-41-36.log'"&
+12-07-2021 20:41:37 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://danisimo:599bcf@159.89.221.86:2101/MP2717 -out file:///home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_13-41-37.log'"&
+12-07-2021 20:41:38 -> Не указана электронная почта для отправки уведомлений.
+12-07-2021 20:42:00 -> Directory exists.
+12-07-2021 20:42:00 -> Directory exists.
+12-07-2021 20:42:00 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://danisimo:599bcf@159.89.221.86:2101/MP2717a -out file:///home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_13-42-00.log'"&
+12-07-2021 20:42:01 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://danisimo:599bcf@159.89.221.86:2101/MP2717 -out file:///home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_13-42-01.log'"&
+12-07-2021 20:42:03 -> Не указана электронная почта для отправки уведомлений.
+12-07-2021 20:42:03 -> К FTP серверу подключились.
+12-07-2021 20:42:03 -> Папка уже созадана: 550 Directory already exists
+12-07-2021 20:42:03 -> К FTP серверу подключились.
+12-07-2021 20:42:03 -> Папка уже созадана: 550 Directory already exists
+12-07-2021 20:42:03 -> Проблема с загрузкой БД: 550 Permission denied
+12-07-2021 20:44:00 -> Directory exists.
+12-07-2021 20:44:00 -> Directory exists.
+12-07-2021 20:44:00 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://danisimo:599bcf@159.89.221.86:2101/MP2717a -out file:///home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_13-44-00.log'"&
+12-07-2021 20:44:01 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://danisimo:599bcf@159.89.221.86:2101/MP2717 -out file:///home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_13-44-01.log'"&
+12-07-2021 20:44:03 -> Не указана электронная почта для отправки уведомлений.
+12-07-2021 20:44:03 -> К FTP серверу подключились.
+12-07-2021 20:44:03 -> Папка уже созадана: 550 Directory already exists
+12-07-2021 20:44:03 -> К FTP серверу подключились.
+12-07-2021 20:44:03 -> Папка уже созадана: 550 Directory already exists
+12-07-2021 20:44:03 -> Проблема с загрузкой БД: 550 Permission denied
+12-07-2021 20:45:10 -> Directory exists.
+12-07-2021 20:45:10 -> Directory exists.
+12-07-2021 20:45:10 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://danisimo:599bcf@159.89.221.86:2101/MP2717a -out file:///home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_13-45-10.log'"&
+12-07-2021 20:45:11 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://danisimo:599bcf@159.89.221.86:2101/MP2717 -out file:///home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_13-45-11.log'"&
+12-07-2021 20:45:13 -> Не указана электронная почта для отправки уведомлений.
+12-07-2021 20:45:13 -> RTKLIB-2.4.3-b33/app/convbin/gcc/convbin -r ubx -f 1 -v 3.03 -os -od -y R -y E -y J -y S -y C -o /home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_13-44-00.log.obs -n /home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_13-44-00.log.nav -ts 2021/07/12 13:44:00 /home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_13-44-00.log
+12-07-2021 20:45:14 -> RTKLIB-2.4.3-b33/app/convbin/gcc/convbin -r rt17 -f 2 -v 3.03 -os -od -y R -y E -y J -y S -y C -o /home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_13-44-01.log.obs -n /home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_13-44-01.log.nav -ts 2021/07/12 13:44:01 /home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_13-44-01.log
+12-07-2021 20:45:15 -> К FTP серверу подключились.
+12-07-2021 20:45:15 -> Папка уже созадана: 550 Directory already exists
+12-07-2021 20:45:15 -> Проблема с загрузкой БД: 550 Permission denied
+12-07-2021 20:45:15 -> К FTP серверу подключились.
+12-07-2021 20:45:15 -> Папка уже созадана: 550 Directory already exists
+12-07-2021 20:45:15 -> Проблема с загрузкой БД: 550 Permission denied
+12-07-2021 20:47:00 -> Directory exists.
+12-07-2021 20:47:00 -> Directory exists.
+12-07-2021 20:47:00 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://danisimo:599bcf@159.89.221.86:2101/MP2717a -out file:///home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_13-47-00.log'"&
+12-07-2021 20:47:01 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://danisimo:599bcf@159.89.221.86:2101/MP2717 -out file:///home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_13-47-01.log'"&
+12-07-2021 20:47:03 -> Не указана электронная почта для отправки уведомлений.
+12-07-2021 20:47:03 -> RTKLIB-2.4.3-b33/app/convbin/gcc/convbin -r ubx -f 1 -v 3.03 -os -od -y R -y E -y J -y S -y C -o /home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_13-45-10.log.obs -n /home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_13-45-10.log.nav -ts 2021/07/12 13:45:10 /home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_13-45-10.log
+12-07-2021 20:47:04 -> RTKLIB-2.4.3-b33/app/convbin/gcc/convbin -r rt17 -f 2 -v 3.03 -os -od -y R -y E -y J -y S -y C -o /home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_13-45-11.log.obs -n /home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_13-45-11.log.nav -ts 2021/07/12 13:45:11 /home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_13-45-11.log
+12-07-2021 20:47:05 -> К FTP серверу подключились.
+12-07-2021 20:47:05 -> Папка уже созадана: 550 Directory already exists
+12-07-2021 20:47:05 -> Проблема с загрузкой БД: 421 Could not create socket.
+12-07-2021 20:47:05 -> К FTP серверу подключились.
+12-07-2021 20:47:05 -> Папка уже созадана: 550 Directory already exists
+12-07-2021 20:47:05 -> Проблема с загрузкой БД: 550 Permission denied
+12-07-2021 20:47:24 -> On
+12-07-2021 20:47:27 -> RTKLIB-2.4.3-b33/app/convbin/gcc/convbin -r ubx -f 1 -v 3.03 -os -od -y R -y E -y J -y S -y C -o /home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_13-47-00.log.obs -n /home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_13-47-00.log.nav -ts 2021/07/12 13:47:00 /home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_13-47-00.log
+12-07-2021 20:47:27 -> Off
+12-07-2021 20:47:28 -> RTKLIB-2.4.3-b33/app/convbin/gcc/convbin -r rt17 -f 2 -v 3.03 -os -od -y R -y E -y J -y S -y C -o /home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_13-47-01.log.obs -n /home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_13-47-01.log.nav -ts 2021/07/12 13:47:01 /home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_13-47-01.log
+12-07-2021 20:52:43 -> Directory exists.
+12-07-2021 20:52:43 -> Directory exists.
+12-07-2021 20:52:43 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://danisimo:599bcf@159.89.221.86:2101/MP2717a -out file:///home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_13-52-43.log'"&
+12-07-2021 20:52:44 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://danisimo:599bcf@159.89.221.86:2101/MP2717 -out file:///home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_13-52-44.log'"&
+12-07-2021 20:52:45 -> Не указана электронная почта для отправки уведомлений.
+12-07-2021 20:56:00 -> Directory exists.
+12-07-2021 20:56:00 -> Directory exists.
+12-07-2021 20:56:00 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://danisimo:599bcf@159.89.221.86:2101/MP2717a -out file:///home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_13-56-00.log'"&
+12-07-2021 20:56:02 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://danisimo:599bcf@159.89.221.86:2101/MP2717 -out file:///home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_13-56-02.log'"&
+12-07-2021 20:56:03 -> Не указана электронная почта для отправки уведомлений.
+12-07-2021 20:56:03 -> RTKLIB-2.4.3-b33/app/convbin/gcc/convbin -r ubx -f 1 -v 3.03 -os -od -y R -y E -y J -y S -y C -o /home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_13-52-43.log.obs -n /home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_13-52-43.log.nav -ts 2021/07/12 13:52:43 /home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_13-52-43.log
+12-07-2021 20:56:04 -> RTKLIB-2.4.3-b33/app/convbin/gcc/convbin -r rt17 -f 2 -v 3.03 -os -od -y R -y E -y J -y S -y C -o /home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_13-52-44.log.obs -n /home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_13-52-44.log.nav -ts 2021/07/12 13:52:44 /home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_13-52-44.log
+12-07-2021 20:56:05 -> RTKLIB-2.4.3-b33/app/rnx2rtkp/gcc/rnx2rtkp -p 3 -m 20 -f 1 -t -d 0 -l 54.9873598 82.86477483 112.535 -o /home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_13-52-43.log.pos /home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_13-52-43.log.obs /home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_13-52-44.log.obs /home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_13-52-44.log.nav
+12-07-2021 20:56:06 -> Post processing OK
+12-07-2021 20:56:06 -> RNX2RTKP with DB: near "ASELINES": syntax error
+12-07-2021 20:56:06 -> К FTP серверу подключились.
+12-07-2021 20:56:06 -> Папка уже созадана: 550 Directory already exists
+12-07-2021 20:56:06 -> К FTP серверу подключились.
+12-07-2021 20:56:06 -> Папка уже созадана: 550 Directory already exists
+12-07-2021 20:56:07 -> Проблема с загрузкой БД: 550 Permission denied
+12-07-2021 20:56:55 -> Database is was connected!
+12-07-2021 20:56:58 -> Directory exists.
+12-07-2021 20:56:58 -> Directory exists.
+12-07-2021 20:56:58 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://danisimo:599bcf@159.89.221.86:2101/MP2717a -out file:///home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_13-56-58.log'"&
+12-07-2021 20:56:59 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://danisimo:599bcf@159.89.221.86:2101/MP2717 -out file:///home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_13-56-59.log'"&
+12-07-2021 20:57:01 -> Не указана электронная почта для отправки уведомлений.
+12-07-2021 20:57:10 -> Directory exists.
+12-07-2021 20:57:10 -> Directory exists.
+12-07-2021 20:57:10 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://danisimo:599bcf@159.89.221.86:2101/MP2717a -out file:///home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_13-57-10.log'"&
+12-07-2021 20:57:11 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://danisimo:599bcf@159.89.221.86:2101/MP2717 -out file:///home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_13-57-11.log'"&
+12-07-2021 20:57:13 -> Не указана электронная почта для отправки уведомлений.
+12-07-2021 20:57:13 -> К FTP серверу подключились.
+12-07-2021 20:57:13 -> Папка уже созадана: 550 Directory already exists
+12-07-2021 20:57:13 -> К FTP серверу подключились.
+12-07-2021 20:57:13 -> Папка уже созадана: 550 Directory already exists
+12-07-2021 20:57:13 -> Проблема с загрузкой БД: 550 Permission denied
+12-07-2021 21:04:00 -> Directory exists.
+12-07-2021 21:04:00 -> Directory exists.
+12-07-2021 21:04:00 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://danisimo:599bcf@159.89.221.86:2101/MP2717a -out file:///home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_14-04-00.log'"&
+12-07-2021 21:04:01 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://danisimo:599bcf@159.89.221.86:2101/MP2717 -out file:///home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_14-04-01.log'"&
+12-07-2021 21:04:03 -> Не указана электронная почта для отправки уведомлений.
+12-07-2021 21:04:03 -> RTKLIB-2.4.3-b33/app/convbin/gcc/convbin -r ubx -f 1 -v 3.03 -os -od -y R -y E -y J -y S -y C -o /home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_13-57-10.log.obs -n /home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_13-57-10.log.nav -ts 2021/07/12 13:57:10 /home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_13-57-10.log
+12-07-2021 21:04:04 -> RTKLIB-2.4.3-b33/app/convbin/gcc/convbin -r rt17 -f 2 -v 3.03 -os -od -y R -y E -y J -y S -y C -o /home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_13-57-11.log.obs -n /home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_13-57-11.log.nav -ts 2021/07/12 13:57:11 /home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_13-57-11.log
+12-07-2021 21:04:41 -> Database is was connected!
+12-07-2021 21:04:56 -> Directory exists.
+12-07-2021 21:04:56 -> Directory exists.
+12-07-2021 21:04:56 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://danisimo:599bcf@159.89.221.86:2101/MP2717a -out file:///home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_14-04-56.log'"&
+12-07-2021 21:04:57 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://danisimo:599bcf@159.89.221.86:2101/MP2717 -out file:///home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_14-04-57.log'"&
+12-07-2021 21:04:59 -> Не указана электронная почта для отправки уведомлений.
+12-07-2021 21:07:00 -> Directory exists.
+12-07-2021 21:07:00 -> Directory exists.
+12-07-2021 21:07:00 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://danisimo:599bcf@159.89.221.86:2101/MP2717a -out file:///home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_14-07-00.log'"&
+12-07-2021 21:07:01 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://danisimo:599bcf@159.89.221.86:2101/MP2717 -out file:///home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_14-07-01.log'"&
+12-07-2021 21:07:03 -> Не указана электронная почта для отправки уведомлений.
+12-07-2021 21:07:03 -> RTKLIB-2.4.3-b33/app/convbin/gcc/convbin -r ubx -f 1 -v 3.03 -os -od -y R -y E -y J -y S -y C -o /home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_14-04-56.log.obs -n /home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_14-04-56.log.nav -ts 2021/07/12 14:04:56 /home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_14-04-56.log
+12-07-2021 21:07:04 -> RTKLIB-2.4.3-b33/app/convbin/gcc/convbin -r rt17 -f 2 -v 3.03 -os -od -y R -y E -y J -y S -y C -o /home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_14-04-57.log.obs -n /home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_14-04-57.log.nav -ts 2021/07/12 14:04:57 /home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_14-04-57.log
+12-07-2021 21:07:05 -> RTKLIB-2.4.3-b33/app/rnx2rtkp/gcc/rnx2rtkp -p 3 -m 20 -f 1 -t -d 0 -l 54.9873598 82.86477483 112.535 -o /home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_14-04-56.log.pos /home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_14-04-56.log.obs /home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_14-04-57.log.obs /home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_14-04-57.log.nav
+12-07-2021 21:07:06 -> К FTP серверу подключились.
+12-07-2021 21:07:06 -> Папка уже созадана: 550 Directory already exists
+12-07-2021 21:07:06 -> Проблема с загрузкой БД: 550 Permission denied
+12-07-2021 21:07:06 -> К FTP серверу подключились.
+12-07-2021 21:07:06 -> Папка уже созадана: 550 Directory already exists
+12-07-2021 21:07:06 -> Проблема с загрузкой БД: 550 Permission denied
+12-07-2021 21:11:00 -> Directory exists.
+12-07-2021 21:11:00 -> Directory exists.
+12-07-2021 21:11:00 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://danisimo:599bcf@159.89.221.86:2101/MP2717a -out file:///home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_14-11-00.log'"&
+12-07-2021 21:11:01 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://danisimo:599bcf@159.89.221.86:2101/MP2717 -out file:///home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_14-11-01.log'"&
+12-07-2021 21:11:02 -> Не указана электронная почта для отправки уведомлений.
+12-07-2021 21:11:02 -> RTKLIB-2.4.3-b33/app/convbin/gcc/convbin -r ubx -f 1 -v 3.03 -os -od -y R -y E -y J -y S -y C -o /home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_14-07-00.log.obs -n /home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_14-07-00.log.nav -ts 2021/07/12 14:07:00 /home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_14-07-00.log
+12-07-2021 21:11:03 -> RTKLIB-2.4.3-b33/app/convbin/gcc/convbin -r rt17 -f 2 -v 3.03 -os -od -y R -y E -y J -y S -y C -o /home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_14-07-01.log.obs -n /home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_14-07-01.log.nav -ts 2021/07/12 14:07:01 /home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_14-07-01.log
+12-07-2021 21:11:04 -> RTKLIB-2.4.3-b33/app/rnx2rtkp/gcc/rnx2rtkp -p 3 -m 20 -f 1 -t -d 0 -l 54.9873598 82.86477483 112.535 -o /home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_14-07-00.log.pos /home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_14-07-00.log.obs /home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_14-07-01.log.obs /home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_14-07-01.log.nav
+12-07-2021 21:11:05 -> Post processing OK
+12-07-2021 21:11:05 -> RNX2RTKP with DB: near "ASELINES": syntax error
+12-07-2021 21:11:05 -> К FTP серверу подключились.
+12-07-2021 21:11:05 -> Папка уже созадана: 550 Directory already exists
+12-07-2021 21:11:05 -> Проблема с загрузкой БД: 550 Permission denied
+12-07-2021 21:11:05 -> К FTP серверу подключились.
+12-07-2021 21:11:05 -> Папка уже созадана: 550 Directory already exists
+12-07-2021 21:11:05 -> Проблема с загрузкой БД: 550 Permission denied
+12-07-2021 21:14:35 -> Database is was connected!
+12-07-2021 21:14:38 -> Directory exists.
+12-07-2021 21:14:38 -> Directory exists.
+12-07-2021 21:14:38 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://danisimo:599bcf@159.89.221.86:2101/MP2717a -out file:///home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_14-14-38.log'"&
+12-07-2021 21:14:39 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://danisimo:599bcf@159.89.221.86:2101/MP2717 -out file:///home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_14-14-39.log'"&
+12-07-2021 21:14:40 -> Не указана электронная почта для отправки уведомлений.
+12-07-2021 21:17:00 -> Directory exists.
+12-07-2021 21:17:00 -> Directory exists.
+12-07-2021 21:17:00 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://danisimo:599bcf@159.89.221.86:2101/MP2717a -out file:///home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_14-17-00.log'"&
+12-07-2021 21:17:01 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://danisimo:599bcf@159.89.221.86:2101/MP2717 -out file:///home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_14-17-01.log'"&
+12-07-2021 21:17:03 -> Не указана электронная почта для отправки уведомлений.
+12-07-2021 21:17:03 -> RTKLIB-2.4.3-b33/app/convbin/gcc/convbin -r ubx -f 1 -v 3.03 -os -od -y R -y E -y J -y S -y C -o /home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_14-14-38.log.obs -n /home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_14-14-38.log.nav -ts 2021/07/12 14:14:38 /home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_14-14-38.log
+12-07-2021 21:17:04 -> RTKLIB-2.4.3-b33/app/convbin/gcc/convbin -r rt17 -f 2 -v 3.03 -os -od -y R -y E -y J -y S -y C -o /home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_14-14-39.log.obs -n /home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_14-14-39.log.nav -ts 2021/07/12 14:14:39 /home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_14-14-39.log
+12-07-2021 21:17:05 -> RTKLIB-2.4.3-b33/app/rnx2rtkp/gcc/rnx2rtkp -p 3 -m 20 -f 1 -t -d 0 -l 54.9873598 82.86477483 112.535 -o /home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_14-14-38.log.pos /home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_14-14-38.log.obs /home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_14-14-39.log.obs /home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_14-14-39.log.nav
+12-07-2021 21:17:06 -> К FTP серверу подключились.
+12-07-2021 21:17:06 -> Папка уже созадана: 550 Directory already exists
+12-07-2021 21:17:06 -> Проблема с загрузкой БД: 550 Permission denied
+12-07-2021 21:17:06 -> К FTP серверу подключились.
+12-07-2021 21:17:06 -> Папка уже созадана: 550 Directory already exists
+12-07-2021 21:17:06 -> Проблема с загрузкой БД: 550 Permission denied
+12-07-2021 21:20:19 -> On
+12-07-2021 21:20:22 -> RTKLIB-2.4.3-b33/app/convbin/gcc/convbin -r ubx -f 1 -v 3.03 -os -od -y R -y E -y J -y S -y C -o /home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_14-17-00.log.obs -n /home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_14-17-00.log.nav -ts 2021/07/12 14:17:00 /home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_14-17-00.log
+12-07-2021 21:20:23 -> Off
+12-07-2021 21:20:23 -> RTKLIB-2.4.3-b33/app/convbin/gcc/convbin -r rt17 -f 2 -v 3.03 -os -od -y R -y E -y J -y S -y C -o /home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_14-17-01.log.obs -n /home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_14-17-01.log.nav -ts 2021/07/12 14:17:01 /home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_14-17-01.log
+12-07-2021 21:20:24 -> RTKLIB-2.4.3-b33/app/rnx2rtkp/gcc/rnx2rtkp -p 3 -m 20 -f 1 -t -d 0 -l 54.9873598 82.86477483 112.535 -o /home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_14-17-00.log.pos /home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_14-17-00.log.obs /home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_14-17-01.log.obs /home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_14-17-01.log.nav
+12-07-2021 21:20:25 -> Post processing OK
+12-07-2021 21:20:25 -> RNX2RTKP with DB: can only concatenate list (not "str") to list
+12-07-2021 21:22:58 -> Database is was connected!
