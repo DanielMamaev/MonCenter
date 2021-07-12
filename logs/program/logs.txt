@@ -466,3 +466,41 @@
 12-07-2021 21:20:25 -> Post processing OK
 12-07-2021 21:20:25 -> RNX2RTKP with DB: can only concatenate list (not "str") to list
 12-07-2021 21:22:58 -> Database is was connected!
+12-07-2021 21:24:57 -> Database is was connected!
+12-07-2021 21:25:00 -> Directory exists.
+12-07-2021 21:25:00 -> Directory exists.
+12-07-2021 21:25:00 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://danisimo:599bcf@159.89.221.86:2101/MP2717a -out file:///home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_14-25-00.log'"&
+12-07-2021 21:25:01 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://danisimo:599bcf@159.89.221.86:2101/MP2717 -out file:///home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_14-25-01.log'"&
+12-07-2021 21:25:02 -> Не указана электронная почта для отправки уведомлений.
+12-07-2021 21:27:53 -> On
+12-07-2021 21:27:56 -> RTKLIB-2.4.3-b33/app/convbin/gcc/convbin -r ubx -f 1 -v 3.03 -os -od -y R -y E -y J -y S -y C -o /home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_14-25-00.log.obs -n /home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_14-25-00.log.nav -ts 2021/07/12 14:25:00 /home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_14-25-00.log
+12-07-2021 21:27:57 -> Off
+12-07-2021 21:27:57 -> RTKLIB-2.4.3-b33/app/convbin/gcc/convbin -r rt17 -f 2 -v 3.03 -os -od -y R -y E -y J -y S -y C -o /home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_14-25-01.log.obs -n /home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_14-25-01.log.nav -ts 2021/07/12 14:25:01 /home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_14-25-01.log
+12-07-2021 21:27:58 -> RTKLIB-2.4.3-b33/app/rnx2rtkp/gcc/rnx2rtkp -p 3 -m 20 -f 1 -t -d 0 -l 54.9873598 82.86477483 112.535 -o /home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_14-25-00.log.pos /home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_14-25-00.log.obs /home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_14-25-01.log.obs /home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_14-25-01.log.nav
+12-07-2021 21:28:27 -> On
+12-07-2021 21:28:30 -> RTKLIB-2.4.3-b33/app/convbin/gcc/convbin -r ubx -f 1 -v 3.03 -os -od -y R -y E -y J -y S -y C -o /home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_14-25-00.log.obs -n /home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_14-25-00.log.nav -ts 2021/07/12 14:25:00 /home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_14-25-00.log
+12-07-2021 21:28:31 -> Off
+12-07-2021 21:28:31 -> RTKLIB-2.4.3-b33/app/convbin/gcc/convbin -r rt17 -f 2 -v 3.03 -os -od -y R -y E -y J -y S -y C -o /home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_14-25-01.log.obs -n /home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_14-25-01.log.nav -ts 2021/07/12 14:25:01 /home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_14-25-01.log
+12-07-2021 21:28:32 -> RTKLIB-2.4.3-b33/app/rnx2rtkp/gcc/rnx2rtkp -p 3 -m 20 -f 1 -t -d 0 -l 54.9873598 82.86477483 112.535 -o /home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_14-25-00.log.pos /home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_14-25-00.log.obs /home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_14-25-01.log.obs /home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_14-25-01.log.nav
+12-07-2021 21:29:51 -> On
+12-07-2021 21:29:54 -> RTKLIB-2.4.3-b33/app/convbin/gcc/convbin -r ubx -f 1 -v 3.03 -os -od -y R -y E -y J -y S -y C -o /home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_14-25-00.log.obs -n /home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_14-25-00.log.nav -ts 2021/07/12 14:25:00 /home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_14-25-00.log
+12-07-2021 21:29:55 -> Off
+12-07-2021 21:29:55 -> RTKLIB-2.4.3-b33/app/convbin/gcc/convbin -r rt17 -f 2 -v 3.03 -os -od -y R -y E -y J -y S -y C -o /home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_14-25-01.log.obs -n /home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_14-25-01.log.nav -ts 2021/07/12 14:25:01 /home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_14-25-01.log
+12-07-2021 21:29:56 -> RTKLIB-2.4.3-b33/app/rnx2rtkp/gcc/rnx2rtkp -p 3 -m 20 -f 1 -t -d 0 -l 54.9873598 82.86477483 112.535 -o /home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_14-25-00.log.pos /home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_14-25-00.log.obs /home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_14-25-01.log.obs /home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_14-25-01.log.nav
+12-07-2021 21:29:58 -> Post processing OK
+12-07-2021 21:29:58 -> Не указана электронная почта для отправки уведомлений.
+12-07-2021 21:40:00 -> Directory exists.
+12-07-2021 21:40:00 -> Directory exists.
+12-07-2021 21:40:00 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://danisimo:599bcf@159.89.221.86:2101/MP2717a -out file:///home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_14-40-00.log'"&
+12-07-2021 21:40:01 -> xterm -e "/bin/bash -c '/home/pi/Desktop/MonCenter/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in ntrip://danisimo:599bcf@159.89.221.86:2101/MP2717 -out file:///home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_14-40-01.log'"&
+12-07-2021 21:40:03 -> Не указана электронная почта для отправки уведомлений.
+12-07-2021 21:40:03 -> RTKLIB-2.4.3-b33/app/convbin/gcc/convbin -r ubx -f 1 -v 3.03 -os -od -y R -y E -y J -y S -y C -o /home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_14-25-00.log.obs -n /home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_14-25-00.log.nav -ts 2021/07/12 14:25:00 /home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_14-25-00.log
+12-07-2021 21:40:04 -> RTKLIB-2.4.3-b33/app/convbin/gcc/convbin -r rt17 -f 2 -v 3.03 -os -od -y R -y E -y J -y S -y C -o /home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_14-25-01.log.obs -n /home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_14-25-01.log.nav -ts 2021/07/12 14:25:01 /home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_14-25-01.log
+12-07-2021 21:40:05 -> RTKLIB-2.4.3-b33/app/rnx2rtkp/gcc/rnx2rtkp -p 3 -m 20 -f 1 -t -d 0 -l 54.9873598 82.86477483 112.535 -o /home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_14-25-00.log.pos /home/pi/Desktop/07.12.21/M8N/M8N_07.12.2021_14-25-00.log.obs /home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_14-25-01.log.obs /home/pi/Desktop/07.12.21/NSKN/NSKN_07.12.2021_14-25-01.log.nav
+12-07-2021 21:40:06 -> Post processing OK
+12-07-2021 21:40:07 -> Не указана электронная почта для отправки уведомлений.
+12-07-2021 21:40:07 -> К FTP серверу подключились.
+12-07-2021 21:40:07 -> Папка уже созадана: 550 Directory already exists
+12-07-2021 21:40:07 -> К FTP серверу подключились.
+12-07-2021 21:40:07 -> Папка уже созадана: 550 Directory already exists
+12-07-2021 21:40:07 -> Проблема с загрузкой БД: 550 Permission denied

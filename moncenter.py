@@ -343,6 +343,7 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
     # *************************** FTP ***************************
 
     def ftp_connect(self, path):
+        ftp = ''
         try:
             ftp = FTP(self.lineEdit_settings_ftp_host.text())
             ftp.login(self.lineEdit_settings_ftp_username.text(), self.lineEdit_settings_ftp_password.text())
@@ -386,6 +387,7 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
                                    open(self.lineEdit_db_con_path.text(), "rb"))
                 except Exception as e:
                     self.show_logs("Проблема с загрузкой БД: " + str(e))
+        ftp.close()
 
 
             # *************************** FILE .INI ***************************
