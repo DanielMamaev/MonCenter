@@ -244,7 +244,7 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
             # fields="nextPageToken, files(id, name, mimeType, createdTime, quotaBytesUsed )", ).execute()
             # Создание папки
             folder_id = self.lineEdit_settings_google_id.text()
-            today = datetime.today()
+            today = datetime.today().strftime("%m.%d.%y")
             date = str(today.day) + str(today.month) + str(today.year)
 
             results = service.files().list(pageSize=10, fields="files(id, name)", ).execute()
@@ -318,7 +318,7 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
                 self.show_logs("Dir is not found!")
 
             else:
-                today = datetime.today()
+                today = datetime.today().strftime("%m.%d.%y")
                 date = str(today.day) + str(today.month) + str(today.year)
                 try:
                     ya.mkdir(self.lineEdit_settings_ya_folder.text() + date + "/")
