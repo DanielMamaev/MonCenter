@@ -239,7 +239,7 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
             self.show_logs("Файл не найден, либо проблема с файлом json")
         else:
             service = build('drive', 'v3', credentials=credentials)
-            # Список файлов на диске в корненом каталоге
+            # Список файлов на диске в корневой папке
             # results = service.files().list(pageSize=10,
             # fields="nextPageToken, files(id, name, mimeType, createdTime, quotaBytesUsed )", ).execute()
             # Создание папки
