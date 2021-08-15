@@ -5738,7 +5738,7 @@
      <x>0</x>
      <y>0</y>
      <width>697</width>
-     <height>28</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_file">
@@ -5832,6 +5832,10 @@
    </property>
   </action>
   <action name="action_start_str2str">
+   <property name="icon">
+    <iconset>
+     <normaloff>icon/play.png</normaloff>icon/play.png</iconset>
+   </property>
    <property name="text">
     <string>Start STR2STR</string>
    </property>

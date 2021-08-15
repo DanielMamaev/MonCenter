@@ -2,11 +2,13 @@
 
 # Form implementation generated from reading ui file 'design.ui'
 #
-# Created by: PyQt5 UI code generator 5.11.3
+# Created by: PyQt5 UI code generator 5.14.1
 #
 # WARNING! All changes made in this file will be lost!
 
+
 from PyQt5 import QtCore, QtGui, QtWidgets
+
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -1882,7 +1884,7 @@ class Ui_MainWindow(object):
         self.tabWidget.addTab(self.tab_logs, "")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 697, 28))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 697, 21))
         self.menubar.setObjectName("menubar")
         self.menu_file = QtWidgets.QMenu(self.menubar)
         self.menu_file.setObjectName("menu_file")
@@ -1916,6 +1918,7 @@ class Ui_MainWindow(object):
         self.action_autoclose_xterm.setCheckable(True)
         self.action_autoclose_xterm.setObjectName("action_autoclose_xterm")
         self.action_start_str2str = QtWidgets.QAction(MainWindow)
+        self.action_start_str2str.setIcon(icon1)
         self.action_start_str2str.setObjectName("action_start_str2str")
         self.action_exit = QtWidgets.QAction(MainWindow)
         self.action_exit.setObjectName("action_exit")
@@ -2317,4 +2320,3 @@ class Ui_MainWindow(object):
         self.action_exit.setText(_translate("MainWindow", "Exit"))
         self.action_debug_stream.setText(_translate("MainWindow", "Debug stream"))
         self.action_refresh_ports.setText(_translate("MainWindow", "Refresh ports"))
-
