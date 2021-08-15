@@ -1,3 +1,2 @@
-.idea
 __pycache__
-logs.txt
+logs/
