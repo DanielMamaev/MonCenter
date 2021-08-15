@@ -26,7 +26,6 @@ from googleapiclient.http import MediaFileUpload
 import os
 import time
 
-#123
 
 def serial_ports():
     if sys.platform.startswith('win'):
