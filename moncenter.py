@@ -48,6 +48,7 @@ def serial_ports():
             pass
     return result
 
+
 # ******************************************* MAIN *******************************************
 class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
     def __init__(self):
@@ -522,6 +523,7 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
     def ini_start(self):
         if not os.path.exists(self.path_ini):
             self.show_logs("The file conf.ini does not exist!")
+            
             return
 
         config = configparser.ConfigParser()
