@@ -12,7 +12,8 @@ import os.path
 import configparser
 import sqlite3
 import psutil
-from datetime import datetime, time, timedelta
+from datetime import time as dt_time
+from datetime import datetime, timedelta
 
 import smtplib
 from email.mime.text import MIMEText
@@ -25,6 +26,8 @@ from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
 import os
 import time
+
+import pathlib
 
 
 def serial_ports():
@@ -50,7 +53,7 @@ def serial_ports():
 
 
 # ******************************************* MAIN *******************************************
-class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
+class MainWindow(QtWidgets.QMainWindow, design.Ui_MainWindow): 
     def __init__(self):
         super().__init__()
         self.setupUi(self)
@@ -76,19 +79,27 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.ntrip_list = []
         self.path_ntrip = ""
 
-        self.action_start_str2str.triggered.connect(self.str2str_start)  # СТАРТ TCP CLIENT
+        self.action_start_str2str.triggered.connect(
+            self.str2str_start)  # СТАРТ TCP CLIENT
         self.action_stop_str2str.triggered.connect(self.str2str_stop)
         self.action_close_xterm.triggered.connect(self.str2str_stop_xterm)
-        self.Button_str2str_in_file.clicked.connect(self.str2str_inputfile_path)
-        self.Button_str2str_out_file.clicked.connect(self.str2str_outputfile_path)
-        self.Button_str2str_out_file_2.clicked.connect(self.str2str_outputfile_path_2)
-        self.Button_str2str_out_file_3.clicked.connect(self.str2str_outputfile_path_3)
+        self.Button_str2str_in_file.clicked.connect(
+            self.str2str_inputfile_path)
+        self.Button_str2str_out_file.clicked.connect(
+            self.str2str_outputfile_path)
+        self.Button_str2str_out_file_2.clicked.connect(
+            self.str2str_outputfile_path_2)
+        self.Button_str2str_out_file_3.clicked.connect(
+            self.str2str_outputfile_path_3)
         self.tab_output1.setEnabled(False)
         self.tab_output2.setEnabled(False)
         self.tab_output3.setEnabled(False)
-        self.checkBox_str2str_out1.stateChanged.connect(self.str2str_flag_output1)
-        self.checkBox_str2str_out2.stateChanged.connect(self.str2str_flag_output2)
-        self.checkBox_str2str_out3.stateChanged.connect(self.str2str_flag_output3)
+        self.checkBox_str2str_out1.stateChanged.connect(
+            self.str2str_flag_output1)
+        self.checkBox_str2str_out2.stateChanged.connect(
+            self.str2str_flag_output2)
+        self.checkBox_str2str_out3.stateChanged.connect(
+            self.str2str_flag_output3)
 
         # -------------CONVBIN
         self.Button_convert.clicked.connect(self.convbin_convert)
@@ -105,7 +116,8 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
                        'rt17']
         self.comboBox_format.addItems(self.format)
 
-        self.rinex_ver = ['3.03', '3.02', '3.01', '3.0', '2.12', '2.11', '2.10']
+        self.rinex_ver = ['3.03', '3.02', '3.01',
+                          '3.0', '2.12', '2.11', '2.10']
         self.comboBox_rinex.addItems(self.rinex_ver)
 
         self.freq_list = ['1', '2']
@@ -116,18 +128,28 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
 
         self.checkBox_convbin_obs.stateChanged.connect(self.convbin_check_obs)
         self.checkBox_convbin_nav.stateChanged.connect(self.convbin_check_nav)
-        self.checkBox_convbin_gnav.stateChanged.connect(self.convbin_check_gnav)
-        self.checkBox_convbin_hnav.stateChanged.connect(self.convbin_check_hnav)
-        self.checkBox_convbin_qnav.stateChanged.connect(self.convbin_check_qnav)
-        self.checkBox_convbin_lnav.stateChanged.connect(self.convbin_check_lnav)
-        self.checkBox_convbin_sbas.stateChanged.connect(self.convbin_check_sbas)
-        self.checkBox_time_start.stateChanged.connect(self.convbin_check_time_start)
-        self.checkBox_time_end.stateChanged.connect(self.convbin_check_time_end)
+        self.checkBox_convbin_gnav.stateChanged.connect(
+            self.convbin_check_gnav)
+        self.checkBox_convbin_hnav.stateChanged.connect(
+            self.convbin_check_hnav)
+        self.checkBox_convbin_qnav.stateChanged.connect(
+            self.convbin_check_qnav)
+        self.checkBox_convbin_lnav.stateChanged.connect(
+            self.convbin_check_lnav)
+        self.checkBox_convbin_sbas.stateChanged.connect(
+            self.convbin_check_sbas)
+        self.checkBox_time_start.stateChanged.connect(
+            self.convbin_check_time_start)
+        self.checkBox_time_end.stateChanged.connect(
+            self.convbin_check_time_end)
 
         # -------------RNX2RTKP
-        self.Button_rnx2rtkp_input_conf.clicked.connect(self.rnx2rtkp_input_conf)
-        self.Button_rnx2rtkp_input_rover.clicked.connect(self.rnx2rtkp_input_rover)
-        self.Button_rnx2rtkp_input_base.clicked.connect(self.rnx2rtkp_input_base)
+        self.Button_rnx2rtkp_input_conf.clicked.connect(
+            self.rnx2rtkp_input_conf)
+        self.Button_rnx2rtkp_input_rover.clicked.connect(
+            self.rnx2rtkp_input_rover)
+        self.Button_rnx2rtkp_input_base.clicked.connect(
+            self.rnx2rtkp_input_base)
         self.Button_rnx2rtkp_input_nav.clicked.connect(self.rnx2rtkp_input_nav)
         self.Button_rnx2rtkp_output.clicked.connect(self.rnx2rtkp_output)
         self.Button_rnx2rtkp_start.clicked.connect(self.rnx2rtkp_input_start)
@@ -137,9 +159,12 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.fname_input_rnx2rtkp = ""
         self.fname_output_pos = ""
 
-        self.checkBox_rnx2rtkp_conf.stateChanged.connect(self.rxn2rtkp_conf_file_check)
-        self.checkBox_rnx2rtkp_time_start.stateChanged.connect(self.rnx2rtkp_time_start_check)
-        self.checkBox_rnx2rtkp_time_end.stateChanged.connect(self.rnx2rtkp_time_end_check)
+        self.checkBox_rnx2rtkp_conf.stateChanged.connect(
+            self.rxn2rtkp_conf_file_check)
+        self.checkBox_rnx2rtkp_time_start.stateChanged.connect(
+            self.rnx2rtkp_time_start_check)
+        self.checkBox_rnx2rtkp_time_end.stateChanged.connect(
+            self.rnx2rtkp_time_end_check)
 
         # ------------- DATABASE
         self.Button_db_new_create.clicked.connect(self.db_create)
@@ -155,7 +180,8 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.bool_ok_db = False
         self.temp_time_db = 0
 
-        self.time_reset_str2str_Thread_instance = TimeResetStr2strThread(mainwindow=self)
+        self.time_reset_str2str_Thread_instance = TimeResetStr2strThread(
+            mainwindow=self)
         self.time_reset_str2str_Thread_instance.start()
 
         self.checkBox_db_reset.stateChanged.connect(self.db_check_str2str)
@@ -163,30 +189,39 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.Button_db_timepost_ok.clicked.connect(self.db_posttime)
         self.Button_db_sql.clicked.connect(self.db_sql_command)
 
-
         # ------------- COM
         self.realport = None
         self.action_refresh_ports.triggered.connect(self.serial_update)
-        self.pushButton_connect.clicked.connect(self.com_connect)  # ОБРАБОТКА ПОДКЛЮЧЕНИЯ К ПОРТУ
-        self.pushButton_refresh.clicked.connect(self.com_refresh)  # ПОИСК НОВЫХ ПОРТОВ
-        self.pushButton_send.clicked.connect(self.com_send)  # ОТПРАВКА СООБЩЕНИЯ
-        self.pushButton_clear.clicked.connect(self.com_clear)  # ЧИСТКА ОКНА ПРИХОДЯЩИХ ДАННЫХ С КОМ ПОРТА
+        self.pushButton_connect.clicked.connect(
+            self.com_connect)  # ОБРАБОТКА ПОДКЛЮЧЕНИЯ К ПОРТУ
+        self.pushButton_refresh.clicked.connect(
+            self.com_refresh)  # ПОИСК НОВЫХ ПОРТОВ
+        self.pushButton_send.clicked.connect(
+            self.com_send)  # ОТПРАВКА СООБЩЕНИЯ
+        # ЧИСТКА ОКНА ПРИХОДЯЩИХ ДАННЫХ С КОМ ПОРТА
+        self.pushButton_clear.clicked.connect(self.com_clear)
         self.receivedMessage = None  # ХРАНИТ ПРИХОДЯЩЕЕ СООБЩЕНИЕ С КОМ ПОРТА
         self.button_com_flag = True  # ФЛАГ ДЛЯ ПОДКЛЮЧЕНИЯ К КОМ ПОРТУ
         self.command_list = ['#ser', '#num', '#ip', '#tcp_res', '#restart',
                              '#reset']  # КОМАНДЫ ДЛЯ УПРАВЛЕНИЯ WEMOS ЧЕРЕЗ КОМ ПОРТ
-        self.comboBox_comm.addItems(self.command_list)  # ДОБАВЛЕНИЕ КОМАНД В COMBOBOX
-        self.read_text_Thread_instance = ReadTextThread(mainwindow=self)  # ЗАПУСК ПОТОКА ЧТЕНИЯ ДАННЫХ ИЗ КОМ ПОРТА
+        # ДОБАВЛЕНИЕ КОМАНД В COMBOBOX
+        self.comboBox_comm.addItems(self.command_list)
+        self.read_text_Thread_instance = ReadTextThread(
+            mainwindow=self)  # ЗАПУСК ПОТОКА ЧТЕНИЯ ДАННЫХ ИЗ КОМ ПОРТА
 
-        #self.ftp_connect("")
-
-
-
+        # ------------- filterSDF
+        self.pushButton_filterSDF_inputParth.clicked.connect(
+            self.filterSDF_inputPath)
+        self.pushButton_filterSDF_outputParth.clicked.connect(
+            self.filterSDF_outputPath)
+        self.pushButton_filterSDF_start.clicked.connect(self.filterSDF_start)
 
     def serial_update(self):
-        self.comboBox_port.addItems(serial_ports())  # ДОБАВЛЕНИЕ НАЙДЕННЫХ ПОРТОВ В COMBOBOX
+        # ДОБАВЛЕНИЕ НАЙДЕННЫХ ПОРТОВ В COMBOBOX
+        self.comboBox_port.addItems(serial_ports())
         self.comboBox_str2str_in_ser_port.addItems(serial_ports())
     # *************************** SHOW LOGS ***************************
+
     def show_logs(self, text):
         print("\n" + text)
         today = datetime.today().strftime("%d-%m-%Y %H:%M:%S")
@@ -208,10 +243,12 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         msg['From'] = email
         msg['To'] = self.lineEdit_settings_email.text()
         if not self.lineEdit_settings_email.text() == "":
-            smtp_obj.sendmail(msg['From'], self.lineEdit_settings_email.text(), msg.as_string())
+            smtp_obj.sendmail(
+                msg['From'], self.lineEdit_settings_email.text(), msg.as_string())
             smtp_obj.quit()
         else:
-            self.show_logs("Не указана электронная почта для отправки уведомлений.")
+            self.show_logs(
+                "Не указана электронная почта для отправки уведомлений.")
 
     # *************************** Google Drive ***************************
     """def delete_all_gdrive(self):
@@ -235,7 +272,8 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         SCOPES = ['https://www.googleapis.com/auth/drive']
         service_account_file = self.lineEdit_settings_google_json.text()
         try:
-            credentials = service_account.Credentials.from_service_account_file(service_account_file, scopes=SCOPES)
+            credentials = service_account.Credentials.from_service_account_file(
+                service_account_file, scopes=SCOPES)
         except Exception:
             self.show_logs("Файл не найден, либо проблема с файлом json")
         else:
@@ -327,11 +365,13 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
                     pass
 
                 try:
-                    ya.upload(path, self.lineEdit_settings_ya_folder.text() + date + "/" + os.path.basename(path))
+                    ya.upload(path, self.lineEdit_settings_ya_folder.text(
+                    ) + date + "/" + os.path.basename(path))
                 except Exception:
                     self.show_logs("Загрузить не удалось!")
                 else:
-                    self.show_logs("Загрузка " + os.path.basename(path) + " на Яндекс.Диск.")
+                    self.show_logs(
+                        "Загрузка " + os.path.basename(path) + " на Яндекс.Диск.")
 
                 try:
                     ya.upload(self.lineEdit_db_con_path.text(),
@@ -347,18 +387,19 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         ftp = ''
         try:
             ftp = FTP(self.lineEdit_settings_ftp_host.text())
-            ftp.login(self.lineEdit_settings_ftp_username.text(), self.lineEdit_settings_ftp_password.text())
+            ftp.login(self.lineEdit_settings_ftp_username.text(),
+                      self.lineEdit_settings_ftp_password.text())
         except Exception as e:
             self.show_logs("Проблема с подключением к FTP серверу " + str(e))
         else:
             self.show_logs("К FTP серверу подключились.")
-            #print(ftp.retrlines('LIST')) # отображение всех файлов в каталоге
-            #print(ftp.pwd()) # текущий путь
+            # print(ftp.retrlines('LIST')) # отображение всех файлов в каталоге
+            # print(ftp.pwd()) # текущий путь
 
             today = datetime.today().strftime("%m.%d.%y")
             flag_dir = False
             try:
-                ftp.mkd(today) # создание папки
+                ftp.mkd(today)  # создание папки
             except Exception as e:
                 if str(e) == "550 Directory already exists":
                     self.show_logs("Папка уже созадана: " + str(e))
@@ -369,17 +410,19 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
             else:
                 flag_dir = True
                 self.show_logs('Папка создана')
-                #print(ftp.retrlines('LIST'))
+                # print(ftp.retrlines('LIST'))
 
             if flag_dir:
                 try:
                     ftp.cwd('/' + today)
                 except Exception as e:
-                    self.show_logs("Такой папки /" + today + "не существует: " + str(e))
+                    self.show_logs("Такой папки /" + today +
+                                   "не существует: " + str(e))
                     return
                 else:
                     try:
-                        ftp.storbinary('STOR ' + os.path.basename(path), open(path, "rb"))
+                        ftp.storbinary(
+                            'STOR ' + os.path.basename(path), open(path, "rb"))
                     except Exception as e:
                         self.show_logs("Проблема с загрузкой файла: " + str(e))
 
@@ -390,8 +433,7 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
                     self.show_logs("Проблема с загрузкой БД: " + str(e))
         ftp.close()
 
-
-            # *************************** FILE .INI ***************************
+        # *************************** FILE .INI ***************************
 
     def ini_save_exit(self):
         self.ini_save()
@@ -463,57 +505,98 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         config = configparser.ConfigParser()
         try:
             config.read(self.path_ini)
-            config.set("STR2STR", "create_folder", str(self.action_create_folder.isChecked()))
-            config.set("STR2STR", "autoclose_xterm", str(self.action_autoclose_xterm.isChecked()))
-            config.set("CONVBIN", "check_start", str(self.checkBox_time_start.isChecked()))
-            config.set("CONVBIN", "check_end", str(self.checkBox_time_end.isChecked()))
+            config.set("STR2STR", "create_folder", str(
+                self.action_create_folder.isChecked()))
+            config.set("STR2STR", "autoclose_xterm", str(
+                self.action_autoclose_xterm.isChecked()))
+            config.set("CONVBIN", "check_start", str(
+                self.checkBox_time_start.isChecked()))
+            config.set("CONVBIN", "check_end", str(
+                self.checkBox_time_end.isChecked()))
             config.set("CONVBIN", "format", self.comboBox_format.currentText())
             config.set("CONVBIN", "rinex", self.comboBox_rinex.currentText())
-            config.set("CONVBIN", "frequencies", self.comboBox_freq.currentText())
-            config.set("CONVBIN", "sat_gps", str(self.checkBox_gps.isChecked()))
-            config.set("CONVBIN", "sat_glo", str(self.checkBox_glo.isChecked()))
-            config.set("CONVBIN", "sat_galileo", str(self.checkBox_galileo.isChecked()))
-            config.set("CONVBIN", "sat_qzss", str(self.checkBox_qzss.isChecked()))
-            config.set("CONVBIN", "sat_sbas", str(self.checkBox_sbas.isChecked()))
-            config.set("CONVBIN", "sat_beidou", str(self.checkBox_beidou.isChecked()))
-            config.set("CONVBIN", "check_obs", str(self.checkBox_convbin_obs.isChecked()))
-            config.set("CONVBIN", "check_nav", str(self.checkBox_convbin_nav.isChecked()))
-            config.set("CONVBIN", "check_gnav", str(self.checkBox_convbin_gnav.isChecked()))
-            config.set("CONVBIN", "check_hnav", str(self.checkBox_convbin_hnav.isChecked()))
-            config.set("CONVBIN", "check_qnav", str(self.checkBox_convbin_qnav.isChecked()))
-            config.set("CONVBIN", "check_lnav", str(self.checkBox_convbin_lnav.isChecked()))
-            config.set("CONVBIN", "check_sbas", str(self.checkBox_convbin_sbas.isChecked()))
-            config.set("RNX2RTKP", "pos_mode", self.comboBox_rnx2rtkp_pos_mode.currentText())
-            config.set("RNX2RTKP", "frequencies", self.comboBox_rnx2rtkp_freq.currentText())
-            config.set("RNX2RTKP", "sol_format", self.comboBox_rnx2rtkp_sol_format.currentText())
-            config.set("RNX2RTKP", "time_format", self.comboBox_rnx2rtkp_time_format.currentText())
+            config.set("CONVBIN", "frequencies",
+                       self.comboBox_freq.currentText())
+            config.set("CONVBIN", "sat_gps", str(
+                self.checkBox_gps.isChecked()))
+            config.set("CONVBIN", "sat_glo", str(
+                self.checkBox_glo.isChecked()))
+            config.set("CONVBIN", "sat_galileo", str(
+                self.checkBox_galileo.isChecked()))
+            config.set("CONVBIN", "sat_qzss", str(
+                self.checkBox_qzss.isChecked()))
+            config.set("CONVBIN", "sat_sbas", str(
+                self.checkBox_sbas.isChecked()))
+            config.set("CONVBIN", "sat_beidou", str(
+                self.checkBox_beidou.isChecked()))
+            config.set("CONVBIN", "check_obs", str(
+                self.checkBox_convbin_obs.isChecked()))
+            config.set("CONVBIN", "check_nav", str(
+                self.checkBox_convbin_nav.isChecked()))
+            config.set("CONVBIN", "check_gnav", str(
+                self.checkBox_convbin_gnav.isChecked()))
+            config.set("CONVBIN", "check_hnav", str(
+                self.checkBox_convbin_hnav.isChecked()))
+            config.set("CONVBIN", "check_qnav", str(
+                self.checkBox_convbin_qnav.isChecked()))
+            config.set("CONVBIN", "check_lnav", str(
+                self.checkBox_convbin_lnav.isChecked()))
+            config.set("CONVBIN", "check_sbas", str(
+                self.checkBox_convbin_sbas.isChecked()))
+            config.set("RNX2RTKP", "pos_mode",
+                       self.comboBox_rnx2rtkp_pos_mode.currentText())
+            config.set("RNX2RTKP", "frequencies",
+                       self.comboBox_rnx2rtkp_freq.currentText())
+            config.set("RNX2RTKP", "sol_format",
+                       self.comboBox_rnx2rtkp_sol_format.currentText())
+            config.set("RNX2RTKP", "time_format",
+                       self.comboBox_rnx2rtkp_time_format.currentText())
             config.set("RNX2RTKP", "mask", self.lineEdit_rnx2rtkp_mask.text())
-            config.set("RNX2RTKP", "decimals", self.lineEdit_rnx2rtkp_dec.text())
-            config.set("RNX2RTKP", "base_station", self.comboBox_rnx2rtkp_base.currentText())
+            config.set("RNX2RTKP", "decimals",
+                       self.lineEdit_rnx2rtkp_dec.text())
+            config.set("RNX2RTKP", "base_station",
+                       self.comboBox_rnx2rtkp_base.currentText())
             config.set("RNX2RTKP", "edit1", self.lineEdit_rnx2rtkp_1.text())
             config.set("RNX2RTKP", "edit2", self.lineEdit_rnx2rtkp_2.text())
             config.set("RNX2RTKP", "edit3", self.lineEdit_rnx2rtkp_3.text())
             config.set("COM", "speed", self.comboBox_speed.currentText())
-            config.set("COM", "autoscroll", str(self.checkBox_scroll.isChecked()))
+            config.set("COM", "autoscroll", str(
+                self.checkBox_scroll.isChecked()))
             config.set("COM", "time", str(self.checkBox_time.isChecked()))
-            config.set("DATABASE", "time_reset", str(self.checkBox_db_reset.isChecked()))
-            config.set("DATABASE", "time_post", str(self.checkBox_db_post.isChecked()))
-            config.set("DATABASE", "last_post", str(self.checkBox_db_lastpost.isChecked()))
-            config.set("DATABASE", "connect_to", self.lineEdit_db_con_path.text())
+            config.set("DATABASE", "time_reset", str(
+                self.checkBox_db_reset.isChecked()))
+            config.set("DATABASE", "time_post", str(
+                self.checkBox_db_post.isChecked()))
+            config.set("DATABASE", "last_post", str(
+                self.checkBox_db_lastpost.isChecked()))
+            config.set("DATABASE", "connect_to",
+                       self.lineEdit_db_con_path.text())
             config.set("DATABASE", "save_to", self.lineEdit_db_save.text())
             config.set("DATABASE", "delta", self.lineEdit_db_delta.text())
-            config.set("SETTINGS", "email", self.lineEdit_settings_email.text())
-            config.set("SETTINGS", "ftp_host", self.lineEdit_settings_ftp_host.text())
-            config.set("SETTINGS", "ftp_username", self.lineEdit_settings_ftp_username.text())
-            config.set("SETTINGS", "ftp_password", self.lineEdit_settings_ftp_password.text())
-            config.set("SETTINGS", "ftp_autoconnect", str(self.checkBox_settings_ftp_autoconnect.isChecked()))
-            config.set("SETTINGS", "ya_token", self.lineEdit_settings_ya_token.text())
-            config.set("SETTINGS", "ya_folder", self.lineEdit_settings_ya_folder.text())
-            config.set("SETTINGS", "ya_autoconnect", str(self.checkBox_settings_ya_autoconnect.isChecked()))
-            config.set("SETTINGS", "google_json", self.lineEdit_settings_google_json.text())
-            config.set("SETTINGS", "google_id", self.lineEdit_settings_google_id.text())
-            config.set("SETTINGS", "google_autoconnect", str(self.checkBox_settings_google_autoconnect.isChecked()))
-            config.set("SETTINGS", "output_str_active", str(self.action_debug_stream.isChecked()))
+            config.set("SETTINGS", "email",
+                       self.lineEdit_settings_email.text())
+            config.set("SETTINGS", "ftp_host",
+                       self.lineEdit_settings_ftp_host.text())
+            config.set("SETTINGS", "ftp_username",
+                       self.lineEdit_settings_ftp_username.text())
+            config.set("SETTINGS", "ftp_password",
+                       self.lineEdit_settings_ftp_password.text())
+            config.set("SETTINGS", "ftp_autoconnect", str(
+                self.checkBox_settings_ftp_autoconnect.isChecked()))
+            config.set("SETTINGS", "ya_token",
+                       self.lineEdit_settings_ya_token.text())
+            config.set("SETTINGS", "ya_folder",
+                       self.lineEdit_settings_ya_folder.text())
+            config.set("SETTINGS", "ya_autoconnect", str(
+                self.checkBox_settings_ya_autoconnect.isChecked()))
+            config.set("SETTINGS", "google_json",
+                       self.lineEdit_settings_google_json.text())
+            config.set("SETTINGS", "google_id",
+                       self.lineEdit_settings_google_id.text())
+            config.set("SETTINGS", "google_autoconnect", str(
+                self.checkBox_settings_google_autoconnect.isChecked()))
+            config.set("SETTINGS", "output_str_active", str(
+                self.action_debug_stream.isChecked()))
         except Exception:
             self.show_logs("The file conf.ini is corrupted or not found.")
         else:
@@ -523,7 +606,7 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
     def ini_start(self):
         if not os.path.exists(self.path_ini):
             self.show_logs("The file conf.ini does not exist!")
-            
+
             return
 
         config = configparser.ConfigParser()
@@ -531,71 +614,113 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
 
         try:
             # --- STR2STR
-            self.action_create_folder.setChecked(config.getboolean("STR2STR", "create_folder"))
-            self.action_autoclose_xterm.setChecked(config.getboolean("STR2STR", "autoclose_xterm"))
+            self.action_create_folder.setChecked(
+                config.getboolean("STR2STR", "create_folder"))
+            self.action_autoclose_xterm.setChecked(
+                config.getboolean("STR2STR", "autoclose_xterm"))
 
             # --- CONVBIN
-            self.checkBox_time_start.setChecked(config.getboolean("CONVBIN", "check_start"))
-            self.checkBox_time_end.setChecked(config.getboolean("CONVBIN", "check_end"))
-            self.comboBox_format.setCurrentText(config.get("CONVBIN", "format"))
+            self.checkBox_time_start.setChecked(
+                config.getboolean("CONVBIN", "check_start"))
+            self.checkBox_time_end.setChecked(
+                config.getboolean("CONVBIN", "check_end"))
+            self.comboBox_format.setCurrentText(
+                config.get("CONVBIN", "format"))
             self.comboBox_rinex.setCurrentText(config.get("CONVBIN", "rinex"))
-            self.comboBox_freq.setCurrentText(config.get("CONVBIN", "frequencies"))
+            self.comboBox_freq.setCurrentText(
+                config.get("CONVBIN", "frequencies"))
 
-            self.checkBox_gps.setChecked(config.getboolean("CONVBIN", "sat_gps"))
-            self.checkBox_glo.setChecked(config.getboolean("CONVBIN", "sat_glo"))
-            self.checkBox_galileo.setChecked(bool(config.getboolean("CONVBIN", "sat_galileo")))
-            self.checkBox_qzss.setChecked(bool(config.getboolean("CONVBIN", "sat_qzss")))
-            self.checkBox_sbas.setChecked(bool(config.getboolean("CONVBIN", "sat_sbas")))
-            self.checkBox_beidou.setChecked(bool(config.getboolean("CONVBIN", "sat_beidou")))
+            self.checkBox_gps.setChecked(
+                config.getboolean("CONVBIN", "sat_gps"))
+            self.checkBox_glo.setChecked(
+                config.getboolean("CONVBIN", "sat_glo"))
+            self.checkBox_galileo.setChecked(
+                bool(config.getboolean("CONVBIN", "sat_galileo")))
+            self.checkBox_qzss.setChecked(
+                bool(config.getboolean("CONVBIN", "sat_qzss")))
+            self.checkBox_sbas.setChecked(
+                bool(config.getboolean("CONVBIN", "sat_sbas")))
+            self.checkBox_beidou.setChecked(
+                bool(config.getboolean("CONVBIN", "sat_beidou")))
 
-            self.checkBox_convbin_obs.setChecked(config.getboolean("CONVBIN", "check_obs"))
-            self.checkBox_convbin_nav.setChecked(config.getboolean("CONVBIN", "check_nav"))
-            self.checkBox_convbin_gnav.setChecked(config.getboolean("CONVBIN", "check_gnav"))
-            self.checkBox_convbin_hnav.setChecked(config.getboolean("CONVBIN", "check_hnav"))
-            self.checkBox_convbin_qnav.setChecked(config.getboolean("CONVBIN", "check_qnav"))
-            self.checkBox_convbin_lnav.setChecked(config.getboolean("CONVBIN", "check_lnav"))
-            self.checkBox_convbin_sbas.setChecked(config.getboolean("CONVBIN", "check_sbas"))
+            self.checkBox_convbin_obs.setChecked(
+                config.getboolean("CONVBIN", "check_obs"))
+            self.checkBox_convbin_nav.setChecked(
+                config.getboolean("CONVBIN", "check_nav"))
+            self.checkBox_convbin_gnav.setChecked(
+                config.getboolean("CONVBIN", "check_gnav"))
+            self.checkBox_convbin_hnav.setChecked(
+                config.getboolean("CONVBIN", "check_hnav"))
+            self.checkBox_convbin_qnav.setChecked(
+                config.getboolean("CONVBIN", "check_qnav"))
+            self.checkBox_convbin_lnav.setChecked(
+                config.getboolean("CONVBIN", "check_lnav"))
+            self.checkBox_convbin_sbas.setChecked(
+                config.getboolean("CONVBIN", "check_sbas"))
 
             # --- RNX2RTKP
-            self.comboBox_rnx2rtkp_pos_mode.setCurrentText(config.get("RNX2RTKP", "pos_mode"))
-            self.comboBox_rnx2rtkp_freq.setCurrentText(config.get("RNX2RTKP", "frequencies"))
-            self.comboBox_rnx2rtkp_sol_format.setCurrentText(config.get("RNX2RTKP", "sol_format"))
-            self.comboBox_rnx2rtkp_time_format.setCurrentText(config.get("RNX2RTKP", "time_format"))
+            self.comboBox_rnx2rtkp_pos_mode.setCurrentText(
+                config.get("RNX2RTKP", "pos_mode"))
+            self.comboBox_rnx2rtkp_freq.setCurrentText(
+                config.get("RNX2RTKP", "frequencies"))
+            self.comboBox_rnx2rtkp_sol_format.setCurrentText(
+                config.get("RNX2RTKP", "sol_format"))
+            self.comboBox_rnx2rtkp_time_format.setCurrentText(
+                config.get("RNX2RTKP", "time_format"))
             self.lineEdit_rnx2rtkp_mask.setText(config.get("RNX2RTKP", "mask"))
-            self.lineEdit_rnx2rtkp_dec.setText(config.get("RNX2RTKP", "decimals"))
-            self.comboBox_rnx2rtkp_base.setCurrentText(config.get("RNX2RTKP", "base_station"))
+            self.lineEdit_rnx2rtkp_dec.setText(
+                config.get("RNX2RTKP", "decimals"))
+            self.comboBox_rnx2rtkp_base.setCurrentText(
+                config.get("RNX2RTKP", "base_station"))
             self.lineEdit_rnx2rtkp_1.setText(config.get("RNX2RTKP", "edit1"))
             self.lineEdit_rnx2rtkp_2.setText(config.get("RNX2RTKP", "edit2"))
             self.lineEdit_rnx2rtkp_3.setText(config.get("RNX2RTKP", "edit3"))
 
             # --- COM
             self.comboBox_speed.setCurrentText(config.get("COM", "speed"))
-            self.checkBox_scroll.setChecked(config.getboolean("COM", "autoscroll"))
+            self.checkBox_scroll.setChecked(
+                config.getboolean("COM", "autoscroll"))
             self.checkBox_time.setChecked(config.getboolean("COM", "time"))
 
             # --- DATABASE
-            self.checkBox_db_reset.setChecked(config.getboolean("DATABASE", "time_reset"))
-            self.checkBox_db_post.setChecked(config.getboolean("DATABASE", "time_post"))
-            self.checkBox_db_lastpost.setChecked(config.getboolean("DATABASE", "last_post"))
-            self.lineEdit_db_con_path.setText(config.get("DATABASE", "connect_to"))
+            self.checkBox_db_reset.setChecked(
+                config.getboolean("DATABASE", "time_reset"))
+            self.checkBox_db_post.setChecked(
+                config.getboolean("DATABASE", "time_post"))
+            self.checkBox_db_lastpost.setChecked(
+                config.getboolean("DATABASE", "last_post"))
+            self.lineEdit_db_con_path.setText(
+                config.get("DATABASE", "connect_to"))
             self.lineEdit_db_save.setText(config.get("DATABASE", "save_to"))
             self.lineEdit_db_delta.setText(config.get("DATABASE", "delta"))
             if self.checkBox_db_reset.isChecked():
                 self.timeEdit_db.setEnabled(True)
 
             # --- SETTINGS
-            self.lineEdit_settings_email.setText(config.get("SETTINGS", "email"))
-            self.lineEdit_settings_ftp_host.setText(config.get("SETTINGS", "ftp_host"))
-            self.lineEdit_settings_ftp_username.setText(config.get("SETTINGS", "ftp_username"))
-            self.lineEdit_settings_ftp_password.setText(config.get("SETTINGS", "ftp_password"))
-            self.checkBox_settings_ftp_autoconnect.setChecked(config.getboolean("SETTINGS", "ftp_autoconnect"))
-            self.lineEdit_settings_ya_token.setText(config.get("SETTINGS", "ya_token"))
-            self.lineEdit_settings_ya_folder.setText(config.get("SETTINGS", "ya_folder"))
-            self.checkBox_settings_ya_autoconnect.setChecked(config.getboolean("SETTINGS", "ya_autoconnect"))
-            self.lineEdit_settings_google_json.setText(config.get("SETTINGS", "google_json"))
-            self.lineEdit_settings_google_id.setText(config.get("SETTINGS", "google_id"))
-            self.checkBox_settings_google_autoconnect.setChecked(config.getboolean("SETTINGS", "google_autoconnect"))
-            self.action_debug_stream.setChecked(config.getboolean("SETTINGS", "output_str_active"))
+            self.lineEdit_settings_email.setText(
+                config.get("SETTINGS", "email"))
+            self.lineEdit_settings_ftp_host.setText(
+                config.get("SETTINGS", "ftp_host"))
+            self.lineEdit_settings_ftp_username.setText(
+                config.get("SETTINGS", "ftp_username"))
+            self.lineEdit_settings_ftp_password.setText(
+                config.get("SETTINGS", "ftp_password"))
+            self.checkBox_settings_ftp_autoconnect.setChecked(
+                config.getboolean("SETTINGS", "ftp_autoconnect"))
+            self.lineEdit_settings_ya_token.setText(
+                config.get("SETTINGS", "ya_token"))
+            self.lineEdit_settings_ya_folder.setText(
+                config.get("SETTINGS", "ya_folder"))
+            self.checkBox_settings_ya_autoconnect.setChecked(
+                config.getboolean("SETTINGS", "ya_autoconnect"))
+            self.lineEdit_settings_google_json.setText(
+                config.get("SETTINGS", "google_json"))
+            self.lineEdit_settings_google_id.setText(
+                config.get("SETTINGS", "google_id"))
+            self.checkBox_settings_google_autoconnect.setChecked(
+                config.getboolean("SETTINGS", "google_autoconnect"))
+            self.action_debug_stream.setChecked(
+                config.getboolean("SETTINGS", "output_str_active"))
         except Exception:
             self.show_logs("The file conf.ini is corrupted.")
 
@@ -727,11 +852,13 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.lineEdit_db_con_path.setText(fname)
 
     def db_connect(self):
-        db_table = ['BASELINES', 'CONV_CONF', 'POINTS', 'POS_CONF', 'RECEIVERS', 'SOLUTIONS']
+        db_table = ['BASELINES', 'CONV_CONF', 'POINTS',
+                    'POS_CONF', 'RECEIVERS', 'SOLUTIONS']
         temp_table = ""
         if self.lineEdit_db_con_path.text() != "":
             try:
-                self.open_db = sqlite3.connect(self.lineEdit_db_con_path.text(), check_same_thread=False)
+                self.open_db = sqlite3.connect(
+                    self.lineEdit_db_con_path.text(), check_same_thread=False)
                 for i in db_table:
                     temp_table = i
                     cursor = self.open_db.cursor()
@@ -769,25 +896,30 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
                     if os.path.exists(
                             path_save + "/" + datetime.today().strftime("%m.%d.%y") + "/" + temp_host):
                         self.show_logs("Directory exists.")
-                        filepath = path_save + "/" + datetime.today().strftime("%m.%d.%y") + "/" + temp_host
+                        filepath = path_save + "/" + datetime.today().strftime("%m.%d.%y") + \
+                            "/" + temp_host
                         dir_path_list.append(filepath + "/")
                     else:
                         try:
                             filepath = path_save + "/" + today
                             os.mkdir(filepath)
                         except OSError:
-                            self.show_logs("Создать директорию %s не удалось" % filepath)
+                            self.show_logs(
+                                "Создать директорию %s не удалось" % filepath)
                         else:
-                            self.show_logs("Успешно создана директория %s " % filepath)
+                            self.show_logs(
+                                "Успешно создана директория %s " % filepath)
 
                         try:
                             filepath = path_save + "/" + today + "/" + temp_host
                             os.mkdir(filepath)
                         except OSError:
-                            self.show_logs("Создать директорию %s не удалось" % filepath)
+                            self.show_logs(
+                                "Создать директорию %s не удалось" % filepath)
                         else:
                             dir_path_list.append(filepath + "/")
-                            self.show_logs("Успешно создана директория %s " % filepath)
+                            self.show_logs(
+                                "Успешно создана директория %s " % filepath)
 
             else:
                 self.show_logs("Укажите путь для сохранения!")
@@ -809,7 +941,7 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
                 if host[i][3] == 2:
                     command_str2str += "serial://"
                     command_str2str += host[i][9] + ":" + host[i][10] + ":" + host[i][11] + ":" + host[i][12]\
-                                       + ":" + host[i][13] + ":" + host[i][14]
+                        + ":" + host[i][13] + ":" + host[i][14]
 
                 if len(dir_path_list) == len(host):
                     command_str2str += " -out file://"
@@ -817,7 +949,7 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
 
                     temp_ip = host[i][0]
                     file_n = temp_ip.replace(":", ".")
-                    file_n += "_" + datetime.utcnow().strftime("%m.%d.%Y_%H-%M-%S") + ".log"
+                    file_n += "_" + datetime.now().strftime("%m.%d.%Y_%H-%M-%S") + ".log"
                     command_str2str += file_n
                     self.post_pro_db.append([])
                     self.post_pro_db[i].append(host[i][0])
@@ -844,9 +976,11 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
                             filepath = str_folder + "/" + today
                             os.mkdir(filepath)
                         except OSError:
-                            self.show_logs("Создать директорию %s не удалось" % filepath)
+                            self.show_logs(
+                                "Создать директорию %s не удалось" % filepath)
                         else:
-                            self.show_logs("Успешно создана директория %s " % filepath)
+                            self.show_logs(
+                                "Успешно создана директория %s " % filepath)
                             command_str2str += " &>> " + str_folder + "/" + today + "/" + str(
                                 os.path.basename(self.post_pro_db[i][1]))
                 command_str2str += "'\"&"
@@ -859,7 +993,8 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
 
             free = psutil.disk_usage(path_save).free / (1024 * 1024 * 1024)
             if free < 2:
-                self.send_email(message="Внимание! Осталось памяти на диске " + str(free) + " Gb")
+                self.send_email(
+                    message="Внимание! Осталось памяти на диске " + str(free) + " Gb")
 
         except Exception as e:
             self.show_logs("STR2STR with DB: " + str(e))
@@ -934,14 +1069,17 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
                         if len(p[2]) == 3:
                             p[2][2] = p[2][2].rsplit('.', 1)
                         if len(p[1]) == 3 and len(p[2]) == 3:
-                            time_conv = p[1][2] + "/" + p[1][0] + "/" + p[1][1] + " "
-                            time_conv += p[2][0] + ":" + p[2][1] + ":" + p[2][2][0]
+                            time_conv = p[1][2] + "/" + \
+                                p[1][0] + "/" + p[1][1] + " "
+                            time_conv += p[2][0] + ":" + \
+                                p[2][1] + ":" + p[2][2][0]
 
                     command_convbin += " -ts " + time_conv
                     command_convbin += " " + list_path[y][1]
                 else:
                     self.show_logs("(CONVBIN) Декодирование не произошло.")
-                    self.send_email(message="(CONVBIN) Декодирование не произошло.")
+                    self.send_email(
+                        message="(CONVBIN) Декодирование не произошло.")
                 self.show_logs(command_convbin)
                 os.system(command_convbin)
                 time.sleep(1)
@@ -1023,9 +1161,11 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
                 if list_path != []:
                     for y in range(len(list_path)):
                         if base_rover[i][1] == list_path[y][0]:
-                            command_rnx2rtkp += " -o " + list_path[y][1] + ".pos"
+                            command_rnx2rtkp += " -o " + \
+                                list_path[y][1] + ".pos"
                             if os.path.exists(list_path[y][1] + ".obs"):
-                                command_rnx2rtkp += " " + list_path[y][1] + ".obs"
+                                command_rnx2rtkp += " " + \
+                                    list_path[y][1] + ".obs"
                                 error_path = list_path[y][1] + ".obs"
                                 pars_pos = True
                             else:
@@ -1034,8 +1174,10 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
                     if pars_pos:
                         for y in range(len(list_path)):
                             if base_rover[i][0] == list_path[y][0]:
-                                command_rnx2rtkp += " " + list_path[y][1] + ".obs"
-                                command_rnx2rtkp += " " + list_path[y][1] + ".nav"
+                                command_rnx2rtkp += " " + \
+                                    list_path[y][1] + ".obs"
+                                command_rnx2rtkp += " " + \
+                                    list_path[y][1] + ".nav"
 
                         self.show_logs(command_rnx2rtkp)
                         os.system(command_rnx2rtkp)
@@ -1061,7 +1203,8 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
                                         if a[0] != "%" and a[0] != "%\n":
                                             time_list.append(a[1])
 
-                                            d = float(a[7]) ** 2 + float(a[8]) ** 2 + float(a[9]) ** 2
+                                            d = float(
+                                                a[7]) ** 2 + float(a[8]) ** 2 + float(a[9]) ** 2
                                             if frs:
                                                 min_str = a
                                                 min = d
@@ -1071,7 +1214,8 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
                                                 min = d
                                         for j in range(len(min_str)):
                                             if j == len(min_str) - 1:
-                                                min_str[j] = min_str[j].replace("\n", "")
+                                                min_str[j] = min_str[j].replace(
+                                                    "\n", "")
                                     # print(min_str)
 
                                     if min_str != []:
@@ -1079,13 +1223,16 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
                                         work_time = 0
                                         for j in range(len(time_list)):
                                             temp_time = time_list[j].split(":")
-                                            temp_seconds = temp_time[2].split(".")
+                                            temp_seconds = temp_time[2].split(
+                                                ".")
                                             next_time1 = int(temp_time[0]) * 3600 + int(temp_time[1]) * 60 + int(
                                                 temp_seconds[0])
 
                                             if j < len(time_list) - 1:
-                                                temp_time = time_list[j + 1].split(":")
-                                                temp_seconds = temp_time[2].split(".")
+                                                temp_time = time_list[j +
+                                                                      1].split(":")
+                                                temp_seconds = temp_time[2].split(
+                                                    ".")
                                                 next_time2 = int(temp_time[0]) * 3600 + int(temp_time[1]) * 60 + int(
                                                     temp_seconds[0])
 
@@ -1126,7 +1273,8 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
                                         for j in range(len(min_str)):
                                             kor.append(min_str[j])
                                         kor.append("")
-                                        kor.append(str(timedelta(seconds=work_time)))
+                                        kor.append(
+                                            str(timedelta(seconds=work_time)))
                                         kor.append(list_path[y][1] + ".pos")
 
                                         sql = "INSERT INTO SOLUTIONS " \
@@ -1142,7 +1290,8 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
 
                                         self.send_email(message)
                                     else:
-                                        self.show_logs(list_path[y][1] + ".pos" + " Not Found")
+                                        self.show_logs(
+                                            list_path[y][1] + ".pos" + " Not Found")
                     else:
                         self.show_logs(
                             "(RNX2RTKP) Постобработка не произошла. Не существует RINEX файл ровера. " + error_path)
@@ -1151,7 +1300,8 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
                                     "файл ровера. " + error_path)
                 else:
                     self.show_logs("(RNX2RTKP) Постобработка не произошла")
-                    self.send_email(message="(RNX2RTKP) Постобработка не произошла")
+                    self.send_email(
+                        message="(RNX2RTKP) Постобработка не произошла")
         except Exception as e:
             self.show_logs("RNX2RTKP with DB: " + str(e))
 
@@ -1255,9 +1405,11 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
                 dts = dt.rsplit(" ")
                 command_rnx2rtkp += " -te " + str(dts[0]) + " " + str(dts[1])
 
-            command_rnx2rtkp += " -p " + str(self.comboBox_rnx2rtkp_pos_mode.currentIndex())
+            command_rnx2rtkp += " -p " + \
+                str(self.comboBox_rnx2rtkp_pos_mode.currentIndex())
             command_rnx2rtkp += " -m " + self.lineEdit_rnx2rtkp_mask.text()
-            command_rnx2rtkp += " -f " + str(self.comboBox_rnx2rtkp_freq.currentIndex() + 1)
+            command_rnx2rtkp += " -f " + \
+                str(self.comboBox_rnx2rtkp_freq.currentIndex() + 1)
 
             if self.comboBox_rnx2rtkp_sol_format.currentIndex() == 1:
                 command_rnx2rtkp += " -g"
@@ -1441,11 +1593,16 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
 
         self.lineEdit_obs.setText(self.lineEdit_input.text() + ".obs")
         self.lineEdit_nav.setText(self.lineEdit_input.text() + ".nav")
-        self.lineEdit_convbin_gnav.setText(self.lineEdit_input.text() + ".gnav")
-        self.lineEdit_convbin_hnav.setText(self.lineEdit_input.text() + ".hnav")
-        self.lineEdit_convbin_qnav.setText(self.lineEdit_input.text() + ".qnav")
-        self.lineEdit_convbin_lnav.setText(self.lineEdit_input.text() + ".lnav")
-        self.lineEdit_convbin_sbas.setText(self.lineEdit_input.text() + ".sbas")
+        self.lineEdit_convbin_gnav.setText(
+            self.lineEdit_input.text() + ".gnav")
+        self.lineEdit_convbin_hnav.setText(
+            self.lineEdit_input.text() + ".hnav")
+        self.lineEdit_convbin_qnav.setText(
+            self.lineEdit_input.text() + ".qnav")
+        self.lineEdit_convbin_lnav.setText(
+            self.lineEdit_input.text() + ".lnav")
+        self.lineEdit_convbin_sbas.setText(
+            self.lineEdit_input.text() + ".sbas")
 
     def convbin_output_path(self):
         path = QFileDialog.getExistingDirectory(None)
@@ -1542,7 +1699,7 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.lineEdit_str2str_out_file_3.setText(path + ".log")
 
     def str2str_inputfile_path(self):
-        path,_ = QFileDialog.getOpenFileName()
+        path, _ = QFileDialog.getOpenFileName()
         self.lineEdit_str2str_in_file.setText(path + ".log")
 
     def str2str_start(self):
@@ -1550,7 +1707,7 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
                           "str2str -in "
         if self.tabWidget_str2str_in.currentIndex() == 0:
             command_str2str += "serial://"
-            command_str2str += self.comboBox_str2str_in_ser_port.currentText()
+            command_str2str += self.comboBox_str2str_in_ser_port.currentText().replace('/dev/', '')
             command_str2str += ":" + self.comboBox_str2str_in_ser_speed.currentText()
             command_str2str += ":" + self.comboBox_str2str_in_ser_bsize.currentText()
             command_str2str += ":" + self.comboBox_str2str_in_ser_parity.currentText()
@@ -1568,7 +1725,7 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         elif self.tabWidget_str2str_in.currentIndex() == 3:
             command_str2str += "ntrip://"
             command_str2str += self.lineEdit_str2str_in_ntrip_userid.text() + ":" + \
-                               self.lineEdit_str2str_in_ntrip_pass.text()
+                self.lineEdit_str2str_in_ntrip_pass.text()
 
             command_str2str += "@" + self.lineEdit_str2str_in_ntrip_host.text() + "/" + \
                                self.lineEdit_str2str_in_ntrip_mountpoint.text()
@@ -1576,7 +1733,6 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         elif self.tabWidget_str2str_in.currentIndex() == 4:
             command_str2str += "file://"
             command_str2str += self.lineEdit_str2str_in_file.text()
-
 
         # ПЕРВАЯ ФОРМА
         if self.checkBox_str2str_out1.isChecked():
@@ -1601,7 +1757,7 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
             if self.tabWidget_str2str_out_1.currentIndex() == 3:
                 command_str2str += "ntrip://"
                 command_str2str += self.lineEdit_str2str_out_ntrip_userid.text() + ":" + \
-                                   self.lineEdit_str2str_out_ntrip_pass.text()
+                    self.lineEdit_str2str_out_ntrip_pass.text()
 
                 command_str2str += "@" + self.lineEdit_str2str_out_ntrip_host.text() + "/" + \
                                    self.lineEdit_str2str_out_ntrip_mountpoint.text()
@@ -1639,7 +1795,7 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
             if self.tabWidget_str2str_out_2.currentIndex() == 3:
                 command_str2str += "ntrip://"
                 command_str2str += self.lineEdit_str2str_out_ntrip_userid_2.text() + ":" + \
-                                   self.lineEdit_str2str_out_ntrip_pass_2.text()
+                    self.lineEdit_str2str_out_ntrip_pass_2.text()
 
                 command_str2str += "@" + self.lineEdit_str2str_out_ntrip_host_2.text() + "/" + \
                                    self.lineEdit_str2str_out_ntrip_mountpoint_2.text()
@@ -1654,7 +1810,7 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
                 command_str2str += "file://"
                 command_str2str += self.lineEdit_str2str_out_file_2.text()
 
-        #ТРЕТЬЯ ФОРМА
+        # ТРЕТЬЯ ФОРМА
         if self.checkBox_str2str_out3.isChecked():
             command_str2str += " -out "
             if self.tabWidget_str2str_out_3.currentIndex() == 0:
@@ -1677,7 +1833,7 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
             if self.tabWidget_str2str_out_3.currentIndex() == 3:
                 command_str2str += "ntrip://"
                 command_str2str += self.lineEdit_str2str_out_ntrip_userid_3.text() + ":" + \
-                                   self.lineEdit_str2str_out_ntrip_pass_3.text()
+                    self.lineEdit_str2str_out_ntrip_pass_3.text()
 
                 command_str2str += "@" + self.lineEdit_str2str_out_ntrip_host_3.text() + "/" + \
                                    self.lineEdit_str2str_out_ntrip_mountpoint_3.text()
@@ -1696,10 +1852,8 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.show_logs(command_str2str)
         os.system(command_str2str)
 
-
     def str2str_stop(self):
         os.system("killall str2str")
-
 
     def str2str_stop_xterm(self):
         os.system("killall xterm")
@@ -1708,7 +1862,8 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
     def com_connect(self):
         if self.button_com_flag:
             try:
-                self.realport = serial.Serial(self.comboBox_port.currentText(), int(self.comboBox_speed.currentText()))
+                self.realport = serial.Serial(
+                    self.comboBox_port.currentText(), int(self.comboBox_speed.currentText()))
                 self.pushButton_connect.setText("Disconnect")
                 self.show_logs("Connected")
                 self.lineEdit_send.setFocus()
@@ -1736,6 +1891,328 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
 
     def com_clear(self):
         self.textEdit_read.clear()
+
+    # *************************** ВКЛАДКА filterSDF ***************************
+
+    #173-193 #111
+
+    def temp_path_list(self):
+        path_list = []
+        for i in range(173, 478):
+            exit_c = False
+            for j in range(0, 25):
+                if i > 366:
+                    t = '/home/danisimo/Рабочий стол/R1_post/r001' + str(i-366).zfill(3) + str(j) + '.21pos'
+                else:
+                    t = '/home/danisimo/Рабочий стол/R1_post/r001' + str(i).zfill(3) + str(j) + '.20pos'
+                if os.path.exists(t):
+                    path_list.append(t)
+                    exit_c = False
+                    break
+                else:
+                    exit_c = True
+            if exit_c:
+                path_list.append('')
+               
+        return path_list
+
+    def filterSDF_start(self):
+
+        dir_in = self.lineEdit_filterSDF_inputPath.text()
+        day_start = self.dateEdit_filterSDF_startDate.date()
+        day_end = self.dateEdit_filterSDF_endDate.date()
+        delta = 304 #((day_end.toPyDate() - day_start.toPyDate())).days - \
+            #int(self.spinBox_filterSDF_numDays.text()) + 2
+
+        # составление списка файлов
+        '''path_list = []
+        for i in range(((day_end.toPyDate() - day_start.toPyDate())).days + 1):
+            temp_date = day_start.addDays(i)
+            t = dir_in + '/' + str(temp_date.month()).zfill(2) + '.' + str(temp_date.day()).zfill(
+                2) + '.' + str(temp_date.year())[-2:] + '/' + self.lineEdit_filterSDF_namePoint.text() + '/'
+            if os.path.exists(t):
+                for path in pathlib.Path(t).rglob('*.*pos'):
+                    path_list.append(str(path))
+            else:
+                print('Not found: ' + t)
+                path_list.append('')'''
+
+
+        path_list = self.temp_path_list()
+        coord_n_day = []
+        if self.checkBox_filterSDF_meanDay.isChecked:
+            f = open(self.lineEdit_filterSDF_outputPath.text() + '/all' + '.sdf', 'w')
+            f.write('date x y z n std_x std_y std_z')
+            f.write('\n')
+            f.close()
+
+
+        for j in range(delta):  # цикл ко-ва окон
+            timer_start = time.perf_counter()
+           
+            # цикл добавления данных размером окна
+            for i in range(int(self.spinBox_filterSDF_numDays.text())):
+                print(path_list[i+j])
+                if path_list[i+j] == '':
+                    coord_n_day.append('')
+                    continue
+                f = open(path_list[i+j], "r")
+                new_coord = []
+                for line in f:
+                    value_list = line.split(" ")
+
+                    while "" in value_list:
+                        value_list.remove("")
+
+                    if value_list[0] != "%" and value_list[0] != "%\n":
+                        value_list[len(
+                            value_list)-1] = value_list[len(value_list)-1].replace("\n", "")
+                        temp_list = [value_list[0], value_list[1],
+                                     value_list[2], value_list[3], value_list[4]]
+                        new_coord.append(temp_list)
+                
+                work_time = 0
+                for q in range(len(new_coord)):
+                    temp_time = new_coord[q][1].split(":")
+                    temp_seconds = temp_time[2].split(
+                        ".")
+                    next_time1 = int(temp_time[0]) * 3600 + int(temp_time[1]) * 60 + int(
+                        temp_seconds[0])
+
+                    if q < len(new_coord) - 1:
+                        temp_time = new_coord[q + 1][1].split(":")
+                        temp_seconds = temp_time[2].split(
+                            ".")
+                        next_time2 = int(temp_time[0]) * 3600 + int(temp_time[1]) * 60 + int(
+                            temp_seconds[0])
+
+                        delta = next_time2 - next_time1
+                        if not self.lineEdit_db_delta.text() == "":
+                            if 0 <= delta <= int(self.lineEdit_db_delta.text()):
+                                work_time += delta
+                        else:
+                            if 0 <= delta <= 1:
+                                work_time += delta
+                      
+                if work_time < 2400:
+                    coord_n_day.append('')
+                else:
+                    coord_n_day.append(new_coord)
+                day_start = day_start.addDays(1)
+            
+            
+            mean_list = []
+            last_index = []
+            for w in range(len(coord_n_day)-1):
+                last_index.append(0)
+
+            # цикл прохода по эпохам первого дня
+            for age_index in range(len(coord_n_day[0])):
+                # текущая эпоха первого дня
+                age_first = coord_n_day[0][age_index][1]
+                date_list = []
+                date_list.append(coord_n_day[0][age_index][0])
+                date_list.append(coord_n_day[0][age_index][1])
+                date_list.append([coord_n_day[0][age_index][2], coord_n_day[0]
+                                 [age_index][3], coord_n_day[0][age_index][4]])
+
+                # цикл поиска эпох в других днях
+                for day_index_next in range(len(coord_n_day)-1):
+
+                    if coord_n_day[day_index_next+1] == '':
+                        continue
+
+                    age_first_temp = age_first.split(':')
+                    age_first_temp[2] = age_first_temp[2].split('.')
+
+                    temp_time = datetime(2010, 10, 10, int(age_first_temp[0]), int(
+                        age_first_temp[1]), int(age_first_temp[2][0]))
+                    delta_4 = timedelta(minutes=4 * (day_index_next+1))
+                    temp_time = temp_time + delta_4
+
+                    age_first_temp = str(temp_time.hour).zfill(2) + ':' + str(temp_time.minute).zfill(
+                        2) + ':' + str(temp_time.second).zfill(2) + '.' + age_first_temp[2][1]
+
+                    # цикл поиска эпох в дне
+                    for age_next_index in range(last_index[day_index_next], len(coord_n_day[day_index_next+1])):
+                        age_next = coord_n_day[day_index_next +
+                                               1][age_next_index][1]
+
+                        if age_first_temp == age_next:  # если нашли сразу время, то ура
+                            date_list.append([coord_n_day[day_index_next+1][age_next_index][2], coord_n_day[day_index_next+1]
+                                             [age_next_index][3], coord_n_day[day_index_next+1][age_next_index][4]])
+                            last_index[day_index_next] = age_next_index
+                            break
+                        else:                           # иначе ищем близжайшее значение
+                            age_first_t = age_first.split(':')
+                            age_first_t[2] = age_first_t[2].split('.')
+                            temp_time_first = int(
+                                age_first_t[0])*3600 + int(age_first_t[1])*60 + int(age_first_t[2][0])
+
+                            try:
+                                age_next_temp1 = coord_n_day[day_index_next +
+                                                             1][age_next_index+1][1]
+                                age_next_temp2 = coord_n_day[day_index_next +
+                                                             1][age_next_index-1][1]
+                            except Exception:
+                                pass
+                            else:
+
+                                # заканчивать цикл поиска, если ушли за +4*(day_index_next+1) минуту поиска
+                                age_next = age_next.split(':')
+                                age_next[2] = age_next[2].split('.')
+                                time_5min = int(
+                                    age_next[0])*3600 + int(age_next[1])*60 + int(age_next[2][0])
+                                del_5min = time_5min - temp_time_first
+                                if del_5min > 240 * ((day_index_next+1)) + 60:
+                                    break
+
+                                # поиск близжайшего значения с разбросом +-2 секунды
+                                age_next_temp1 = age_next_temp1.split(':')
+                                age_next_temp1[2] = age_next_temp1[2].split(
+                                    '.')
+                                temp_time_next1 = int(
+                                    age_next_temp1[0])*3600 + int(age_next_temp1[1])*60 + int(age_next_temp1[2][0])
+
+                                age_next_temp2 = age_next_temp2.split(':')
+                                age_next_temp2[2] = age_next_temp2[2].split(
+                                    '.')
+                                temp_time_next2 = int(
+                                    age_next_temp2[0])*3600 + int(age_next_temp2[1])*60 + int(age_next_temp2[2][0])
+
+                                del_temp1 = temp_time_next1 - temp_time_first
+                                if del_temp1 < 0:
+                                    del_temp1 = temp_time_first - temp_time_next1
+
+                                del_temp2 = temp_time_next2 - temp_time_first
+                                if del_temp2 < 0:
+                                    del_temp2 = temp_time_first - temp_time_next2
+
+                                if del_temp1 < del_temp2:
+                                    if 240*(day_index_next+1)-2 < del_temp2 < 240*(day_index_next+1)+2:
+                                        date_list.append([coord_n_day[day_index_next+1][age_next_index-1][2], coord_n_day[day_index_next+1]
+                                                         [age_next_index-1][3], coord_n_day[day_index_next+1][age_next_index-1][4]])
+                                        last_index[day_index_next] = age_next_index
+                                        break
+
+                                if del_temp2 < del_temp1:
+                                    if 240*(day_index_next+1)-2 < del_temp1 < 240*(day_index_next+1)+2:
+                                        date_list.append([coord_n_day[day_index_next+1][age_next_index+1][2], coord_n_day[day_index_next+1]
+                                                         [age_next_index+1][3], coord_n_day[day_index_next+1][age_next_index+1][4]])
+                                        last_index[day_index_next] = age_next_index
+                                        break
+
+                mean_list.append(date_list)
+
+            # нахождение дельты между координатами исходного дня и координатами sdf 
+            if mean_list != []:
+                mean_coord_final = []
+                for elem in mean_list:
+                    if len(elem) == 3:
+                        #mean_coord_final.append([elem[0], elem[1], ['0', '0', '0']])
+                        continue
+                    else:
+                        mean_coord = []
+                        for coord in range(3):
+                            coord_sum = 0
+                            for day_index in range(2, len(elem)):
+                                coord_sum += float(elem[day_index][coord])
+
+                            mean_coord.append(
+                                str(round(float(elem[2][coord]) - round(coord_sum / (len(elem)-2), 4), 4)))
+
+                        mean_coord_final.append([elem[0], elem[1], mean_coord])
+
+                f = open(self.lineEdit_filterSDF_outputPath.text()+'/' +
+                        os.path.basename(path_list[j]) + '.sdf', 'w')
+                for elem in mean_coord_final:
+                    f.write(elem[0] + ' ' + elem[1] + ' ' + elem[2][0] + ' ' + elem[2][1] + ' ' + elem[2][2])
+                    f.write('\n')
+                f.close()
+                
+                #среднее значение за день
+                if self.checkBox_filterSDF_meanDay.isChecked:
+                    if not mean_coord_final == []:
+                        # расчет среднего и ско
+                        mean_delta_x = 0.0
+                        mean_delta_y = 0.0
+                        mean_delta_z = 0.0
+                        for elem in mean_coord_final:
+                            mean_delta_x += float(elem[2][0])
+                            mean_delta_y += float(elem[2][1])
+                            mean_delta_z += float(elem[2][2])            
+                        mean_delta_x = round(mean_delta_x / len(mean_coord_final), 4)
+                        mean_delta_y = round(mean_delta_y / len(mean_coord_final), 4)
+                        mean_delta_z = round(mean_delta_z / len(mean_coord_final), 4)
+
+                        #расчет ско
+                        std_x_temp = 0.0
+                        std_y_temp = 0.0
+                        std_z_temp = 0.0
+                        for elem in mean_coord_final:
+                            std_x_temp += (float(elem[2][0]) - mean_delta_x) ** 2
+                            std_y_temp += (float(elem[2][1]) - mean_delta_y) ** 2
+                            std_z_temp += (float(elem[2][2]) - mean_delta_z) ** 2     
+                        std_x = round(std_x_temp / (len(mean_coord_final)-1), 4)
+                        std_y = round(std_y_temp / (len(mean_coord_final)-1), 4)
+                        std_z = round(std_z_temp / (len(mean_coord_final)-1), 4)
+
+                        #время сеанса по sdf
+                        work_time = 0
+                        for q in range(len(mean_coord_final)):
+                            temp_time = mean_coord_final[q][1].split(":")
+                            temp_seconds = temp_time[2].split(
+                                ".")
+                            next_time1 = int(temp_time[0]) * 3600 + int(temp_time[1]) * 60 + int(
+                                temp_seconds[0])
+
+                            if q < len(mean_coord_final) - 1:
+                                temp_time = mean_coord_final[q + 1][1].split(":")
+                                temp_seconds = temp_time[2].split(
+                                    ".")
+                                next_time2 = int(temp_time[0]) * 3600 + int(temp_time[1]) * 60 + int(
+                                    temp_seconds[0])
+
+                                delta = next_time2 - next_time1
+                                if not self.lineEdit_db_delta.text() == "":
+                                    if 0 <= delta <= int(self.lineEdit_db_delta.text()):
+                                        work_time += delta
+                                else:
+                                    if 0 <= delta <= 1:
+                                        work_time += delta
+
+                        f = open(self.lineEdit_filterSDF_outputPath.text() + '/all' + '.sdf', 'a')
+                        f_write = elem[0] + ' '
+                        f_write += str(mean_delta_x) + ' '
+                        f_write += str(mean_delta_y) + ' '
+                        f_write += str(mean_delta_z) + ' '
+                        f_write += str(len(mean_coord_final)) + ' '
+                        f_write += str(std_x) + ' '
+                        f_write += str(std_y) + ' '
+                        f_write += str(std_z) + ' '
+                        f_write += str(timedelta(seconds=work_time))
+                        f.write(f_write)
+                        f.write('\n')
+                        f.close()
+            
+            
+            mean_list = []
+            coord_n_day = []
+            day_start = day_start.addDays(
+                -(int(self.spinBox_filterSDF_numDays.text())-1))
+            
+            timer_end = time.perf_counter()
+            print('time iter ' + str(j) + ' is ' + str(timer_end-timer_start))
+            
+            
+
+    def filterSDF_inputPath(self):
+        self.lineEdit_filterSDF_inputPath.setText(
+            QFileDialog.getExistingDirectory(None))
+
+    def filterSDF_outputPath(self):
+        self.lineEdit_filterSDF_outputPath.setText(
+            QFileDialog.getExistingDirectory(None))
 
 
 # даННЫЙ КЛАСС НУЖЕН ДЛЯ ПЕРЕЗАПУСКА STR2STR В ОПРЕДЕЛЕННОЕ ВРЕМЯ
@@ -1800,21 +2277,26 @@ class ReadTextThread(QThread):
                     if self.mainwindow.receivedMessage != "":
                         if self.mainwindow.checkBox_time.isChecked():
                             today = datetime.today().strftime("%H.%M.%S")
-                            self.mainwindow.textEdit_read.append(today + " -> " + self.mainwindow.receivedMessage)
+                            self.mainwindow.textEdit_read.append(
+                                today + " -> " + self.mainwindow.receivedMessage)
                             if self.log_write:
                                 self.f = open(self.name_f, "a")
                                 today = datetime.today().strftime("%H.%M.%S")
-                                self.f.write(today + "-> " + self.mainwindow.receivedMessage + "\n")
+                                self.f.write(
+                                    today + "-> " + self.mainwindow.receivedMessage + "\n")
                                 self.f.close()
                         else:
-                            self.mainwindow.textEdit_read.append(self.mainwindow.receivedMessage)
+                            self.mainwindow.textEdit_read.append(
+                                self.mainwindow.receivedMessage)
                             if self.log_write:
                                 self.f = open(self.name_f, "a")
-                                self.f.write(self.mainwindow.receivedMessage + "\n")
+                                self.f.write(
+                                    self.mainwindow.receivedMessage + "\n")
                                 self.f.close()
 
                         if self.mainwindow.checkBox_scroll.isChecked():
-                            self.mainwindow.textEdit_read.moveCursor(QtGui.QTextCursor.End)
+                            self.mainwindow.textEdit_read.moveCursor(
+                                QtGui.QTextCursor.End)
                         self.mainwindow.receivedMessage = ""
 
             except Exception as e:
@@ -1837,7 +2319,7 @@ class ReadTextThread(QThread):
 
 def main():
     app = QtWidgets.QApplication(sys.argv)
-    window = LedApp()
+    window = MainWindow()
     window.show()
     app.exec_()
 
