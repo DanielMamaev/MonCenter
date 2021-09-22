@@ -1937,12 +1937,12 @@ class MainWindow(QtWidgets.QMainWindow, design.Ui_MainWindow):
                 print('Not found: ' + t)
                 path_list.append('')'''
 
-
         path_list = self.temp_path_list()
+        
         coord_n_day = []
         if self.checkBox_filterSDF_meanDay.isChecked:
             f = open(self.lineEdit_filterSDF_outputPath.text() + '/all' + '.sdf', 'w')
-            f.write('date x y z n std_x std_y std_z')
+            f.write('date dx dy dz n std_dx std_dy std_dz time')
             f.write('\n')
             f.close()
 
@@ -1967,9 +1967,18 @@ class MainWindow(QtWidgets.QMainWindow, design.Ui_MainWindow):
                     if value_list[0] != "%" and value_list[0] != "%\n":
                         value_list[len(
                             value_list)-1] = value_list[len(value_list)-1].replace("\n", "")
-                        temp_list = [value_list[0], value_list[1],
-                                     value_list[2], value_list[3], value_list[4]]
-                        new_coord.append(temp_list)
+                        if int(value_list[5]) == 1:
+                            temp_list = [
+                                value_list[0], 
+                                value_list[1],
+                                value_list[2], 
+                                value_list[3], 
+                                value_list[4],
+                                value_list[7],
+                                value_list[8],
+                                value_list[9],
+                                ]
+                            new_coord.append(temp_list)
                 
                 work_time = 0
                 for q in range(len(new_coord)):
@@ -2013,8 +2022,14 @@ class MainWindow(QtWidgets.QMainWindow, design.Ui_MainWindow):
                 date_list = []
                 date_list.append(coord_n_day[0][age_index][0])
                 date_list.append(coord_n_day[0][age_index][1])
-                date_list.append([coord_n_day[0][age_index][2], coord_n_day[0]
-                                 [age_index][3], coord_n_day[0][age_index][4]])
+                date_list.append([
+                    coord_n_day[0][age_index][2], 
+                    coord_n_day[0][age_index][3], 
+                    coord_n_day[0][age_index][4],
+                    coord_n_day[0][age_index][5],
+                    coord_n_day[0][age_index][6],
+                    coord_n_day[0][age_index][7]
+                    ])
 
                 # цикл поиска эпох в других днях
                 for day_index_next in range(len(coord_n_day)-1):
@@ -2039,8 +2054,13 @@ class MainWindow(QtWidgets.QMainWindow, design.Ui_MainWindow):
                                                1][age_next_index][1]
 
                         if age_first_temp == age_next:  # если нашли сразу время, то ура
-                            date_list.append([coord_n_day[day_index_next+1][age_next_index][2], coord_n_day[day_index_next+1]
-                                             [age_next_index][3], coord_n_day[day_index_next+1][age_next_index][4]])
+                            date_list.append([
+                                coord_n_day[day_index_next+1][age_next_index][2], 
+                                coord_n_day[day_index_next+1][age_next_index][3], 
+                                coord_n_day[day_index_next+1][age_next_index][4],
+                                coord_n_day[day_index_next+1][age_next_index][5], 
+                                coord_n_day[day_index_next+1][age_next_index][6],
+                                coord_n_day[day_index_next+1][age_next_index][7]])
                             last_index[day_index_next] = age_next_index
                             break
                         else:                           # иначе ищем близжайшее значение
@@ -2090,15 +2110,27 @@ class MainWindow(QtWidgets.QMainWindow, design.Ui_MainWindow):
 
                                 if del_temp1 < del_temp2:
                                     if 240*(day_index_next+1)-2 < del_temp2 < 240*(day_index_next+1)+2:
-                                        date_list.append([coord_n_day[day_index_next+1][age_next_index-1][2], coord_n_day[day_index_next+1]
-                                                         [age_next_index-1][3], coord_n_day[day_index_next+1][age_next_index-1][4]])
+                                        date_list.append([
+                                            coord_n_day[day_index_next+1][age_next_index-1][2], 
+                                            coord_n_day[day_index_next+1][age_next_index-1][3], 
+                                            coord_n_day[day_index_next+1][age_next_index-1][4],
+                                            coord_n_day[day_index_next+1][age_next_index-1][5],
+                                            coord_n_day[day_index_next+1][age_next_index-1][6],
+                                            coord_n_day[day_index_next+1][age_next_index-1][7]
+                                                         ])
                                         last_index[day_index_next] = age_next_index
                                         break
 
                                 if del_temp2 < del_temp1:
                                     if 240*(day_index_next+1)-2 < del_temp1 < 240*(day_index_next+1)+2:
-                                        date_list.append([coord_n_day[day_index_next+1][age_next_index+1][2], coord_n_day[day_index_next+1]
-                                                         [age_next_index+1][3], coord_n_day[day_index_next+1][age_next_index+1][4]])
+                                        date_list.append([
+                                            coord_n_day[day_index_next+1][age_next_index+1][2], 
+                                            coord_n_day[day_index_next+1][age_next_index+1][3], 
+                                            coord_n_day[day_index_next+1][age_next_index+1][4],
+                                            coord_n_day[day_index_next+1][age_next_index+1][5],
+                                            coord_n_day[day_index_next+1][age_next_index+1][6],
+                                            coord_n_day[day_index_next+1][age_next_index+1][7]
+                                                        ])
                                         last_index[day_index_next] = age_next_index
                                         break
 
@@ -2115,11 +2147,13 @@ class MainWindow(QtWidgets.QMainWindow, design.Ui_MainWindow):
                         mean_coord = []
                         for coord in range(3):
                             coord_sum = 0
+                            mean_std = 0
                             for day_index in range(2, len(elem)):
                                 coord_sum += float(elem[day_index][coord])
-
+                                mean_std += float(elem[day_index][coord+3]) ** 2
                             mean_coord.append(
                                 str(round(float(elem[2][coord]) - round(coord_sum / (len(elem)-2), 4), 4)))
+                            mean_coord.append(str(round((mean_std / (len(elem)-2))**0.5, 4)))
 
                         mean_coord_final.append([elem[0], elem[1], mean_coord])
 
@@ -2133,7 +2167,7 @@ class MainWindow(QtWidgets.QMainWindow, design.Ui_MainWindow):
                 #среднее значение за день
                 if self.checkBox_filterSDF_meanDay.isChecked:
                     if not mean_coord_final == []:
-                        # расчет среднего и ско
+                        # расчет среднего
                         mean_delta_x = 0.0
                         mean_delta_y = 0.0
                         mean_delta_z = 0.0
@@ -2157,6 +2191,20 @@ class MainWindow(QtWidgets.QMainWindow, design.Ui_MainWindow):
                         std_y = round(std_y_temp / (len(mean_coord_final)-1), 4)
                         std_z = round(std_z_temp / (len(mean_coord_final)-1), 4)
 
+                        #выбор лучшей эпохи из дня
+                        best_age = []
+                        min = 0
+                        frs = True
+                        for elem in mean_coord_final:
+                            d = float(elem[2][3]) ** 2 + float(elem[2][4]) ** 2 + float(elem[2][5]) ** 2
+                            if frs:
+                                best_age = elem
+                                min = d
+                                frs = False
+                            if d < min:
+                                best_age = elem
+                                min = d
+                        
                         #время сеанса по sdf
                         work_time = 0
                         for q in range(len(mean_coord_final)):
@@ -2183,9 +2231,9 @@ class MainWindow(QtWidgets.QMainWindow, design.Ui_MainWindow):
 
                         f = open(self.lineEdit_filterSDF_outputPath.text() + '/all' + '.sdf', 'a')
                         f_write = elem[0] + ' '
-                        f_write += str(mean_delta_x) + ' '
-                        f_write += str(mean_delta_y) + ' '
-                        f_write += str(mean_delta_z) + ' '
+                        f_write += str(best_age[2][0]) + ' '
+                        f_write += str(best_age[2][1]) + ' '
+                        f_write += str(best_age[2][2]) + ' '
                         f_write += str(len(mean_coord_final)) + ' '
                         f_write += str(std_x) + ' '
                         f_write += str(std_y) + ' '
