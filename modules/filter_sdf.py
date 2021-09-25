@@ -11,9 +11,9 @@ class FilterSDF(design.Ui_MainWindow):
         super().__init__()
         self.main = main
 
-    #173-193 #111
+    #173-193 #111 #304 общ
 
-    def temp_path_list(self):
+    """def temp_path_list(self):
         path_list = []
         for i in range(173, 478):
             exit_c = False
@@ -31,7 +31,7 @@ class FilterSDF(design.Ui_MainWindow):
             if exit_c:
                 path_list.append('')
                
-        return path_list
+        return path_list"""
 
     def input_path(self):
         self.main.lineEdit_filterSDF_inputPath.setText(
@@ -46,11 +46,11 @@ class FilterSDF(design.Ui_MainWindow):
         dir_in = self.main.lineEdit_filterSDF_inputPath.text()
         day_start = self.main.dateEdit_filterSDF_startDate.date()
         day_end = self.main.dateEdit_filterSDF_endDate.date()
-        delta = 304 #((day_end.toPyDate() - day_start.toPyDate())).days - \
-            #int(self.main.spinBox_filterSDF_numDays.text()) + 2
+        delta = ((day_end.toPyDate() - day_start.toPyDate())).days - \
+            int(self.main.spinBox_filterSDF_numDays.text()) + 2
 
         # составление списка файлов
-        '''path_list = []
+        path_list = []
         for i in range(((day_end.toPyDate() - day_start.toPyDate())).days + 1):
             temp_date = day_start.addDays(i)
             t = dir_in + '/' + str(temp_date.month()).zfill(2) + '.' + str(temp_date.day()).zfill(
@@ -60,9 +60,9 @@ class FilterSDF(design.Ui_MainWindow):
                     path_list.append(str(path))
             else:
                 print('Not found: ' + t)
-                path_list.append('')'''
+                path_list.append('')
 
-        path_list = self.temp_path_list()
+        #path_list = self.temp_path_list()
         
         coord_n_day = []
         if self.main.checkBox_filterSDF_meanDay.isChecked:
