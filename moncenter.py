@@ -1,5 +1,6 @@
 from modules.str2str import Str2Str
 from modules.convbin import ConvBin
+from modules.rnx2rtkp import Rnx2Rtkp
 from modules.config_ini import ConfigIni
 from modules.filter_sdf import FilterSDF
 
@@ -98,7 +99,6 @@ class MainWindow(QtWidgets.QMainWindow, design.Ui_MainWindow):
 
         # -------------CONVBIN
         self.convbin = ConvBin(main=self)
-
         self.Button_convert.clicked.connect(self.convbin.convert)
         self.Button_input.clicked.connect(self.convbin.input_path)
         self.Button_obs.clicked.connect(self.convbin.obs_path)
@@ -126,27 +126,26 @@ class MainWindow(QtWidgets.QMainWindow, design.Ui_MainWindow):
             self.convbin.check_time_end)
 
         # -------------RNX2RTKP
+        self.rnx2rtkp = Rnx2Rtkp(main=self)
         self.Button_rnx2rtkp_input_conf.clicked.connect(
-            self.rnx2rtkp_input_conf)
+            self.rnx2rtkp.input_conf)
         self.Button_rnx2rtkp_input_rover.clicked.connect(
-            self.rnx2rtkp_input_rover)
+            self.rnx2rtkp.input_rover)
         self.Button_rnx2rtkp_input_base.clicked.connect(
-            self.rnx2rtkp_input_base)
-        self.Button_rnx2rtkp_input_nav.clicked.connect(self.rnx2rtkp_input_nav)
-        self.Button_rnx2rtkp_output.clicked.connect(self.rnx2rtkp_output)
-        self.Button_rnx2rtkp_start.clicked.connect(self.rnx2rtkp_input_start)
-
+            self.rnx2rtkp.input_base)
+        self.Button_rnx2rtkp_input_nav.clicked.connect(self.rnx2rtkp.input_nav)
+        self.Button_rnx2rtkp_output.clicked.connect(self.rnx2rtkp.output)
+        self.Button_rnx2rtkp_start.clicked.connect(self.rnx2rtkp.start)
         self.lineEdit_rnx2rtkp_conf.setText("")
 
-        self.fname_input_rnx2rtkp = ""
-        self.fname_output_pos = ""
+      
 
         self.checkBox_rnx2rtkp_conf.stateChanged.connect(
-            self.rxn2rtkp_conf_file_check)
+            self.rnx2rtkp.conf_file_check)
         self.checkBox_rnx2rtkp_time_start.stateChanged.connect(
-            self.rnx2rtkp_time_start_check)
+            self.rnx2rtkp.time_start_check)
         self.checkBox_rnx2rtkp_time_end.stateChanged.connect(
-            self.rnx2rtkp_time_end_check)
+            self.rnx2rtkp.time_end_check)
 
         # ------------- DATABASE
         self.Button_db_new_create.clicked.connect(self.db_create)
@@ -1029,115 +1028,7 @@ class MainWindow(QtWidgets.QMainWindow, design.Ui_MainWindow):
 
     # *************************** ВКЛАДКА RNX2RTKP ***************************
 
-    def rxn2rtkp_conf_file_check(self, state):
-        if state != self.checkBox_rnx2rtkp_conf.isChecked():
-            self.lineEdit_rnx2rtkp_conf.setEnabled(True)
-        else:
-            self.lineEdit_rnx2rtkp_conf.setEnabled(False)
-
-    def rnx2rtkp_time_start_check(self, state):
-        if state != self.checkBox_rnx2rtkp_time_start.isChecked():
-            self.dateTimeEdit_rnx2rtkp_start.setEnabled(True)
-        else:
-            self.dateTimeEdit_rnx2rtkp_start.setEnabled(False)
-
-    def rnx2rtkp_time_end_check(self, state):
-        if state != self.checkBox_rnx2rtkp_time_end.isChecked():
-            self.dateTimeEdit_rnx2rtkp_end.setEnabled(True)
-        else:
-            self.dateTimeEdit_rnx2rtkp_end.setEnabled(False)
-
-    def rnx2rtkp_input_conf(self):
-        fname, _ = QFileDialog.getOpenFileName(None)
-        self.lineEdit_rnx2rtkp_conf.setText(fname)
-
-    def rnx2rtkp_input_rover(self):
-        fname, _ = QFileDialog.getOpenFileName(None)
-        if fname == "":
-            return
-        self.lineEdit_rnx2rtkp_rover.setText(fname)
-
-        p = QUrl.fromLocalFile(fname)
-        p = p.fileName()
-        p = p.rsplit('.', 1)
-        if len(p) == 2:
-            self.show_logs(str(p))
-            self.fname_input_rnx2rtkp = p[0]
-            pa = fname
-            fname_path = pa.replace(self.fname_input + '.' + p[1], "")
-            self.fname_output_pos = fname_path + ".pos"
-            self.lineEdit_rnx2rtkp_output.setText(self.fname_output_pos)
-        else:
-            self.show_logs("Specify the extension!")
-
-    def rnx2rtkp_input_base(self):
-        fname, _ = QFileDialog.getOpenFileName(None)
-        self.lineEdit_rnx2rtkp_base.setText(fname)
-
-    def rnx2rtkp_input_nav(self):
-        fname, _ = QFileDialog.getOpenFileName(None)
-        self.lineEdit_rnx2rtkp_nav.setText(fname)
-
-    def rnx2rtkp_output(self):
-        fname = QFileDialog.getExistingDirectory(None)
-        self.lineEdit_rnx2rtkp_output.setText(fname)
-
-    def rnx2rtkp_input_start(self):
-        command_rnx2rtkp = "RTKLIB-2.4.3-b33/app/rnx2rtkp/gcc/rnx2rtkp"
-        if self.checkBox_rnx2rtkp_conf.isChecked():
-            command_rnx2rtkp += " -k " + self.lineEdit_rnx2rtkp_conf.text()
-        else:
-            if self.checkBox_rnx2rtkp_time_start.isChecked():
-                dt = self.dateTimeEdit_rnx2rtkp_start.text()
-                dts = dt.rsplit(" ")
-                command_rnx2rtkp += " -ts " + str(dts[0]) + " " + str(dts[1])
-
-            if self.checkBox_rnx2rtkp_time_end.isChecked():
-                dt = self.dateTimeEdit_rnx2rtkp_end.text()
-                dts = dt.rsplit(" ")
-                command_rnx2rtkp += " -te " + str(dts[0]) + " " + str(dts[1])
-
-            command_rnx2rtkp += " -p " + \
-                str(self.comboBox_rnx2rtkp_pos_mode.currentIndex())
-            command_rnx2rtkp += " -m " + self.lineEdit_rnx2rtkp_mask.text()
-            command_rnx2rtkp += " -f " + \
-                str(self.comboBox_rnx2rtkp_freq.currentIndex() + 1)
-
-            if self.comboBox_rnx2rtkp_sol_format.currentIndex() == 1:
-                command_rnx2rtkp += " -g"
-            elif self.comboBox_rnx2rtkp_sol_format.currentIndex() == 2:
-                command_rnx2rtkp += " -e"
-            elif self.comboBox_rnx2rtkp_sol_format.currentIndex() == 3:
-                command_rnx2rtkp += " -a"
-            elif self.comboBox_rnx2rtkp_sol_format.currentIndex() == 4:
-                command_rnx2rtkp += " -n"
-
-            if self.comboBox_rnx2rtkp_time_format.currentIndex() == 0:
-                command_rnx2rtkp += " -t"
-
-            command_rnx2rtkp += " -d " + self.lineEdit_rnx2rtkp_dec.text()
-
-            if self.comboBox_rnx2rtkp_base.currentIndex() == 0:
-                command_rnx2rtkp += " -l " + str(self.lineEdit_rnx2rtkp_1.text()) + " " + str(
-                    self.lineEdit_rnx2rtkp_2.text()) + " " + str(self.lineEdit_rnx2rtkp_3.text())
-            else:
-                command_rnx2rtkp += " -r " + str(self.lineEdit_rnx2rtkp_1.text()) + " " + str(
-                    self.lineEdit_rnx2rtkp_2.text()) + " " + str(self.lineEdit_rnx2rtkp_3.text())
-
-        command_rnx2rtkp += " -o " + self.lineEdit_rnx2rtkp_output.text()
-        command_rnx2rtkp += " " + self.lineEdit_rnx2rtkp_rover.text()
-        command_rnx2rtkp += " " + self.lineEdit_rnx2rtkp_base.text()
-        command_rnx2rtkp += " " + self.lineEdit_rnx2rtkp_nav.text()
-
-        self.show_logs(command_rnx2rtkp)
-        os.system(command_rnx2rtkp)
-        time.sleep(1)
-
-        if os.path.exists(self.lineEdit_rnx2rtkp_output.text()):
-            self.show_logs("ok")
-        else:
-            self.show_logs(self.lineEdit_rnx2rtkp_output.text() + " Not Found")
-            return
+    
 
     # ***************************ВКЛАДКА CONVBIN***************************
     
