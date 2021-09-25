@@ -1,15 +1,21 @@
+from modules.str2str import Str2Str
+from modules.convbin import ConvBin
+from modules.config_ini import ConfigIni
+from modules.filter_sdf import FilterSDF
+
+
 import sys
 import glob
 
 from PyQt5 import QtWidgets
-from PyQt5.QtCore import QThread, QUrl, QDateTime
+from PyQt5.QtCore import QThread, QUrl
 from PyQt5 import QtGui
 from PyQt5.QtWidgets import QFileDialog
 
 import design
 import serial
 import os.path
-import configparser
+
 import sqlite3
 import psutil
 from datetime import time as dt_time
@@ -27,7 +33,7 @@ from googleapiclient.http import MediaFileUpload
 import os
 import time
 
-import pathlib
+
 
 
 def serial_ports():
@@ -53,95 +59,71 @@ def serial_ports():
 
 
 # ******************************************* MAIN *******************************************
-class MainWindow(QtWidgets.QMainWindow, design.Ui_MainWindow): 
+class MainWindow(QtWidgets.QMainWindow, design.Ui_MainWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
-
         self.serial_update()
-        self.action_exit.triggered.connect(self.ini_save_exit)
+        
 
         # ------------- .INI
-        self.path_ini = "conf.ini"
-        self.action_save_config.triggered.connect(self.ini_save)
-        self.action_reset_config.triggered.connect(self.ini_reset)
-        self.ini_start()
+        self.config_ini = ConfigIni(main=self)
+        self.action_exit.triggered.connect(self.config_ini.save_exit)
+        self.action_save_config.triggered.connect(self.config_ini.save)
+        self.action_reset_config.triggered.connect(self.config_ini.reset)
+        self.config_ini.start()
 
         # -------------STR2STR
-        self.filename_tcpcli = ""
-        self.path_tcpcli = ""
-        self.tcpcli_list = []
-
-        self.filename_tcpsvr = ""
-        self.path_tcpsvr = ""
-
-        self.filename_ntrip = ""
-        self.ntrip_list = []
-        self.path_ntrip = ""
-
-        self.action_start_str2str.triggered.connect(
-            self.str2str_start)  # СТАРТ TCP CLIENT
-        self.action_stop_str2str.triggered.connect(self.str2str_stop)
-        self.action_close_xterm.triggered.connect(self.str2str_stop_xterm)
+        self.str2str = Str2Str(main=self)
+        self.action_start_str2str.triggered.connect(self.str2str.start)
+        self.action_stop_str2str.triggered.connect(self.str2str.stop)
+        self.action_close_xterm.triggered.connect(self.str2str.stop_xterm)
         self.Button_str2str_in_file.clicked.connect(
-            self.str2str_inputfile_path)
+            self.str2str.inputfile_path)
         self.Button_str2str_out_file.clicked.connect(
-            self.str2str_outputfile_path)
+            self.str2str.outputfile_path)
         self.Button_str2str_out_file_2.clicked.connect(
-            self.str2str_outputfile_path_2)
+            self.str2str.outputfile_path_2)
         self.Button_str2str_out_file_3.clicked.connect(
-            self.str2str_outputfile_path_3)
+            self.str2str.outputfile_path_3)
+        self.checkBox_str2str_out1.stateChanged.connect(
+            self.str2str.flag_output1)
+        self.checkBox_str2str_out2.stateChanged.connect(
+            self.str2str.flag_output2)
+        self.checkBox_str2str_out3.stateChanged.connect(
+            self.str2str.flag_output3)
         self.tab_output1.setEnabled(False)
         self.tab_output2.setEnabled(False)
         self.tab_output3.setEnabled(False)
-        self.checkBox_str2str_out1.stateChanged.connect(
-            self.str2str_flag_output1)
-        self.checkBox_str2str_out2.stateChanged.connect(
-            self.str2str_flag_output2)
-        self.checkBox_str2str_out3.stateChanged.connect(
-            self.str2str_flag_output3)
 
         # -------------CONVBIN
-        self.Button_convert.clicked.connect(self.convbin_convert)
-        self.Button_input.clicked.connect(self.convbin_input_path)
-        self.Button_obs.clicked.connect(self.convbin_obs_path)
-        self.Button_nav.clicked.connect(self.convbin_nav_path)
-        self.Button_convbin_gnav.clicked.connect(self.convbin_gnav_path)
-        self.Button_convbin_hnav.clicked.connect(self.convbin_hnav_path)
-        self.Button_convbin_qnav.clicked.connect(self.convbin_qnav_path)
-        self.Button_convbin_lnav.clicked.connect(self.convbin_lnav_path)
-        self.Button_convbin_sbas.clicked.connect(self.convbin_sbas_path)
+        self.convbin = ConvBin(main=self)
 
-        self.format = ['rtcm2', 'rtcm3', 'nov', 'oem3', 'ubx', 'ss2', 'hemis', 'stq', 'javad', 'nvs', 'binex', 'rinex',
-                       'rt17']
-        self.comboBox_format.addItems(self.format)
-
-        self.rinex_ver = ['3.03', '3.02', '3.01',
-                          '3.0', '2.12', '2.11', '2.10']
-        self.comboBox_rinex.addItems(self.rinex_ver)
-
-        self.freq_list = ['1', '2']
-        self.comboBox_freq.addItems(self.freq_list)
-
-        self.fname_input = ""
-        self.convbin_list = []
-
-        self.checkBox_convbin_obs.stateChanged.connect(self.convbin_check_obs)
-        self.checkBox_convbin_nav.stateChanged.connect(self.convbin_check_nav)
+        self.Button_convert.clicked.connect(self.convbin.convert)
+        self.Button_input.clicked.connect(self.convbin.input_path)
+        self.Button_obs.clicked.connect(self.convbin.obs_path)
+        self.Button_nav.clicked.connect(self.convbin.nav_path)
+        self.Button_convbin_gnav.clicked.connect(self.convbin.gnav_path)
+        self.Button_convbin_hnav.clicked.connect(self.convbin.hnav_path)
+        self.Button_convbin_qnav.clicked.connect(self.convbin.qnav_path)
+        self.Button_convbin_lnav.clicked.connect(self.convbin.lnav_path)
+        self.Button_convbin_sbas.clicked.connect(self.convbin.sbas_path)
+        self.checkBox_convbin_obs.stateChanged.connect(self.convbin.check_obs)
+        self.checkBox_convbin_nav.stateChanged.connect(self.convbin.check_nav)
         self.checkBox_convbin_gnav.stateChanged.connect(
-            self.convbin_check_gnav)
+            self.convbin.check_gnav)
         self.checkBox_convbin_hnav.stateChanged.connect(
-            self.convbin_check_hnav)
+            self.convbin.check_hnav)
         self.checkBox_convbin_qnav.stateChanged.connect(
-            self.convbin_check_qnav)
+            self.convbin.check_qnav)
         self.checkBox_convbin_lnav.stateChanged.connect(
-            self.convbin_check_lnav)
+            self.convbin.check_lnav)
         self.checkBox_convbin_sbas.stateChanged.connect(
-            self.convbin_check_sbas)
+            self.convbin.check_sbas)
         self.checkBox_time_start.stateChanged.connect(
-            self.convbin_check_time_start)
+            self.convbin.check_time_start)
         self.checkBox_time_end.stateChanged.connect(
-            self.convbin_check_time_end)
+            self.convbin.check_time_end)
 
         # -------------RNX2RTKP
         self.Button_rnx2rtkp_input_conf.clicked.connect(
@@ -206,15 +188,18 @@ class MainWindow(QtWidgets.QMainWindow, design.Ui_MainWindow):
                              '#reset']  # КОМАНДЫ ДЛЯ УПРАВЛЕНИЯ WEMOS ЧЕРЕЗ КОМ ПОРТ
         # ДОБАВЛЕНИЕ КОМАНД В COMBOBOX
         self.comboBox_comm.addItems(self.command_list)
-        self.read_text_Thread_instance = ReadTextThread(
-            mainwindow=self)  # ЗАПУСК ПОТОКА ЧТЕНИЯ ДАННЫХ ИЗ КОМ ПОРТА
+        self.read_text_Thread_instance = ReadTextThread(mainwindow=self)
 
         # ------------- filterSDF
-        self.pushButton_filterSDF_inputParth.clicked.connect(
-            self.filterSDF_inputPath)
-        self.pushButton_filterSDF_outputParth.clicked.connect(
-            self.filterSDF_outputPath)
-        self.pushButton_filterSDF_start.clicked.connect(self.filterSDF_start)
+        self.filterSDF = FilterSDF(main=self)
+        self.pushButton_filterSDF_inputPath.clicked.connect(
+            self.filterSDF.input_path)
+        self.pushButton_filterSDF_outputPath.clicked.connect(
+            self.filterSDF.output_path)
+        self.pushButton_filterSDF_start.clicked.connect(self.filterSDF.start)
+
+
+
 
     def serial_update(self):
         # ДОБАВЛЕНИЕ НАЙДЕННЫХ ПОРТОВ В COMBOBOX
@@ -222,13 +207,7 @@ class MainWindow(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.comboBox_str2str_in_ser_port.addItems(serial_ports())
     # *************************** SHOW LOGS ***************************
 
-    def show_logs(self, text):
-        print("\n" + text)
-        today = datetime.today().strftime("%d-%m-%Y %H:%M:%S")
-        self.plainTextEdit_logs.appendPlainText(str(today) + " -> " + text)
-        f = open("logs/program/logs.txt", "a")
-        f.write(str(today) + " -> " + text + "\n")
-        f.close()
+    
 
     # *************************** E-MAIL ***************************
     def send_email(self, message):
@@ -435,294 +414,7 @@ class MainWindow(QtWidgets.QMainWindow, design.Ui_MainWindow):
 
         # *************************** FILE .INI ***************************
 
-    def ini_save_exit(self):
-        self.ini_save()
-        sys.exit()
-
-    def ini_reset(self):
-        config = configparser.ConfigParser()
-        try:
-            config.read(self.path_ini)
-            config.set("STR2STR", "create_folder", "False")
-            config.set("STR2STR", "autoclose_xterm", "False")
-            config.set("CONVBIN", "check_start", "False")
-            config.set("CONVBIN", "check_end", "False")
-            config.set("CONVBIN", "format", "rtcm2")
-            config.set("CONVBIN", "rinex", "3.03")
-            config.set("CONVBIN", "frequencies", "1")
-            config.set("CONVBIN", "sat_gps", "False")
-            config.set("CONVBIN", "sat_glo", "False")
-            config.set("CONVBIN", "sat_galileo", "False")
-            config.set("CONVBIN", "sat_qzss", "False")
-            config.set("CONVBIN", "sat_sbas", "False")
-            config.set("CONVBIN", "sat_beidou", "False")
-            config.set("CONVBIN", "check_obs", "False")
-            config.set("CONVBIN", "check_nav", "False")
-            config.set("CONVBIN", "check_gnav", "False")
-            config.set("CONVBIN", "check_hnav", "False")
-            config.set("CONVBIN", "check_qnav", "False")
-            config.set("CONVBIN", "check_lnav", "False")
-            config.set("CONVBIN", "check_sbas", "False")
-            config.set("RNX2RTKP", "pos_mode", "Single")
-            config.set("RNX2RTKP", "frequencies", "L1")
-            config.set("RNX2RTKP", "sol_format", "Lat/Lon/Height (deg/m)")
-            config.set("RNX2RTKP", "time_format", "yyyy/mm/dd hh:mm:ss.ss")
-            config.set("RNX2RTKP", "mask", "")
-            config.set("RNX2RTKP", "decimals", "")
-            config.set("RNX2RTKP", "base_station", "Lat/Lon/Height (deg/m)")
-            config.set("RNX2RTKP", "edit1", "")
-            config.set("RNX2RTKP", "edit2", "")
-            config.set("RNX2RTKP", "edit3", "")
-            config.set("COM", "speed", "9600")
-            config.set("COM", "autoscroll", "False")
-            config.set("COM", "time", "False")
-            config.set("DATABASE", "time_reset", "False")
-            config.set("DATABASE", "time_post", "False")
-            config.set("DATABASE", "last_post", "False")
-            config.set("DATABASE", "connect_to", "")
-            config.set("DATABASE", "save_to", "")
-            config.set("DATABASE", "delta", "")
-            config.set("SETTINGS", "email", "")
-            config.set("SETTINGS", "ftp_host", "")
-            config.set("SETTINGS", "ftp_username", "")
-            config.set("SETTINGS", "ftp_password", "")
-            config.set("SETTINGS", "ftp_autoconnect", "False")
-            config.set("SETTINGS", "ya_token", "")
-            config.set("SETTINGS", "ya_folder", "")
-            config.set("SETTINGS", "ya_autoconnect", "False")
-            config.set("SETTINGS", "google_json", "")
-            config.set("SETTINGS", "google_id", "")
-            config.set("SETTINGS", "google_autoconnect", "False")
-            config.set("SETTINGS", "output_str_active", "False")
-        except Exception:
-            self.show_logs("The file conf.ini is corrupted or not found.")
-        else:
-            with open(self.path_ini, "w") as config_file:
-                config.write(config_file)
-            self.ini_start()
-
-    def ini_save(self):
-        config = configparser.ConfigParser()
-        try:
-            config.read(self.path_ini)
-            config.set("STR2STR", "create_folder", str(
-                self.action_create_folder.isChecked()))
-            config.set("STR2STR", "autoclose_xterm", str(
-                self.action_autoclose_xterm.isChecked()))
-            config.set("CONVBIN", "check_start", str(
-                self.checkBox_time_start.isChecked()))
-            config.set("CONVBIN", "check_end", str(
-                self.checkBox_time_end.isChecked()))
-            config.set("CONVBIN", "format", self.comboBox_format.currentText())
-            config.set("CONVBIN", "rinex", self.comboBox_rinex.currentText())
-            config.set("CONVBIN", "frequencies",
-                       self.comboBox_freq.currentText())
-            config.set("CONVBIN", "sat_gps", str(
-                self.checkBox_gps.isChecked()))
-            config.set("CONVBIN", "sat_glo", str(
-                self.checkBox_glo.isChecked()))
-            config.set("CONVBIN", "sat_galileo", str(
-                self.checkBox_galileo.isChecked()))
-            config.set("CONVBIN", "sat_qzss", str(
-                self.checkBox_qzss.isChecked()))
-            config.set("CONVBIN", "sat_sbas", str(
-                self.checkBox_sbas.isChecked()))
-            config.set("CONVBIN", "sat_beidou", str(
-                self.checkBox_beidou.isChecked()))
-            config.set("CONVBIN", "check_obs", str(
-                self.checkBox_convbin_obs.isChecked()))
-            config.set("CONVBIN", "check_nav", str(
-                self.checkBox_convbin_nav.isChecked()))
-            config.set("CONVBIN", "check_gnav", str(
-                self.checkBox_convbin_gnav.isChecked()))
-            config.set("CONVBIN", "check_hnav", str(
-                self.checkBox_convbin_hnav.isChecked()))
-            config.set("CONVBIN", "check_qnav", str(
-                self.checkBox_convbin_qnav.isChecked()))
-            config.set("CONVBIN", "check_lnav", str(
-                self.checkBox_convbin_lnav.isChecked()))
-            config.set("CONVBIN", "check_sbas", str(
-                self.checkBox_convbin_sbas.isChecked()))
-            config.set("RNX2RTKP", "pos_mode",
-                       self.comboBox_rnx2rtkp_pos_mode.currentText())
-            config.set("RNX2RTKP", "frequencies",
-                       self.comboBox_rnx2rtkp_freq.currentText())
-            config.set("RNX2RTKP", "sol_format",
-                       self.comboBox_rnx2rtkp_sol_format.currentText())
-            config.set("RNX2RTKP", "time_format",
-                       self.comboBox_rnx2rtkp_time_format.currentText())
-            config.set("RNX2RTKP", "mask", self.lineEdit_rnx2rtkp_mask.text())
-            config.set("RNX2RTKP", "decimals",
-                       self.lineEdit_rnx2rtkp_dec.text())
-            config.set("RNX2RTKP", "base_station",
-                       self.comboBox_rnx2rtkp_base.currentText())
-            config.set("RNX2RTKP", "edit1", self.lineEdit_rnx2rtkp_1.text())
-            config.set("RNX2RTKP", "edit2", self.lineEdit_rnx2rtkp_2.text())
-            config.set("RNX2RTKP", "edit3", self.lineEdit_rnx2rtkp_3.text())
-            config.set("COM", "speed", self.comboBox_speed.currentText())
-            config.set("COM", "autoscroll", str(
-                self.checkBox_scroll.isChecked()))
-            config.set("COM", "time", str(self.checkBox_time.isChecked()))
-            config.set("DATABASE", "time_reset", str(
-                self.checkBox_db_reset.isChecked()))
-            config.set("DATABASE", "time_post", str(
-                self.checkBox_db_post.isChecked()))
-            config.set("DATABASE", "last_post", str(
-                self.checkBox_db_lastpost.isChecked()))
-            config.set("DATABASE", "connect_to",
-                       self.lineEdit_db_con_path.text())
-            config.set("DATABASE", "save_to", self.lineEdit_db_save.text())
-            config.set("DATABASE", "delta", self.lineEdit_db_delta.text())
-            config.set("SETTINGS", "email",
-                       self.lineEdit_settings_email.text())
-            config.set("SETTINGS", "ftp_host",
-                       self.lineEdit_settings_ftp_host.text())
-            config.set("SETTINGS", "ftp_username",
-                       self.lineEdit_settings_ftp_username.text())
-            config.set("SETTINGS", "ftp_password",
-                       self.lineEdit_settings_ftp_password.text())
-            config.set("SETTINGS", "ftp_autoconnect", str(
-                self.checkBox_settings_ftp_autoconnect.isChecked()))
-            config.set("SETTINGS", "ya_token",
-                       self.lineEdit_settings_ya_token.text())
-            config.set("SETTINGS", "ya_folder",
-                       self.lineEdit_settings_ya_folder.text())
-            config.set("SETTINGS", "ya_autoconnect", str(
-                self.checkBox_settings_ya_autoconnect.isChecked()))
-            config.set("SETTINGS", "google_json",
-                       self.lineEdit_settings_google_json.text())
-            config.set("SETTINGS", "google_id",
-                       self.lineEdit_settings_google_id.text())
-            config.set("SETTINGS", "google_autoconnect", str(
-                self.checkBox_settings_google_autoconnect.isChecked()))
-            config.set("SETTINGS", "output_str_active", str(
-                self.action_debug_stream.isChecked()))
-        except Exception:
-            self.show_logs("The file conf.ini is corrupted or not found.")
-        else:
-            with open(self.path_ini, "w") as config_file:
-                config.write(config_file)
-
-    def ini_start(self):
-        if not os.path.exists(self.path_ini):
-            self.show_logs("The file conf.ini does not exist!")
-
-            return
-
-        config = configparser.ConfigParser()
-        config.read(self.path_ini)
-
-        try:
-            # --- STR2STR
-            self.action_create_folder.setChecked(
-                config.getboolean("STR2STR", "create_folder"))
-            self.action_autoclose_xterm.setChecked(
-                config.getboolean("STR2STR", "autoclose_xterm"))
-
-            # --- CONVBIN
-            self.checkBox_time_start.setChecked(
-                config.getboolean("CONVBIN", "check_start"))
-            self.checkBox_time_end.setChecked(
-                config.getboolean("CONVBIN", "check_end"))
-            self.comboBox_format.setCurrentText(
-                config.get("CONVBIN", "format"))
-            self.comboBox_rinex.setCurrentText(config.get("CONVBIN", "rinex"))
-            self.comboBox_freq.setCurrentText(
-                config.get("CONVBIN", "frequencies"))
-
-            self.checkBox_gps.setChecked(
-                config.getboolean("CONVBIN", "sat_gps"))
-            self.checkBox_glo.setChecked(
-                config.getboolean("CONVBIN", "sat_glo"))
-            self.checkBox_galileo.setChecked(
-                bool(config.getboolean("CONVBIN", "sat_galileo")))
-            self.checkBox_qzss.setChecked(
-                bool(config.getboolean("CONVBIN", "sat_qzss")))
-            self.checkBox_sbas.setChecked(
-                bool(config.getboolean("CONVBIN", "sat_sbas")))
-            self.checkBox_beidou.setChecked(
-                bool(config.getboolean("CONVBIN", "sat_beidou")))
-
-            self.checkBox_convbin_obs.setChecked(
-                config.getboolean("CONVBIN", "check_obs"))
-            self.checkBox_convbin_nav.setChecked(
-                config.getboolean("CONVBIN", "check_nav"))
-            self.checkBox_convbin_gnav.setChecked(
-                config.getboolean("CONVBIN", "check_gnav"))
-            self.checkBox_convbin_hnav.setChecked(
-                config.getboolean("CONVBIN", "check_hnav"))
-            self.checkBox_convbin_qnav.setChecked(
-                config.getboolean("CONVBIN", "check_qnav"))
-            self.checkBox_convbin_lnav.setChecked(
-                config.getboolean("CONVBIN", "check_lnav"))
-            self.checkBox_convbin_sbas.setChecked(
-                config.getboolean("CONVBIN", "check_sbas"))
-
-            # --- RNX2RTKP
-            self.comboBox_rnx2rtkp_pos_mode.setCurrentText(
-                config.get("RNX2RTKP", "pos_mode"))
-            self.comboBox_rnx2rtkp_freq.setCurrentText(
-                config.get("RNX2RTKP", "frequencies"))
-            self.comboBox_rnx2rtkp_sol_format.setCurrentText(
-                config.get("RNX2RTKP", "sol_format"))
-            self.comboBox_rnx2rtkp_time_format.setCurrentText(
-                config.get("RNX2RTKP", "time_format"))
-            self.lineEdit_rnx2rtkp_mask.setText(config.get("RNX2RTKP", "mask"))
-            self.lineEdit_rnx2rtkp_dec.setText(
-                config.get("RNX2RTKP", "decimals"))
-            self.comboBox_rnx2rtkp_base.setCurrentText(
-                config.get("RNX2RTKP", "base_station"))
-            self.lineEdit_rnx2rtkp_1.setText(config.get("RNX2RTKP", "edit1"))
-            self.lineEdit_rnx2rtkp_2.setText(config.get("RNX2RTKP", "edit2"))
-            self.lineEdit_rnx2rtkp_3.setText(config.get("RNX2RTKP", "edit3"))
-
-            # --- COM
-            self.comboBox_speed.setCurrentText(config.get("COM", "speed"))
-            self.checkBox_scroll.setChecked(
-                config.getboolean("COM", "autoscroll"))
-            self.checkBox_time.setChecked(config.getboolean("COM", "time"))
-
-            # --- DATABASE
-            self.checkBox_db_reset.setChecked(
-                config.getboolean("DATABASE", "time_reset"))
-            self.checkBox_db_post.setChecked(
-                config.getboolean("DATABASE", "time_post"))
-            self.checkBox_db_lastpost.setChecked(
-                config.getboolean("DATABASE", "last_post"))
-            self.lineEdit_db_con_path.setText(
-                config.get("DATABASE", "connect_to"))
-            self.lineEdit_db_save.setText(config.get("DATABASE", "save_to"))
-            self.lineEdit_db_delta.setText(config.get("DATABASE", "delta"))
-            if self.checkBox_db_reset.isChecked():
-                self.timeEdit_db.setEnabled(True)
-
-            # --- SETTINGS
-            self.lineEdit_settings_email.setText(
-                config.get("SETTINGS", "email"))
-            self.lineEdit_settings_ftp_host.setText(
-                config.get("SETTINGS", "ftp_host"))
-            self.lineEdit_settings_ftp_username.setText(
-                config.get("SETTINGS", "ftp_username"))
-            self.lineEdit_settings_ftp_password.setText(
-                config.get("SETTINGS", "ftp_password"))
-            self.checkBox_settings_ftp_autoconnect.setChecked(
-                config.getboolean("SETTINGS", "ftp_autoconnect"))
-            self.lineEdit_settings_ya_token.setText(
-                config.get("SETTINGS", "ya_token"))
-            self.lineEdit_settings_ya_folder.setText(
-                config.get("SETTINGS", "ya_folder"))
-            self.checkBox_settings_ya_autoconnect.setChecked(
-                config.getboolean("SETTINGS", "ya_autoconnect"))
-            self.lineEdit_settings_google_json.setText(
-                config.get("SETTINGS", "google_json"))
-            self.lineEdit_settings_google_id.setText(
-                config.get("SETTINGS", "google_id"))
-            self.checkBox_settings_google_autoconnect.setChecked(
-                config.getboolean("SETTINGS", "google_autoconnect"))
-            self.action_debug_stream.setChecked(
-                config.getboolean("SETTINGS", "output_str_active"))
-        except Exception:
-            self.show_logs("The file conf.ini is corrupted.")
+    
 
     # *************************** ВКЛАДКА DATABASE ***************************
     def db_sql_command(self):
@@ -1448,415 +1140,10 @@ class MainWindow(QtWidgets.QMainWindow, design.Ui_MainWindow):
             return
 
     # ***************************ВКЛАДКА CONVBIN***************************
-    def convbin_check_obs(self, state):
-        if state != self.checkBox_convbin_obs.isChecked():
-            self.lineEdit_obs.setEnabled(True)
-            self.Button_obs.setEnabled(True)
-        else:
-            self.lineEdit_obs.setEnabled(False)
-            self.Button_obs.setEnabled(False)
-
-    def convbin_check_nav(self, state):
-        if state != self.checkBox_convbin_nav.isChecked():
-            self.lineEdit_nav.setEnabled(True)
-            self.Button_nav.setEnabled(True)
-        else:
-            self.lineEdit_nav.setEnabled(False)
-            self.Button_nav.setEnabled(False)
-
-    def convbin_check_gnav(self, state):
-        if state != self.checkBox_convbin_gnav.isChecked():
-            self.lineEdit_convbin_gnav.setEnabled(True)
-            self.Button_convbin_gnav.setEnabled(True)
-        else:
-            self.lineEdit_convbin_gnav.setEnabled(False)
-            self.Button_convbin_gnav.setEnabled(False)
-
-    def convbin_check_hnav(self, state):
-        if state != self.checkBox_convbin_hnav.isChecked():
-            self.lineEdit_convbin_hnav.setEnabled(True)
-            self.Button_convbin_hnav.setEnabled(True)
-        else:
-            self.lineEdit_convbin_hnav.setEnabled(False)
-            self.Button_convbin_hnav.setEnabled(False)
-
-    def convbin_check_qnav(self, state):
-        if state != self.checkBox_convbin_qnav.isChecked():
-            self.lineEdit_convbin_qnav.setEnabled(True)
-            self.Button_convbin_qnav.setEnabled(True)
-        else:
-            self.lineEdit_convbin_qnav.setEnabled(False)
-            self.Button_convbin_qnav.setEnabled(False)
-
-    def convbin_check_lnav(self, state):
-        if state != self.checkBox_convbin_lnav.isChecked():
-            self.lineEdit_convbin_lnav.setEnabled(True)
-            self.Button_convbin_lnav.setEnabled(True)
-        else:
-            self.lineEdit_convbin_lnav.setEnabled(False)
-            self.Button_convbin_lnav.setEnabled(False)
-
-    def convbin_check_sbas(self, state):
-        if state != self.checkBox_convbin_sbas.isChecked():
-            self.lineEdit_convbin_sbas.setEnabled(True)
-            self.Button_convbin_sbas.setEnabled(True)
-        else:
-            self.lineEdit_convbin_sbas.setEnabled(False)
-            self.Button_convbin_sbas.setEnabled(False)
-
-    def convbin_check_time_start(self, state):
-        if state != self.checkBox_time_start.isChecked():
-            self.dateTimeEdit_start.setEnabled(True)
-        else:
-            self.dateTimeEdit_start.setEnabled(False)
-
-    def convbin_check_time_end(self, state):
-        if state != self.checkBox_time_end.isChecked():
-            self.dateTimeEdit_end.setEnabled(True)
-        else:
-            self.dateTimeEdit_end.setEnabled(False)
-
-    def convbin_convert(self):
-        command_convbin = "RTKLIB-2.4.3-b33/app/convbin/gcc/convbin"
-        command_convbin += " -r " + self.comboBox_format.currentText()
-        command_convbin += " -f " + self.comboBox_freq.currentText()
-        command_convbin += " -v " + self.comboBox_rinex.currentText()
-        command_convbin += " -os -od"
-        if self.checkBox_time_start.isChecked():
-            command_convbin += " -ts "
-            command_convbin += self.dateTimeEdit_start.text()
-        if self.checkBox_time_end.isChecked():
-            command_convbin += " -te "
-            command_convbin += self.dateTimeEdit_end.text()
-
-        if not self.checkBox_gps.isChecked():
-            command_convbin += " -y G"
-        if not self.checkBox_glo.isChecked():
-            command_convbin += " -y R"
-        if not self.checkBox_galileo.isChecked():
-            command_convbin += " -y E"
-        if not self.checkBox_qzss.isChecked():
-            command_convbin += " -y J"
-        if not self.checkBox_sbas.isChecked():
-            command_convbin += " -y S"
-        if not self.checkBox_beidou.isChecked():
-            command_convbin += " -y C"
-
-        if self.lineEdit_obs != "" and self.checkBox_convbin_obs.isChecked():
-            command_convbin += " -o " + self.lineEdit_obs.text()
-        if self.lineEdit_nav != "" and self.checkBox_convbin_nav.isChecked():
-            command_convbin += " -n " + self.lineEdit_nav.text()
-        if self.lineEdit_convbin_gnav != "" and self.checkBox_convbin_gnav.isChecked():
-            command_convbin += " -g " + self.lineEdit_convbin_gnav.text()
-        if self.lineEdit_convbin_hnav != "" and self.checkBox_convbin_hnav.isChecked():
-            command_convbin += " -h " + self.lineEdit_convbin_hnav.text()
-        if self.lineEdit_convbin_qnav != "" and self.checkBox_convbin_qnav.isChecked():
-            command_convbin += " -q " + self.lineEdit_convbin_qnav.text()
-        if self.lineEdit_convbin_lnav != "" and self.checkBox_convbin_qnav.isChecked():
-            command_convbin += " -l " + self.lineEdit_convbin_qnav.text()
-        if self.lineEdit_convbin_sbas != "" and self.checkBox_convbin_sbas.isChecked():
-            command_convbin += " -s " + self.lineEdit_convbin_sbas.text()
-
-        command_convbin += " " + self.lineEdit_input.text()
-        self.show_logs(command_convbin)
-        os.system("\n" + command_convbin)
-        time.sleep(1)
-
-    def convbin_input_path(self):
-        fname, _ = QFileDialog.getOpenFileName(None)
-        if fname == "":
-            return
-
-        p = QUrl.fromLocalFile(fname)
-        p = p.fileName()
-        p = p.rsplit('_', 2)
-        if len(p) == 3:
-            p[1] = p[1].rsplit('.', 2)
-            # print(p[1])
-            p[2] = p[2].rsplit('-', 2)
-
-            if len(p[2]) == 3:
-                p[2][2] = p[2][2].rsplit('.', 1)
-
-            # print(p[2])
-            if len(p[1]) == 3 and len(p[2]) == 3:
-                time_start = QDateTime(int(p[1][2]), int(p[1][0]), int(p[1][1]), int(p[2][0]), int(p[2][1]),
-                                       int(p[2][2][0]))
-                self.dateTimeEdit_start.setDateTime(time_start)
-                self.show_logs("")
-                self.show_logs(time_start)
-                self.checkBox_time_start.setChecked(True)
-        else:
-            self.checkBox_time_start.setChecked(False)
-
-        self.lineEdit_input.setText(fname)
-
-        self.lineEdit_obs.setText(self.lineEdit_input.text() + ".obs")
-        self.lineEdit_nav.setText(self.lineEdit_input.text() + ".nav")
-        self.lineEdit_convbin_gnav.setText(
-            self.lineEdit_input.text() + ".gnav")
-        self.lineEdit_convbin_hnav.setText(
-            self.lineEdit_input.text() + ".hnav")
-        self.lineEdit_convbin_qnav.setText(
-            self.lineEdit_input.text() + ".qnav")
-        self.lineEdit_convbin_lnav.setText(
-            self.lineEdit_input.text() + ".lnav")
-        self.lineEdit_convbin_sbas.setText(
-            self.lineEdit_input.text() + ".sbas")
-
-    def convbin_output_path(self):
-        path = QFileDialog.getExistingDirectory(None)
-        if path == "":
-            return
-        self.lineEdit_output.setText(path)
-
-    def convbin_obs_path(self):
-        path = QFileDialog.getExistingDirectory(None)
-        if path == "":
-            return
-        path += '/' + self.fname_input + '.obs'
-        self.lineEdit_obs.setText(path)
-
-    def convbin_nav_path(self):
-        path = QFileDialog.getExistingDirectory(None)
-        if path == "":
-            return
-        path += '/' + self.fname_input + '.nav'
-        self.lineEdit_nav.setText(path)
-
-    def convbin_gnav_path(self):
-        path = QFileDialog.getExistingDirectory(None)
-        if path == "":
-            return
-        path += '/' + self.fname_input + '.gnav'
-        self.lineEdit_convbin_gnav.setText(path)
-
-    def convbin_hnav_path(self):
-        path = QFileDialog.getExistingDirectory(None)
-        if path == "":
-            return
-        path += '/' + self.fname_input + '.hnav'
-        self.lineEdit_convbin_hnav.setText(path)
-
-    def convbin_qnav_path(self):
-        path = QFileDialog.getExistingDirectory(None)
-        if path == "":
-            return
-        path += '/' + self.fname_input + '.qnav'
-        self.lineEdit_convbin_qnav.setText(path)
-
-    def convbin_lnav_path(self):
-        path = QFileDialog.getExistingDirectory(None)
-        if path == "":
-            return
-        path += '/' + self.fname_input + '.lnav'
-        self.lineEdit_convbin_lnav.setText(path)
-
-    def convbin_sbas_path(self):
-        path = QFileDialog.getExistingDirectory(None)
-        if path == "":
-            return
-        path += '/' + self.fname_input + '.sbas'
-        self.lineEdit_convbin_sbas.setText(path)
+    
 
     # ***************************ВКЛАДКА STR2STR***************************
-    def str2str_flag_output1(self, state):
-        if state == self.checkBox_str2str_out1.isChecked():
-            self.tab_output1.setEnabled(False)
-        else:
-            self.tab_output1.setEnabled(True)
-
-    def str2str_flag_output2(self, state):
-        if state == self.checkBox_str2str_out2.isChecked():
-            self.tab_output2.setEnabled(False)
-        else:
-            self.tab_output2.setEnabled(True)
-
-    def str2str_flag_output3(self, state):
-        if state == self.checkBox_str2str_out3.isChecked():
-            self.tab_output3.setEnabled(False)
-        else:
-            self.tab_output3.setEnabled(True)
-
-    def str2str_check_outputflile(self, state):
-        if state != self.checkBox_str2str_file.isChecked():
-            self.lineEdit_str2str_outputfile.setEnabled(True)
-            self.Button_str2str_outputfile.setEnabled(True)
-        else:
-            self.lineEdit_str2str_outputfile.setEnabled(False)
-            self.Button_str2str_outputfile.setEnabled(False)
-
-    def str2str_outputfile_path(self):
-        path, _ = QFileDialog.getSaveFileName()
-        self.lineEdit_str2str_out_file.setText(path + ".log")
-
-    def str2str_outputfile_path_2(self):
-        path, _ = QFileDialog.getSaveFileName()
-        self.lineEdit_str2str_out_file_2.setText(path + ".log")
-
-    def str2str_outputfile_path_3(self):
-        path, _ = QFileDialog.getSaveFileName()
-        self.lineEdit_str2str_out_file_3.setText(path + ".log")
-
-    def str2str_inputfile_path(self):
-        path, _ = QFileDialog.getOpenFileName()
-        self.lineEdit_str2str_in_file.setText(path + ".log")
-
-    def str2str_start(self):
-        command_str2str = "xterm -e \"/bin/bash -c '" + os.getcwd() + "/RTKLIB-2.4.3-b33/app/str2str/gcc/" + \
-                          "str2str -in "
-        if self.tabWidget_str2str_in.currentIndex() == 0:
-            command_str2str += "serial://"
-            command_str2str += self.comboBox_str2str_in_ser_port.currentText().replace('/dev/', '')
-            command_str2str += ":" + self.comboBox_str2str_in_ser_speed.currentText()
-            command_str2str += ":" + self.comboBox_str2str_in_ser_bsize.currentText()
-            command_str2str += ":" + self.comboBox_str2str_in_ser_parity.currentText()
-            command_str2str += ":" + self.comboBox_str2str_in_ser_stopb.currentText()
-            command_str2str += ":" + self.comboBox_str2str_in_ser_fctr.currentText()
-
-        elif self.tabWidget_str2str_in.currentIndex() == 1:
-            command_str2str += "tcpsvr://:"
-            command_str2str += self.lineEdit_str2str_in_tcpsvr_port.text()
-
-        elif self.tabWidget_str2str_in.currentIndex() == 2:
-            command_str2str += "tcpcli://"
-            command_str2str += self.lineEdit_str2str_in_tcpcli_host.text()
-
-        elif self.tabWidget_str2str_in.currentIndex() == 3:
-            command_str2str += "ntrip://"
-            command_str2str += self.lineEdit_str2str_in_ntrip_userid.text() + ":" + \
-                self.lineEdit_str2str_in_ntrip_pass.text()
-
-            command_str2str += "@" + self.lineEdit_str2str_in_ntrip_host.text() + "/" + \
-                               self.lineEdit_str2str_in_ntrip_mountpoint.text()
-
-        elif self.tabWidget_str2str_in.currentIndex() == 4:
-            command_str2str += "file://"
-            command_str2str += self.lineEdit_str2str_in_file.text()
-
-        # ПЕРВАЯ ФОРМА
-        if self.checkBox_str2str_out1.isChecked():
-            command_str2str += " -out "
-            if self.tabWidget_str2str_out_1.currentIndex() == 0:
-                command_str2str += "serial://"
-                command_str2str += self.comboBox_str2str_out_ser_port.currentText()
-                command_str2str += ":" + self.comboBox_str2str_out_ser_speed.currentText()
-                command_str2str += ":" + self.comboBox_str2str_out_ser_bsize.currentText()
-                command_str2str += ":" + self.comboBox_str2str_out_ser_parity.currentText()
-                command_str2str += ":" + self.comboBox_str2str_out_ser_stopb.currentText()
-                command_str2str += ":" + self.comboBox_str2str_out_ser_fctr.currentText()
-
-            if self.tabWidget_str2str_out_1.currentIndex() == 1:
-                command_str2str += "tcpsvr://:"
-                command_str2str += self.lineEdit_str2str_out_tcpsvr_port.text()
-
-            if self.tabWidget_str2str_out_1.currentIndex() == 2:
-                command_str2str += "tcpcli://"
-                command_str2str += self.lineEdit_str2str_out_tcpcli_host.text()
-
-            if self.tabWidget_str2str_out_1.currentIndex() == 3:
-                command_str2str += "ntrip://"
-                command_str2str += self.lineEdit_str2str_out_ntrip_userid.text() + ":" + \
-                    self.lineEdit_str2str_out_ntrip_pass.text()
-
-                command_str2str += "@" + self.lineEdit_str2str_out_ntrip_host.text() + "/" + \
-                                   self.lineEdit_str2str_out_ntrip_mountpoint.text()
-
-            if self.tabWidget_str2str_out_1.currentIndex() == 4:
-                command_str2str += "ntrips://"
-                command_str2str += ":" + self.lineEdit_str2str_out_ntrips_pass.text()
-                command_str2str += "@" + self.lineEdit_str2str_out_ntrips_host.text() + "/" + \
-                                   self.lineEdit_str2str_out_ntrips_mountpoint.text()
-
-            if self.tabWidget_str2str_out_1.currentIndex() == 5:
-                command_str2str += "file://"
-                command_str2str += self.lineEdit_str2str_out_file.text()
-
-        # ВТОРАЯ ФОРМА
-        if self.checkBox_str2str_out2.isChecked():
-            command_str2str += " -out "
-            if self.tabWidget_str2str_out_2.currentIndex() == 0:
-                command_str2str += "serial://"
-                command_str2str += self.comboBox_str2str_out_ser_port_2.currentText()
-                command_str2str += ":" + self.comboBox_str2str_out_ser_speed_2.currentText()
-                command_str2str += ":" + self.comboBox_str2str_out_ser_bsize_2.currentText()
-                command_str2str += ":" + self.comboBox_str2str_out_ser_parity_2.currentText()
-                command_str2str += ":" + self.comboBox_str2str_out_ser_stopb_2.currentText()
-                command_str2str += ":" + self.comboBox_str2str_out_ser_fctr_2.currentText()
-
-            if self.tabWidget_str2str_out_2.currentIndex() == 1:
-                command_str2str += "tcpsvr://:"
-                command_str2str += self.lineEdit_str2str_out_tcpsvr_port_2.text()
-
-            if self.tabWidget_str2str_out_2.currentIndex() == 2:
-                command_str2str += "tcpcli://"
-                command_str2str += self.lineEdit_str2str_out_tcpcli_host_2.text()
-
-            if self.tabWidget_str2str_out_2.currentIndex() == 3:
-                command_str2str += "ntrip://"
-                command_str2str += self.lineEdit_str2str_out_ntrip_userid_2.text() + ":" + \
-                    self.lineEdit_str2str_out_ntrip_pass_2.text()
-
-                command_str2str += "@" + self.lineEdit_str2str_out_ntrip_host_2.text() + "/" + \
-                                   self.lineEdit_str2str_out_ntrip_mountpoint_2.text()
-
-            if self.tabWidget_str2str_out_2.currentIndex() == 4:
-                command_str2str += "ntrips://"
-                command_str2str += ":" + self.lineEdit_str2str_out_ntrips_pass_2.text()
-                command_str2str += "@" + self.lineEdit_str2str_out_ntrips_host_2.text() + "/" + \
-                                   self.lineEdit_str2str_out_ntrips_mountpoint_2.text()
-
-            if self.tabWidget_str2str_out_2.currentIndex() == 5:
-                command_str2str += "file://"
-                command_str2str += self.lineEdit_str2str_out_file_2.text()
-
-        # ТРЕТЬЯ ФОРМА
-        if self.checkBox_str2str_out3.isChecked():
-            command_str2str += " -out "
-            if self.tabWidget_str2str_out_3.currentIndex() == 0:
-                command_str2str += "serial://"
-                command_str2str += self.comboBox_str2str_out_ser_port_3.currentText()
-                command_str2str += ":" + self.comboBox_str2str_out_ser_speed_3.currentText()
-                command_str2str += ":" + self.comboBox_str2str_out_ser_bsize_3.currentText()
-                command_str2str += ":" + self.comboBox_str2str_out_ser_parity_3.currentText()
-                command_str2str += ":" + self.comboBox_str2str_out_ser_stopb_3.currentText()
-                command_str2str += ":" + self.comboBox_str2str_out_ser_fctr_3.currentText()
-
-            if self.tabWidget_str2str_out_3.currentIndex() == 1:
-                command_str2str += "tcpsvr://:"
-                command_str2str += self.lineEdit_str2str_out_tcpsvr_port_3.text()
-
-            if self.tabWidget_str2str_out_3.currentIndex() == 2:
-                command_str2str += "tcpcli://"
-                command_str2str += self.lineEdit_str2str_out_tcpcli_host_3.text()
-
-            if self.tabWidget_str2str_out_3.currentIndex() == 3:
-                command_str2str += "ntrip://"
-                command_str2str += self.lineEdit_str2str_out_ntrip_userid_3.text() + ":" + \
-                    self.lineEdit_str2str_out_ntrip_pass_3.text()
-
-                command_str2str += "@" + self.lineEdit_str2str_out_ntrip_host_3.text() + "/" + \
-                                   self.lineEdit_str2str_out_ntrip_mountpoint_3.text()
-
-            if self.tabWidget_str2str_out_3.currentIndex() == 4:
-                command_str2str += "ntrips://"
-                command_str2str += ":" + self.lineEdit_str2str_out_ntrips_pass_3.text()
-                command_str2str += "@" + self.lineEdit_str2str_out_ntrips_host_3.text() + "/" + \
-                                   self.lineEdit_str2str_out_ntrips_mountpoint_3.text()
-
-            if self.tabWidget_str2str_out_3.currentIndex() == 5:
-                command_str2str += "file://"
-                command_str2str += self.lineEdit_str2str_out_file_3.text()
-
-        command_str2str += "'\"&"
-        self.show_logs(command_str2str)
-        os.system(command_str2str)
-
-    def str2str_stop(self):
-        os.system("killall str2str")
-
-    def str2str_stop_xterm(self):
-        os.system("killall xterm")
+    
 
     # *************************** ВКЛАДКА COM ***************************
     def com_connect(self):
@@ -1891,376 +1178,6 @@ class MainWindow(QtWidgets.QMainWindow, design.Ui_MainWindow):
 
     def com_clear(self):
         self.textEdit_read.clear()
-
-    # *************************** ВКЛАДКА filterSDF ***************************
-
-    #173-193 #111
-
-    def temp_path_list(self):
-        path_list = []
-        for i in range(173, 478):
-            exit_c = False
-            for j in range(0, 25):
-                if i > 366:
-                    t = '/home/danisimo/Рабочий стол/R1_post/r001' + str(i-366).zfill(3) + str(j) + '.21pos'
-                else:
-                    t = '/home/danisimo/Рабочий стол/R1_post/r001' + str(i).zfill(3) + str(j) + '.20pos'
-                if os.path.exists(t):
-                    path_list.append(t)
-                    exit_c = False
-                    break
-                else:
-                    exit_c = True
-            if exit_c:
-                path_list.append('')
-               
-        return path_list
-
-    def filterSDF_start(self):
-
-        dir_in = self.lineEdit_filterSDF_inputPath.text()
-        day_start = self.dateEdit_filterSDF_startDate.date()
-        day_end = self.dateEdit_filterSDF_endDate.date()
-        delta = 304 #((day_end.toPyDate() - day_start.toPyDate())).days - \
-            #int(self.spinBox_filterSDF_numDays.text()) + 2
-
-        # составление списка файлов
-        '''path_list = []
-        for i in range(((day_end.toPyDate() - day_start.toPyDate())).days + 1):
-            temp_date = day_start.addDays(i)
-            t = dir_in + '/' + str(temp_date.month()).zfill(2) + '.' + str(temp_date.day()).zfill(
-                2) + '.' + str(temp_date.year())[-2:] + '/' + self.lineEdit_filterSDF_namePoint.text() + '/'
-            if os.path.exists(t):
-                for path in pathlib.Path(t).rglob('*.*pos'):
-                    path_list.append(str(path))
-            else:
-                print('Not found: ' + t)
-                path_list.append('')'''
-
-        path_list = self.temp_path_list()
-        
-        coord_n_day = []
-        if self.checkBox_filterSDF_meanDay.isChecked:
-            f = open(self.lineEdit_filterSDF_outputPath.text() + '/all' + '.sdf', 'w')
-            f.write('date dx dy dz n std_dx std_dy std_dz time')
-            f.write('\n')
-            f.close()
-
-
-        for j in range(delta):  # цикл ко-ва окон
-            timer_start = time.perf_counter()
-           
-            # цикл добавления данных размером окна
-            for i in range(int(self.spinBox_filterSDF_numDays.text())):
-                print(path_list[i+j])
-                if path_list[i+j] == '':
-                    coord_n_day.append('')
-                    continue
-                f = open(path_list[i+j], "r")
-                new_coord = []
-                for line in f:
-                    value_list = line.split(" ")
-
-                    while "" in value_list:
-                        value_list.remove("")
-
-                    if value_list[0] != "%" and value_list[0] != "%\n":
-                        value_list[len(
-                            value_list)-1] = value_list[len(value_list)-1].replace("\n", "")
-                        if int(value_list[5]) == 1:
-                            temp_list = [
-                                value_list[0], 
-                                value_list[1],
-                                value_list[2], 
-                                value_list[3], 
-                                value_list[4],
-                                value_list[7],
-                                value_list[8],
-                                value_list[9],
-                                ]
-                            new_coord.append(temp_list)
-                
-                work_time = 0
-                for q in range(len(new_coord)):
-                    temp_time = new_coord[q][1].split(":")
-                    temp_seconds = temp_time[2].split(
-                        ".")
-                    next_time1 = int(temp_time[0]) * 3600 + int(temp_time[1]) * 60 + int(
-                        temp_seconds[0])
-
-                    if q < len(new_coord) - 1:
-                        temp_time = new_coord[q + 1][1].split(":")
-                        temp_seconds = temp_time[2].split(
-                            ".")
-                        next_time2 = int(temp_time[0]) * 3600 + int(temp_time[1]) * 60 + int(
-                            temp_seconds[0])
-
-                        delta = next_time2 - next_time1
-                        if not self.lineEdit_db_delta.text() == "":
-                            if 0 <= delta <= int(self.lineEdit_db_delta.text()):
-                                work_time += delta
-                        else:
-                            if 0 <= delta <= 1:
-                                work_time += delta
-                      
-                if work_time < 2400:
-                    coord_n_day.append('')
-                else:
-                    coord_n_day.append(new_coord)
-                day_start = day_start.addDays(1)
-            
-            
-            mean_list = []
-            last_index = []
-            for w in range(len(coord_n_day)-1):
-                last_index.append(0)
-
-            # цикл прохода по эпохам первого дня
-            for age_index in range(len(coord_n_day[0])):
-                # текущая эпоха первого дня
-                age_first = coord_n_day[0][age_index][1]
-                date_list = []
-                date_list.append(coord_n_day[0][age_index][0])
-                date_list.append(coord_n_day[0][age_index][1])
-                date_list.append([
-                    coord_n_day[0][age_index][2], 
-                    coord_n_day[0][age_index][3], 
-                    coord_n_day[0][age_index][4],
-                    coord_n_day[0][age_index][5],
-                    coord_n_day[0][age_index][6],
-                    coord_n_day[0][age_index][7]
-                    ])
-
-                # цикл поиска эпох в других днях
-                for day_index_next in range(len(coord_n_day)-1):
-
-                    if coord_n_day[day_index_next+1] == '':
-                        continue
-
-                    age_first_temp = age_first.split(':')
-                    age_first_temp[2] = age_first_temp[2].split('.')
-
-                    temp_time = datetime(2010, 10, 10, int(age_first_temp[0]), int(
-                        age_first_temp[1]), int(age_first_temp[2][0]))
-                    delta_4 = timedelta(minutes=4 * (day_index_next+1))
-                    temp_time = temp_time + delta_4
-
-                    age_first_temp = str(temp_time.hour).zfill(2) + ':' + str(temp_time.minute).zfill(
-                        2) + ':' + str(temp_time.second).zfill(2) + '.' + age_first_temp[2][1]
-
-                    # цикл поиска эпох в дне
-                    for age_next_index in range(last_index[day_index_next], len(coord_n_day[day_index_next+1])):
-                        age_next = coord_n_day[day_index_next +
-                                               1][age_next_index][1]
-
-                        if age_first_temp == age_next:  # если нашли сразу время, то ура
-                            date_list.append([
-                                coord_n_day[day_index_next+1][age_next_index][2], 
-                                coord_n_day[day_index_next+1][age_next_index][3], 
-                                coord_n_day[day_index_next+1][age_next_index][4],
-                                coord_n_day[day_index_next+1][age_next_index][5], 
-                                coord_n_day[day_index_next+1][age_next_index][6],
-                                coord_n_day[day_index_next+1][age_next_index][7]])
-                            last_index[day_index_next] = age_next_index
-                            break
-                        else:                           # иначе ищем близжайшее значение
-                            age_first_t = age_first.split(':')
-                            age_first_t[2] = age_first_t[2].split('.')
-                            temp_time_first = int(
-                                age_first_t[0])*3600 + int(age_first_t[1])*60 + int(age_first_t[2][0])
-
-                            try:
-                                age_next_temp1 = coord_n_day[day_index_next +
-                                                             1][age_next_index+1][1]
-                                age_next_temp2 = coord_n_day[day_index_next +
-                                                             1][age_next_index-1][1]
-                            except Exception:
-                                pass
-                            else:
-
-                                # заканчивать цикл поиска, если ушли за +4*(day_index_next+1) минуту поиска
-                                age_next = age_next.split(':')
-                                age_next[2] = age_next[2].split('.')
-                                time_5min = int(
-                                    age_next[0])*3600 + int(age_next[1])*60 + int(age_next[2][0])
-                                del_5min = time_5min - temp_time_first
-                                if del_5min > 240 * ((day_index_next+1)) + 60:
-                                    break
-
-                                # поиск близжайшего значения с разбросом +-2 секунды
-                                age_next_temp1 = age_next_temp1.split(':')
-                                age_next_temp1[2] = age_next_temp1[2].split(
-                                    '.')
-                                temp_time_next1 = int(
-                                    age_next_temp1[0])*3600 + int(age_next_temp1[1])*60 + int(age_next_temp1[2][0])
-
-                                age_next_temp2 = age_next_temp2.split(':')
-                                age_next_temp2[2] = age_next_temp2[2].split(
-                                    '.')
-                                temp_time_next2 = int(
-                                    age_next_temp2[0])*3600 + int(age_next_temp2[1])*60 + int(age_next_temp2[2][0])
-
-                                del_temp1 = temp_time_next1 - temp_time_first
-                                if del_temp1 < 0:
-                                    del_temp1 = temp_time_first - temp_time_next1
-
-                                del_temp2 = temp_time_next2 - temp_time_first
-                                if del_temp2 < 0:
-                                    del_temp2 = temp_time_first - temp_time_next2
-
-                                if del_temp1 < del_temp2:
-                                    if 240*(day_index_next+1)-2 < del_temp2 < 240*(day_index_next+1)+2:
-                                        date_list.append([
-                                            coord_n_day[day_index_next+1][age_next_index-1][2], 
-                                            coord_n_day[day_index_next+1][age_next_index-1][3], 
-                                            coord_n_day[day_index_next+1][age_next_index-1][4],
-                                            coord_n_day[day_index_next+1][age_next_index-1][5],
-                                            coord_n_day[day_index_next+1][age_next_index-1][6],
-                                            coord_n_day[day_index_next+1][age_next_index-1][7]
-                                                         ])
-                                        last_index[day_index_next] = age_next_index
-                                        break
-
-                                if del_temp2 < del_temp1:
-                                    if 240*(day_index_next+1)-2 < del_temp1 < 240*(day_index_next+1)+2:
-                                        date_list.append([
-                                            coord_n_day[day_index_next+1][age_next_index+1][2], 
-                                            coord_n_day[day_index_next+1][age_next_index+1][3], 
-                                            coord_n_day[day_index_next+1][age_next_index+1][4],
-                                            coord_n_day[day_index_next+1][age_next_index+1][5],
-                                            coord_n_day[day_index_next+1][age_next_index+1][6],
-                                            coord_n_day[day_index_next+1][age_next_index+1][7]
-                                                        ])
-                                        last_index[day_index_next] = age_next_index
-                                        break
-
-                mean_list.append(date_list)
-
-            # нахождение дельты между координатами исходного дня и координатами sdf 
-            if mean_list != []:
-                mean_coord_final = []
-                for elem in mean_list:
-                    if len(elem) == 3:
-                        #mean_coord_final.append([elem[0], elem[1], ['0', '0', '0']])
-                        continue
-                    else:
-                        mean_coord = []
-                        for coord in range(3):
-                            coord_sum = 0
-                            mean_std = 0
-                            for day_index in range(2, len(elem)):
-                                coord_sum += float(elem[day_index][coord])
-                                mean_std += float(elem[day_index][coord+3]) ** 2
-                            mean_coord.append(
-                                str(round(float(elem[2][coord]) - round(coord_sum / (len(elem)-2), 4), 4)))
-                            mean_coord.append(str(round((mean_std / (len(elem)-2))**0.5, 4)))
-
-                        mean_coord_final.append([elem[0], elem[1], mean_coord])
-
-                f = open(self.lineEdit_filterSDF_outputPath.text()+'/' +
-                        os.path.basename(path_list[j]) + '.sdf', 'w')
-                for elem in mean_coord_final:
-                    f.write(elem[0] + ' ' + elem[1] + ' ' + elem[2][0] + ' ' + elem[2][1] + ' ' + elem[2][2])
-                    f.write('\n')
-                f.close()
-                
-                #среднее значение за день
-                if self.checkBox_filterSDF_meanDay.isChecked:
-                    if not mean_coord_final == []:
-                        # расчет среднего
-                        mean_delta_x = 0.0
-                        mean_delta_y = 0.0
-                        mean_delta_z = 0.0
-                        for elem in mean_coord_final:
-                            mean_delta_x += float(elem[2][0])
-                            mean_delta_y += float(elem[2][1])
-                            mean_delta_z += float(elem[2][2])            
-                        mean_delta_x = round(mean_delta_x / len(mean_coord_final), 4)
-                        mean_delta_y = round(mean_delta_y / len(mean_coord_final), 4)
-                        mean_delta_z = round(mean_delta_z / len(mean_coord_final), 4)
-
-                        #расчет ско
-                        std_x_temp = 0.0
-                        std_y_temp = 0.0
-                        std_z_temp = 0.0
-                        for elem in mean_coord_final:
-                            std_x_temp += (float(elem[2][0]) - mean_delta_x) ** 2
-                            std_y_temp += (float(elem[2][1]) - mean_delta_y) ** 2
-                            std_z_temp += (float(elem[2][2]) - mean_delta_z) ** 2     
-                        std_x = round(std_x_temp / (len(mean_coord_final)-1), 4)
-                        std_y = round(std_y_temp / (len(mean_coord_final)-1), 4)
-                        std_z = round(std_z_temp / (len(mean_coord_final)-1), 4)
-
-                        #выбор лучшей эпохи из дня
-                        best_age = []
-                        min = 0
-                        frs = True
-                        for elem in mean_coord_final:
-                            d = float(elem[2][3]) ** 2 + float(elem[2][4]) ** 2 + float(elem[2][5]) ** 2
-                            if frs:
-                                best_age = elem
-                                min = d
-                                frs = False
-                            if d < min:
-                                best_age = elem
-                                min = d
-                        
-                        #время сеанса по sdf
-                        work_time = 0
-                        for q in range(len(mean_coord_final)):
-                            temp_time = mean_coord_final[q][1].split(":")
-                            temp_seconds = temp_time[2].split(
-                                ".")
-                            next_time1 = int(temp_time[0]) * 3600 + int(temp_time[1]) * 60 + int(
-                                temp_seconds[0])
-
-                            if q < len(mean_coord_final) - 1:
-                                temp_time = mean_coord_final[q + 1][1].split(":")
-                                temp_seconds = temp_time[2].split(
-                                    ".")
-                                next_time2 = int(temp_time[0]) * 3600 + int(temp_time[1]) * 60 + int(
-                                    temp_seconds[0])
-
-                                delta = next_time2 - next_time1
-                                if not self.lineEdit_db_delta.text() == "":
-                                    if 0 <= delta <= int(self.lineEdit_db_delta.text()):
-                                        work_time += delta
-                                else:
-                                    if 0 <= delta <= 1:
-                                        work_time += delta
-
-                        f = open(self.lineEdit_filterSDF_outputPath.text() + '/all' + '.sdf', 'a')
-                        f_write = elem[0] + ' '
-                        f_write += str(best_age[2][0]) + ' '
-                        f_write += str(best_age[2][1]) + ' '
-                        f_write += str(best_age[2][2]) + ' '
-                        f_write += str(len(mean_coord_final)) + ' '
-                        f_write += str(std_x) + ' '
-                        f_write += str(std_y) + ' '
-                        f_write += str(std_z) + ' '
-                        f_write += str(timedelta(seconds=work_time))
-                        f.write(f_write)
-                        f.write('\n')
-                        f.close()
-            
-            
-            mean_list = []
-            coord_n_day = []
-            day_start = day_start.addDays(
-                -(int(self.spinBox_filterSDF_numDays.text())-1))
-            
-            timer_end = time.perf_counter()
-            print('time iter ' + str(j) + ' is ' + str(timer_end-timer_start))
-            
-            
-
-    def filterSDF_inputPath(self):
-        self.lineEdit_filterSDF_inputPath.setText(
-            QFileDialog.getExistingDirectory(None))
-
-    def filterSDF_outputPath(self):
-        self.lineEdit_filterSDF_outputPath.setText(
-            QFileDialog.getExistingDirectory(None))
 
 
 # даННЫЙ КЛАСС НУЖЕН ДЛЯ ПЕРЕЗАПУСКА STR2STR В ОПРЕДЕЛЕННОЕ ВРЕМЯ

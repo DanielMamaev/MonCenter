@@ -5826,7 +5826,7 @@
        <string>Конечная дата</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_filterSDF_inputParth">
+     <widget class="QPushButton" name="pushButton_filterSDF_inputPath">
       <property name="geometry">
        <rect>
         <x>400</x>
@@ -5891,7 +5891,7 @@
        <string>/home/danisimo/Рабочий стол/Out</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_filterSDF_outputParth">
+     <widget class="QPushButton" name="pushButton_filterSDF_outputPath">
       <property name="geometry">
        <rect>
         <x>400</x>
