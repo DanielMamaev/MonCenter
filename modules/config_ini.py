@@ -1,9 +1,9 @@
-import design
 import configparser
 import sys
 import os
 
 from modules.show_logs import ShowLogs
+
 
 class ConfigIni():
 
