@@ -29,7 +29,9 @@ Soon
 ![](ssugt.png)
 
 Karpik A. P. - rektorat@ssga.ru
+
 Mamaev D.S. – mamaev.s.d@gmail.com
+
 Mareev A.V. – mareevavssugt@gmail.com
 
 Distributed under the BSD 2-Clause License license. See ``LICENSE`` for more information.
