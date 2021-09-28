@@ -3,7 +3,7 @@
 
 One to two paragraph statement about your product and what it does.
 
-![](header.png)
+
 
 ## Installation
 
@@ -26,10 +26,11 @@ Soon
     * Work in progress
 
 ## Meta
+![](ssugt.png)
 
-Daniel Mamaev – mamaev.s.d@gmail.com
-
-Artem Mareev – mareevavssugt@gmail.com
+Karpik A. P. - rektorat@ssga.ru
+Mamaev D.S. – mamaev.s.d@gmail.com
+Mareev A.V. – mareevavssugt@gmail.com
 
 Distributed under the BSD 2-Clause License license. See ``LICENSE`` for more information.
 
