@@ -2,7 +2,7 @@
 
 Moncenter is a program package for real-time GNSS-monitoring establishment.
 It is intended for cost-effective Building Health or geodynamic monitoring. 
-Package uses RtkLib functionality and can help users to create GNSS monitoring database
+Package uses RtkLib functionality and can help users to create GNSS monitoring database.
 
 ## Installation
 
