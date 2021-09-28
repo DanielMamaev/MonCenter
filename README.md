@@ -28,6 +28,9 @@ Soon
 ## Meta
 ![](ssugt.png)
 
+[https://sgugit.ru/](https://sgugit.ru/)
+[https://sgugit.ru/en/](https://sgugit.ru/en/)
+
 Karpik A. P. - rektorat@ssga.ru
 
 Mamaev D.S. – mamaev.s.d@gmail.com
