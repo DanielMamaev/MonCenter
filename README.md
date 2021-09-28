@@ -27,9 +27,9 @@ Soon
 
 ## Meta
 ![](ssugt.png)
+Site RU: [https://sgugit.ru/](https://sgugit.ru/)
 
-[https://sgugit.ru/](https://sgugit.ru/)
-[https://sgugit.ru/en/](https://sgugit.ru/en/)
+Site EN: [https://sgugit.ru/en/](https://sgugit.ru/en/)
 
 Karpik A. P. - rektorat@ssga.ru
 
