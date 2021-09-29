@@ -13,15 +13,15 @@ class FilterSDF(design.Ui_MainWindow):
 
     #173-193 #111 #304 общ
 
-    """def temp_path_list(self):
+    def temp_path_list(self):
         path_list = []
         for i in range(173, 478):
             exit_c = False
             for j in range(0, 25):
                 if i > 366:
-                    t = '/home/danisimo/Рабочий стол/R1_post/r001' + str(i-366).zfill(3) + str(j) + '.21pos'
+                    t = '/home/danisimo/Рабочий стол/R1_post_kinem/r001' + str(i-366).zfill(3) + str(j) + '.21pos'
                 else:
-                    t = '/home/danisimo/Рабочий стол/R1_post/r001' + str(i).zfill(3) + str(j) + '.20pos'
+                    t = '/home/danisimo/Рабочий стол/R1_post_kinem/r001' + str(i).zfill(3) + str(j) + '.20pos'
                 if os.path.exists(t):
                     path_list.append(t)
                     exit_c = False
@@ -31,7 +31,7 @@ class FilterSDF(design.Ui_MainWindow):
             if exit_c:
                 path_list.append('')
                
-        return path_list"""
+        return path_list
 
     def input_path(self):
         self.main.lineEdit_filterSDF_inputPath.setText(
@@ -121,12 +121,9 @@ class FilterSDF(design.Ui_MainWindow):
                             temp_seconds[0])
 
                         delta = next_time2 - next_time1
-                        if not self.main.lineEdit_db_delta.text() == "":
-                            if 0 <= delta <= int(self.main.lineEdit_db_delta.text()):
+                        if 0 <= delta <= 60:
                                 work_time += delta
-                        else:
-                            if 0 <= delta <= 1:
-                                work_time += delta
+                    
                       
                 if work_time < 2400:
                     coord_n_day.append('')
@@ -347,12 +344,9 @@ class FilterSDF(design.Ui_MainWindow):
                                     temp_seconds[0])
 
                                 delta = next_time2 - next_time1
-                                if not self.main.lineEdit_db_delta.text() == "":
-                                    if 0 <= delta <= int(self.main.lineEdit_db_delta.text()):
-                                        work_time += delta
-                                else:
-                                    if 0 <= delta <= 1:
-                                        work_time += delta
+                                if 0 <= delta <= 60:
+                                    work_time += delta
+                                
 
                         f = open(self.main.lineEdit_filterSDF_outputPath.text() + '/all' + '.sdf', 'a')
                         f_write = elem[0] + ' '
