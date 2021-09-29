@@ -1,9 +1,8 @@
 # MonCenter
-> Short blurb about what your product does.
 
-One to two paragraph statement about your product and what it does.
-
-![](header.png)
+Moncenter is a program package for real-time GNSS-monitoring establishment.
+It is intended for cost-effective Building Health or geodynamic monitoring. 
+Package uses RtkLib functionality and can help users to create GNSS monitoring database.
 
 ## Installation
 
@@ -26,10 +25,13 @@ Soon
     * Work in progress
 
 ## Meta
+![](ssugt.png)
 
-Daniel Mamaev – mamaev.s.d@gmail.com
+Site RU: [https://sgugit.ru/](https://sgugit.ru/)
 
-Artem Mareev – mareevavssugt@gmail.com
+Site EN: [https://sgugit.ru/en/](https://sgugit.ru/en/)
+
+Karpik A. P. - rektorat@ssga.ru, Mamaev D.S. – mamaev.s.d@gmail.com, Mareev A.V. – mareevavssugt@gmail.com
 
 Distributed under the BSD 2-Clause License license. See ``LICENSE`` for more information.
 
