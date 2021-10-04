@@ -540,12 +540,8 @@ class DataBase():
                                                     temp_seconds[0])
 
                                                 delta = next_time2 - next_time1
-                                                if not self.main.lineEdit_db_delta.text() == "":
-                                                    if 0 <= delta <= int(self.main.lineEdit_db_delta.text()):
-                                                        work_time += delta
-                                                else:
-                                                    if 0 <= delta <= 1:
-                                                        work_time += delta
+                                                if 0 <= delta <= 60:
+                                                    work_time += delta
 
                                         # Вставка в БД
                                         sql = "SELECT id_sol FROM SOLUTIONS ORDER BY id_sol DESC LIMIT 1"

@@ -56,11 +56,9 @@ class ConfigIni():
             config.set("COM", "autoscroll", "False")
             config.set("COM", "time", "False")
             config.set("DATABASE", "time_reset", "False")
-            config.set("DATABASE", "time_post", "False")
             config.set("DATABASE", "last_post", "False")
             config.set("DATABASE", "connect_to", "")
             config.set("DATABASE", "save_to", "")
-            config.set("DATABASE", "delta", "")
             config.set("SETTINGS", "email", "")
             config.set("SETTINGS", "ftp_host", "")
             config.set("SETTINGS", "ftp_username", "")
@@ -143,15 +141,12 @@ class ConfigIni():
                 self.main.checkBox_scroll.isChecked()))
             config.set("COM", "time", str(self.main.checkBox_time.isChecked()))
             config.set("DATABASE", "time_reset", str(
-                self.main.checkBox_db_reset.isChecked()))
-            config.set("DATABASE", "time_post", str(
-                self.main.checkBox_db_post.isChecked()))
+                self.main.action_autopost_reset.isChecked()))
             config.set("DATABASE", "last_post", str(
-                self.main.checkBox_db_lastpost.isChecked()))
+                self.main.action_autopost_post.isChecked()))
             config.set("DATABASE", "connect_to",
                        self.main.lineEdit_db_con_path.text())
             config.set("DATABASE", "save_to", self.main.lineEdit_db_save.text())
-            config.set("DATABASE", "delta", self.main.lineEdit_db_delta.text())
             config.set("SETTINGS", "email",
                        self.main.lineEdit_settings_email.text())
             config.set("SETTINGS", "ftp_host",
@@ -184,9 +179,8 @@ class ConfigIni():
 
     def start(self):
         if not os.path.exists(self.path_ini):
-            self.logs.show_logs("The file conf.ini does not exist!")
-
-            return
+            self.logs.show_logs("The file conf.ini does not exist! Create new file ini.")
+            self.new_ini()
 
         config = configparser.ConfigParser()
         config.read(self.path_ini)
@@ -262,18 +256,15 @@ class ConfigIni():
             self.main.checkBox_time.setChecked(config.getboolean("COM", "time"))
 
             # --- DATABASE
-            self.main.checkBox_db_reset.setChecked(
+            self.main.action_autopost_reset.setChecked(
                 config.getboolean("DATABASE", "time_reset"))
-            self.main.checkBox_db_post.setChecked(
-                config.getboolean("DATABASE", "time_post"))
-            self.main.checkBox_db_lastpost.setChecked(
+            self.main.action_autopost_post.setChecked(
                 config.getboolean("DATABASE", "last_post"))
             self.main.lineEdit_db_con_path.setText(
                 config.get("DATABASE", "connect_to"))
             self.main.lineEdit_db_save.setText(config.get("DATABASE", "save_to"))
-            self.main.lineEdit_db_delta.setText(config.get("DATABASE", "delta"))
-            if self.main.checkBox_db_reset.isChecked():
-                self.main.timeEdit_db.setEnabled(True)
+            
+               
 
             # --- SETTINGS
             self.main.lineEdit_settings_email.setText(
@@ -302,3 +293,71 @@ class ConfigIni():
                 config.getboolean("SETTINGS", "output_str_active"))
         except Exception:
             self.logs.show_logs("The file conf.ini is corrupted.")
+    
+    def new_ini(self):
+        f = open('conf.ini', 'w')
+        f.write(
+
+'''[STR2STR]
+create_folder = False
+autoclose_xterm = False
+
+[CONVBIN]
+check_start = False
+check_end = False
+format = rtcm2
+rinex = 3.03
+frequencies = 1
+sat_gps = False
+sat_glo = False
+sat_galileo = False
+sat_qzss = False
+sat_sbas = False
+sat_beidou = False
+check_obs = False
+check_nav = False
+check_gnav = False
+check_hnav = False
+check_qnav = False
+check_lnav = False
+check_sbas = False
+
+[RNX2RTKP]
+pos_mode = Single
+frequencies = L1
+sol_format = Lat/Lon/Height (deg/m)
+time_format = yyyy/mm/dd hh:mm:ss.ss
+mask = 
+decimals = 
+base_station = Lat/Lon/Height (deg/m)
+edit1 = 
+edit2 = 
+edit3 = 
+
+[DATABASE]
+connect_to = 
+save_to = 
+time_reset = False
+last_post = False
+
+[COM]
+speed = 9600
+autoscroll = False
+time = False
+
+[SETTINGS]
+email = 
+ftp_host = 
+ftp_username = 
+ftp_password = 
+ftp_autoconnect = False
+ya_token = 
+ya_folder = 
+ya_autoconnect = False
+google_json = 
+google_id = 
+google_autoconnect = False
+output_str_active = False       
+'''
+        )
+        f.close()
