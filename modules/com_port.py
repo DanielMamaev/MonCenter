@@ -70,10 +70,6 @@ class ComPort():
             self.realport.write(bytearray(send_text, 'utf8'))
         self.main.comboBox_comm.setEditText("")
 
-    def refresh(self):
-        self.main.comboBox_port.clear()
-        self.main.comboBox_port.addItems(self.serial_ports())
-
     def clear(self):
         self.main.textEdit_read.clear()
 
@@ -81,7 +77,15 @@ class ComPort():
         # ДОБАВЛЕНИЕ НАЙДЕННЫХ ПОРТОВ В COMBOBOX
         self.main.comboBox_port.clear()
         self.main.comboBox_port.addItems(self.serial_ports())
+        self.main.comboBox_str2str_in_ser_port.clear()
         self.main.comboBox_str2str_in_ser_port.addItems(self.serial_ports())
+        self.main.comboBox_str2str_out_ser_port.clear()
+        self.main.comboBox_str2str_out_ser_port.addItems(self.serial_ports())
+        self.main.comboBox_str2str_out_ser_port_2.clear()
+        self.main.comboBox_str2str_out_ser_port_2.addItems(self.serial_ports())
+        self.main.comboBox_str2str_out_ser_port_3.clear()
+        self.main.comboBox_str2str_out_ser_port_3.addItems(self.serial_ports())
+        
 
 
 # ДАННЫЙ КЛАСС НУЖЕН ДЛЯ ЧТЕНИЯ ДАННЫХ С COM ПОРТА В ОТДЕЛЬНОМ ПОТОКЕ

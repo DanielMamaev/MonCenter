@@ -9,11 +9,37 @@ from modules.config_ini import ConfigIni
 from modules.filter_sdf import FilterSDF
 
 
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets, QtCore
 import design
 
 
+class TabBar(QtWidgets.QTabBar):
+    def tabSizeHint(self, index):
+        s = QtWidgets.QTabBar.tabSizeHint(self, index)
+        s.transpose()
+        return s
 
+    def paintEvent(self, event):
+        painter = QtWidgets.QStylePainter(self)
+        opt = QtWidgets.QStyleOptionTab()
+
+        for i in range(self.count()):
+            self.initStyleOption(opt, i)
+            painter.drawControl(QtWidgets.QStyle.CE_TabBarTabShape, opt)
+            painter.save()
+
+            s = opt.rect.size()
+            s.transpose()
+            r = QtCore.QRect(QtCore.QPoint(), s)
+            r.moveCenter(opt.rect.center())
+            opt.rect = r
+
+            c = self.tabRect(i).center()
+            painter.translate(c)
+            painter.rotate(90)
+            painter.translate(-c)
+            painter.drawControl(QtWidgets.QStyle.CE_TabBarTabLabel, opt)
+            painter.restore()
 
 # ******************************************* MAIN *******************************************
 class MainWindow(QtWidgets.QMainWindow, design.Ui_MainWindow):
@@ -21,6 +47,18 @@ class MainWindow(QtWidgets.QMainWindow, design.Ui_MainWindow):
         super().__init__()
         self.setupUi(self)
         
+
+        self.tabWidget.setTabBar(TabBar(self.tabWidget))
+        self.tabWidget.setTabPosition(self.tabWidget.West)
+        self.tabWidget.insertTab(1, self.tab, "STR2STR")
+        self.tabWidget.insertTab(2, self.tab, "CONVBIN")
+        self.tabWidget.insertTab(3, self.tab, "RNX2RTKP")
+        self.tabWidget.insertTab(4, self.tab, "Database")
+        self.tabWidget.insertTab(5, self.tab, "COM")
+        self.tabWidget.insertTab(6, self.tab, "Settings")
+        self.tabWidget.insertTab(7, self.tab, "Logs")
+        self.tabWidget.insertTab(8, self.tab, "Fileter SDF")
+
         # ------------- .INI
         self.config_ini = ConfigIni(main=self)
         self.action_exit.triggered.connect(self.config_ini.save_exit)
@@ -50,6 +88,7 @@ class MainWindow(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.tab_output1.setEnabled(False)
         self.tab_output2.setEnabled(False)
         self.tab_output3.setEnabled(False)
+        
 
         # -------------CONVBIN
         self.convbin = ConvBin(main=self)
@@ -105,20 +144,17 @@ class MainWindow(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.Button_db_new_path.clicked.connect(self.db_tab.path_new)
         self.Button_db_con_path.clicked.connect(self.db_tab.path_connect)
         self.Button_db_connect.clicked.connect(self.db_tab.connect)
-        self.Button_db_start.clicked.connect(self.db_tab.start_str2str)
         self.Button_db_save.clicked.connect(self.db_tab.dir_save)
-        self.Button_db_stop.clicked.connect(self.db_tab.stop)
-        self.checkBox_db_reset.stateChanged.connect(self.db_tab.check_str2str)
-        self.checkBox_db_post.stateChanged.connect(self.db_tab.check_post)
-        self.Button_db_timepost_ok.clicked.connect(self.db_tab.posttime)
         self.Button_db_sql.clicked.connect(self.db_tab.sql_command)
+
+        self.action_autopost_start.triggered.connect(self.db_tab.start_str2str)
+        self.action_autopost_stop.triggered.connect(self.db_tab.stop)
 
         # ------------- COM
         self.com_port = ComPort(main=self)
         self.com_port.update()
         self.action_refresh_ports.triggered.connect(self.com_port.update)
         self.pushButton_connect.clicked.connect(self.com_port.connect)
-        self.pushButton_refresh.clicked.connect(self.com_port.refresh)
         self.pushButton_send.clicked.connect(self.com_port.send)
         self.pushButton_clear.clicked.connect(self.com_port.clear)
         self.comboBox_comm.addItems(self.com_port.command_list)
@@ -130,6 +166,9 @@ class MainWindow(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.pushButton_filterSDF_outputPath.clicked.connect(
             self.filterSDF.output_path)
         self.pushButton_filterSDF_start.clicked.connect(self.filterSDF.start)
+
+        
+        
 
 
 

@@ -117,21 +117,21 @@ class ConvBin():
             command_convbin += " -y C"
 
         if self.main.lineEdit_obs.text() != "" and self.main.checkBox_convbin_obs.isChecked():
-            command_convbin += " -o '" + self.main.lineEdit_obs.text() + "'"
+            command_convbin += " -o " + self.main.lineEdit_obs.text().replace(" ", '\\ ')
         if self.main.lineEdit_nav.text() != "" and self.main.checkBox_convbin_nav.isChecked():
-            command_convbin += " -n '" + self.main.lineEdit_nav.text() + "'"
+            command_convbin += " -n " + self.main.lineEdit_nav.text().replace(" ", '\\ ')
         if self.main.lineEdit_convbin_gnav.text() != "" and self.main.checkBox_convbin_gnav.isChecked():
-            command_convbin += " -g '" + self.main.lineEdit_convbin_gnav.text() + "'"
+            command_convbin += " -g " + self.main.lineEdit_convbin_gnav.text().replace(" ", '\\ ')
         if self.main.lineEdit_convbin_hnav.text() != "" and self.main.checkBox_convbin_hnav.isChecked():
-            command_convbin += " -h '" + self.main.lineEdit_convbin_hnav.text() + "'"
+            command_convbin += " -h " + self.main.lineEdit_convbin_hnav.text().replace(" ", '\\ ')
         if self.main.lineEdit_convbin_qnav.text() != "" and self.main.checkBox_convbin_qnav.isChecked():
-            command_convbin += " -q '" + self.main.lineEdit_convbin_qnav.text() + "'"
+            command_convbin += " -q " + self.main.lineEdit_convbin_qnav.text().replace(" ", '\\ ')
         if self.main.lineEdit_convbin_lnav.text() != "" and self.main.checkBox_convbin_qnav.isChecked():
-            command_convbin += " -l '" + self.main.lineEdit_convbin_qnav.text() + "'"
+            command_convbin += " -l " + self.main.lineEdit_convbin_qnav.text().replace(" ", '\\ ')
         if self.main.lineEdit_convbin_sbas.text() != "" and self.main.checkBox_convbin_sbas.isChecked():
-            command_convbin += " -s '" + self.main.lineEdit_convbin_sbas.text() + "'"
+            command_convbin += " -s " + self.main.lineEdit_convbin_sbas.text().replace(" ", '\\ ') 
 
-        command_convbin += " '" + self.main.lineEdit_input.text() + "'"
+        command_convbin += " " + self.main.lineEdit_input.text().replace(" ", '\\ ')
         self.logs.show_logs(command_convbin)
         os.system("\n" + command_convbin)
         time.sleep(1)

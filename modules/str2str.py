@@ -14,18 +14,21 @@ class Str2Str():
             self.main.tab_output1.setEnabled(False)
         else:
             self.main.tab_output1.setEnabled(True)
+            self.main.tabWidget_str2str_out.setCurrentIndex(0)
 
     def flag_output2(self, state):
         if state == self.main.checkBox_str2str_out2.isChecked():
             self.main.tab_output2.setEnabled(False)
         else:
             self.main.tab_output2.setEnabled(True)
+            self.main.tabWidget_str2str_out.setCurrentIndex(1)
 
     def flag_output3(self, state):
         if state == self.main.checkBox_str2str_out3.isChecked():
             self.main.tab_output3.setEnabled(False)
         else:
             self.main.tab_output3.setEnabled(True)
+            self.main.tabWidget_str2str_out.setCurrentIndex(2)
 
     def check_outputflile(self, state):
         if state != self.main.checkBox_str2str_file.isChecked():
@@ -119,7 +122,7 @@ class Str2Str():
 
             if self.main.tabWidget_str2str_out_1.currentIndex() == 5:
                 command_str2str += "file://"
-                command_str2str += self.main.lineEdit_str2str_out_file.text()
+                command_str2str += self.main.lineEdit_str2str_out_file.text().replace(" ", '\\ ')
 
         # ВТОРАЯ ФОРМА
         if self.main.checkBox_str2str_out2.isChecked():
@@ -157,7 +160,7 @@ class Str2Str():
 
             if self.main.tabWidget_str2str_out_2.currentIndex() == 5:
                 command_str2str += "file://"
-                command_str2str += self.main.lineEdit_str2str_out_file_2.text()
+                command_str2str += self.main.lineEdit_str2str_out_file_2.text().replace(" ", '\\ ')
 
         # ТРЕТЬЯ ФОРМА
         if self.main.checkBox_str2str_out3.isChecked():
@@ -195,7 +198,7 @@ class Str2Str():
 
             if self.main.tabWidget_str2str_out_3.currentIndex() == 5:
                 command_str2str += "file://"
-                command_str2str += self.main.lineEdit_str2str_out_file_3.text()
+                command_str2str += self.main.lineEdit_str2str_out_file_3.text().replace(" ", '\\ ')
 
         command_str2str += "'\"&"
         self.logs.show_logs(command_str2str)

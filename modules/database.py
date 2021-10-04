@@ -608,24 +608,6 @@ class DataBase():
         except Exception as e:
             self.logs.show_logs("RNX2RTKP with DB: " + str(e))
 
-    def check_str2str(self, state):
-        if state != self.main.checkBox_db_reset.isChecked():
-            self.main.timeEdit_db.setEnabled(True)
-        else:
-            self.main.timeEdit_db.setEnabled(False)
-
-    def check_post(self, state):
-        if state != self.main.checkBox_db_post.isChecked():
-            self.main.lineEdit_db_hours.setEnabled(True)
-            self.main.lineEdit_db_minutes.setEnabled(True)
-            self.main.lineEdit_db_seconds.setEnabled(True)
-            self.main.Button_db_timepost_ok.setEnabled(True)
-        else:
-            self.main.lineEdit_db_hours.setEnabled(False)
-            self.main.lineEdit_db_minutes.setEnabled(False)
-            self.main.lineEdit_db_seconds.setEnabled(False)
-            self.main.Button_db_timepost_ok.setEnabled(False)
-            self.bool_ok_db = False
 
     def posttime(self):
         if not self.bool_ok_db:
@@ -650,11 +632,11 @@ class TimeResetStr2strThread(QThread):
     def run(self):
         while True:
             if (datetime.today().strftime(
-                    "%H:%M:%S") == self.mainwindow.timeEdit_db.text() and self.mainwindow.checkBox_db_reset.isChecked()):
+                    "%H:%M:%S") == '00:00:00' and self.mainwindow.action_autopost_reset.isChecked()):
                 temp_list = self.mainwindow.post_pro_db
                 self.mainwindow.stop()
                 self.mainwindow.start_str2str()
-                if self.mainwindow.checkBox_db_lastpost.isChecked():
+                if self.mainwindow.action_autopost_post.isChecked():
                     self.mainwindow.start_convbin(temp_list)
                     self.mainwindow.start_rnx2rtkp(temp_list)
 
@@ -665,15 +647,4 @@ class TimeResetStr2strThread(QThread):
                         self.settings.yadisk_connect(path[1])
                     if self.mainwindow.checkBox_settings_google_autoconnect.isChecked():
                         self.settings.gdrive_connect(path[1])
-
-            if self.mainwindow.checkBox_db_post.isChecked() and self.mainwindow.bool_ok_db:
-                if int(datetime.today().timestamp()) > self.mainwindow.temp_time_db:
-                    self.mainwindow.temp_time_db = int(datetime.today().timestamp()) + int(
-                        self.mainwindow.lineEdit_db_hours.text()) * 3600 + int(
-                        self.mainwindow.lineEdit_db_minutes.text()) * 60 + int(
-                        self.mainwindow.lineEdit_db_seconds.text())
-                    if self.mainwindow.post_pro_db != []:
-                        temp_list = self.mainwindow.post_pro_db
-                        self.mainwindow.start_convbin(temp_list)
-                        self.mainwindow.start_rnx2rtkp(temp_list)
             time.sleep(1)

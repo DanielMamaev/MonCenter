@@ -103,10 +103,10 @@ class Rnx2Rtkp():
                 command_rnx2rtkp += " -r " + str(self.main.lineEdit_rnx2rtkp_1.text()) + " " + str(
                     self.main.lineEdit_rnx2rtkp_2.text()) + " " + str(self.main.lineEdit_rnx2rtkp_3.text())
 
-        command_rnx2rtkp += " -o '" + self.main.lineEdit_rnx2rtkp_output.text() + "'"
-        command_rnx2rtkp += " '" + self.main.lineEdit_rnx2rtkp_rover.text() + "'"
-        command_rnx2rtkp += " '" + self.main.lineEdit_rnx2rtkp_base.text() + "'"
-        command_rnx2rtkp += " '" + self.main.lineEdit_rnx2rtkp_nav.text() + "'"
+        command_rnx2rtkp += " -o " + self.main.lineEdit_rnx2rtkp_output.text().replace(" ", '\\ ')
+        command_rnx2rtkp += " " + self.main.lineEdit_rnx2rtkp_rover.text().replace(" ", '\\ ')
+        command_rnx2rtkp += " " + self.main.lineEdit_rnx2rtkp_base.text().replace(" ", '\\ ')
+        command_rnx2rtkp += " " + self.main.lineEdit_rnx2rtkp_nav.text().replace(" ", '\\ ')
 
         self.logs.show_logs(command_rnx2rtkp)
         os.system(command_rnx2rtkp)
