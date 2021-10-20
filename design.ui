@@ -5746,10 +5746,17 @@
     <addaction name="action_autopost_reset"/>
     <addaction name="action_autopost_post"/>
    </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>Help</string>
+    </property>
+    <addaction name="action_About"/>
+   </widget>
    <addaction name="menuSTR2STR_2"/>
    <addaction name="menuXterm"/>
    <addaction name="menuAutoPost"/>
    <addaction name="menu_file"/>
+   <addaction name="menuHelp"/>
   </widget>
   <action name="action_stop_str2str">
    <property name="icon">
@@ -5871,6 +5878,11 @@
    </property>
    <property name="text">
     <string>Stop</string>
+   </property>
+  </action>
+  <action name="action_About">
+   <property name="text">
+    <string>About</string>
    </property>
   </action>
  </widget>

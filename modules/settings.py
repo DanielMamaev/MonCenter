@@ -24,7 +24,7 @@ class Settings():
         smtp_obj.starttls()
         smtp_obj.login(email, 'tsoekbtboewzuxyy')
 
-        now = datetime.today().strftime("%m.%d.%Y-%H:%M:%S")
+        now = datetime.utcnow().strftime("%m.%d.%Y-%H:%M:%S")
         msg = MIMEText(message, 'plain', 'utf-8')
         msg['Subject'] = Header(now, 'utf-8')
         msg['From'] = email
@@ -54,7 +54,7 @@ class Settings():
             # fields="nextPageToken, files(id, name, mimeType, createdTime, quotaBytesUsed )", ).execute()
             # Создание папки
             folder_id = self.main.lineEdit_settings_google_id.text()
-            today = datetime.today().strftime("%m.%d.%y")
+            today = datetime.utcnow().strftime("%m.%d.%y")
             date = str(today.day) + str(today.month) + str(today.year)
 
             results = service.files().list(pageSize=10, fields="files(id, name)", ).execute()
@@ -128,7 +128,7 @@ class Settings():
                 self.logs.show_logs("Dir is not found!")
 
             else:
-                today = datetime.today().strftime("%m.%d.%y")
+                today = datetime.utcnow().strftime("%m.%d.%y")
                 date = str(today.day) + str(today.month) + str(today.year)
                 try:
                     ya.mkdir(self.main.lineEdit_settings_ya_folder.text() + date + "/")
@@ -167,7 +167,7 @@ class Settings():
             # print(ftp.retrlines('LIST')) # отображение всех файлов в каталоге
             # print(ftp.pwd()) # текущий путь
 
-            today = datetime.today().strftime("%m.%d.%y")
+            today = datetime.utcnow().strftime("%m.%d.%y")
             flag_dir = False
             try:
                 ftp.mkd(today)  # создание папки
