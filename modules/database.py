@@ -25,7 +25,7 @@ class DataBase():
         self.temp_time_db = 0
 
         self.time_reset_str2str_Thread_instance = TimeResetStr2strThread(
-            mainwindow=main)
+            mainwindow=self, parent=main)
         self.time_reset_str2str_Thread_instance.start()
 
     def sql_command(self):
@@ -192,14 +192,14 @@ class DataBase():
             path_save = self.main.lineEdit_db_save.text()
             dir_path_list = []
             if path_save != "":
-                today = datetime.today().strftime("%m.%d.%y")
+                today = datetime.utcnow().strftime("%m.%d.%y")
                 for i in range(len(host)):
                     temp_host = host[i][0].replace(":", ".")
                     filepath = ""
                     if os.path.exists(
-                            path_save + "/" + datetime.today().strftime("%m.%d.%y") + "/" + temp_host):
+                            path_save + "/" + datetime.utcnow().strftime("%m.%d.%y") + "/" + temp_host):
                         self.logs.show_logs("Directory exists.")
-                        filepath = path_save + "/" + datetime.today().strftime("%m.%d.%y") + \
+                        filepath = path_save + "/" + datetime.utcnow().strftime("%m.%d.%y") + \
                             "/" + temp_host
                         dir_path_list.append(filepath + "/")
                     else:
@@ -252,7 +252,7 @@ class DataBase():
 
                     temp_ip = host[i][0]
                     file_n = temp_ip.replace(":", ".")
-                    file_n += "_" + datetime.now().strftime("%m.%d.%Y_%H-%M-%S") + ".log"
+                    file_n += "_" + datetime.utcnow().strftime("%m.%d.%Y_%H-%M-%S") + ".log"
                     command_str2str += file_n
                     self.post_pro_db.append([])
                     self.post_pro_db[i].append(host[i][0])
@@ -268,7 +268,7 @@ class DataBase():
 
                 if self.main.action_debug_stream.isChecked():
                     str_folder = "logs/xterm"
-                    today = datetime.today().strftime("%d.%m.%y")
+                    today = datetime.utcnow().strftime("%d.%m.%y")
                     filepath = ""
                     if os.path.exists(str_folder + "/" + today + "/"):
                         self.logs.show_logs("Directory exists for str output.")
@@ -603,44 +603,35 @@ class DataBase():
                         message="(RNX2RTKP) Постобработка не произошла")
         except Exception as e:
             self.logs.show_logs("RNX2RTKP with DB: " + str(e))
-
-
-    def posttime(self):
-        if not self.bool_ok_db:
-            self.bool_ok_db = True
-            self.logs.show_logs("On")
-            self.temp_time_db = int(datetime.today().timestamp()) + int(self.main.lineEdit_db_hours.text()) * 3600 + int(
-                self.main.lineEdit_db_minutes.text()) * 60 + int(self.main.lineEdit_db_seconds.text())
-            # print(self.temp_time)
-        else:
-            self.bool_ok_db = False
-            self.logs.show_logs("Off")
+    
 
 
 
 
 class TimeResetStr2strThread(QThread):
-    def __init__(self, mainwindow):
+    def __init__(self, mainwindow, parent):
         super().__init__()
         self.mainwindow = mainwindow
-        self.settings = Settings(main=mainwindow)
+        self.parent = parent
+        self.settings = Settings(main=mainwindow)      
 
     def run(self):
         while True:
-            if (datetime.today().strftime(
-                    "%H:%M:%S") == '00:00:00' and self.mainwindow.action_autopost_reset.isChecked()):
+            if (datetime.utcnow().strftime(
+                    "%H:%M:%S") == '00:00:00' and self.parent.action_autopost_reset.isChecked()):
+                
                 temp_list = self.mainwindow.post_pro_db
                 self.mainwindow.stop()
                 self.mainwindow.start_str2str()
-                if self.mainwindow.action_autopost_post.isChecked():
+                if self.parent.action_autopost_post.isChecked():
                     self.mainwindow.start_convbin(temp_list)
                     self.mainwindow.start_rnx2rtkp(temp_list)
 
                 for path in temp_list:
-                    if self.mainwindow.checkBox_settings_ftp_autoconnect.isChecked():
+                    if self.parent.checkBox_settings_ftp_autoconnect.isChecked():
                         self.settings.ftp_connect(path[1])
-                    if self.mainwindow.checkBox_settings_ya_autoconnect.isChecked():
+                    if self.parent.checkBox_settings_ya_autoconnect.isChecked():
                         self.settings.yadisk_connect(path[1])
-                    if self.mainwindow.checkBox_settings_google_autoconnect.isChecked():
+                    if self.parent.checkBox_settings_google_autoconnect.isChecked():
                         self.settings.gdrive_connect(path[1])
             time.sleep(1)
