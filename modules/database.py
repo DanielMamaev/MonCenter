@@ -179,7 +179,7 @@ class DataBase():
 
     def stop(self):
         self.post_pro_db = []
-        os.system("killall str2str")
+        os.system("killall str2str_auto")
 
     def start_str2str(self):
         self.stop()
@@ -233,7 +233,7 @@ class DataBase():
             host = cursor.fetchall()
             for i in range(len(host)):
                 command_str2str = "xterm -e \"/bin/bash -c '" + os.getcwd() + "/RTKLIB-2.4.3-b33/app/str2str/gcc/" + \
-                                  "str2str -in "
+                                  "str2str_auto -in "
                 if host[i][3] == 0:
                     command_str2str += "tcpcli://"
                     command_str2str += host[i][4]
