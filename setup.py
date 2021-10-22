@@ -14,6 +14,8 @@ os.system("pip3 install --upgrade google-api-python-client")
 os.system("pip3 install ftputil")
 os.system("pip3 install psutil")
 os.system("sudo apt install unzip -y")
+os.system('pip install folium')
+os.system('pip install PyQtWebEngine')
 if not os.path.exists(os.getcwd() + "/" + rtklib_v + ".zip") and not os.path.exists(os.getcwd() + "/" + rtklib_v):
     os.system("wget https://github.com/tomojitakasu/RTKLIB/archive/refs/tags/" + ver +".zip")
     os.system("unzip "+ ver +".zip")
