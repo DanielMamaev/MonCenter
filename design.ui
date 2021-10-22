@@ -5776,6 +5776,7 @@
     <property name="title">
      <string>Help</string>
     </property>
+    <addaction name="action_userGuide"/>
     <addaction name="action_About"/>
    </widget>
    <addaction name="menuSTR2STR_2"/>
@@ -5909,6 +5910,11 @@
   <action name="action_About">
    <property name="text">
     <string>About</string>
+   </property>
+  </action>
+  <action name="action_userGuide">
+   <property name="text">
+    <string>User guide</string>
    </property>
   </action>
  </widget>

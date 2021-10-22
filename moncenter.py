@@ -13,6 +13,7 @@ from modules.map import OpenMap
 
 from PyQt5 import QtWidgets, QtCore
 import design
+import about
 
 
 class TabBar(QtWidgets.QTabBar):
@@ -42,6 +43,14 @@ class TabBar(QtWidgets.QTabBar):
             painter.translate(-c)
             painter.drawControl(QtWidgets.QStyle.CE_TabBarTabLabel, opt)
             painter.restore()
+
+# ******************************************* ABOUT *******************************************
+
+class About(QtWidgets.QMainWindow, about.Ui_Form):
+    def __init__(self):
+        super().__init__()
+        self.setupUi(self)
+        
 
 # ******************************************* MAIN *******************************************
 class MainWindow(QtWidgets.QMainWindow, design.Ui_MainWindow):
@@ -173,11 +182,23 @@ class MainWindow(QtWidgets.QMainWindow, design.Ui_MainWindow):
         # ------------- Map
         self.map = None
         self.Button_db_openMap.clicked.connect(self.showMap)
+
+        # ------------- About
+        self.ab = None
+        self.action_About.triggered.connect(self.showAbout)
     
     def showMap(self):
         if self.map is None:
             self.map = OpenMap(main=self)
         self.map.show()
+    
+    def showAbout(self):
+        if self.ab is None:
+            self.ab = About()
+        self.ab.show()
+        
+
+
         
         
 
