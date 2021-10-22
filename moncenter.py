@@ -146,6 +146,7 @@ class MainWindow(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.Button_db_connect.clicked.connect(self.db_tab.connect)
         self.Button_db_save.clicked.connect(self.db_tab.dir_save)
         self.Button_db_sql.clicked.connect(self.db_tab.sql_command)
+        self.Button_db_browser.clicked.connect(self.db_tab.open_sqlite_browser)
 
         self.action_autopost_start.triggered.connect(self.db_tab.start_str2str)
         self.action_autopost_stop.triggered.connect(self.db_tab.stop)

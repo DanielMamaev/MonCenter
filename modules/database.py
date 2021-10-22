@@ -604,6 +604,9 @@ class DataBase():
         except Exception as e:
             self.logs.show_logs("RNX2RTKP with DB: " + str(e))
     
+    def open_sqlite_browser(self):
+        os.system('sqlitebrowser ' + self.main.lineEdit_db_con_path.text().replace(" ", '\\ '))
+    
 
 
 
