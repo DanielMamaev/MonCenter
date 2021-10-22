@@ -1,3 +1,4 @@
+import sys
 from re import S
 from modules.str2str import Str2Str
 from modules.convbin import ConvBin
@@ -7,6 +8,7 @@ from modules.com_port import ComPort
 from modules.settings import Settings
 from modules.config_ini import ConfigIni
 from modules.filter_sdf import FilterSDF
+from modules.map import OpenMap
 
 
 from PyQt5 import QtWidgets, QtCore
@@ -168,13 +170,24 @@ class MainWindow(QtWidgets.QMainWindow, design.Ui_MainWindow):
             self.filterSDF.output_path)
         self.pushButton_filterSDF_start.clicked.connect(self.filterSDF.start)
 
+        # ------------- Map
+        self.map = None
+        self.Button_db_openMap.clicked.connect(self.showMap)
+    
+    def showMap(self):
+        if self.map is None:
+            self.map = OpenMap(main=self)
+        self.map.show()
+        
+        
+
+
         
         
 
 
 
 def main():
-    import sys
     app = QtWidgets.QApplication(sys.argv)
     window = MainWindow()
     window.show()

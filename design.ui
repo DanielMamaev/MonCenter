@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>795</width>
-    <height>547</height>
+    <width>790</width>
+    <height>530</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -21,7 +21,7 @@
   </property>
   <property name="minimumSize">
    <size>
-    <width>697</width>
+    <width>790</width>
     <height>516</height>
    </size>
   </property>
@@ -4796,6 +4796,19 @@
          <string>Open SQLite Browser</string>
         </property>
        </widget>
+       <widget class="QPushButton" name="Button_db_openMap">
+        <property name="geometry">
+         <rect>
+          <x>170</x>
+          <y>280</y>
+          <width>80</width>
+          <height>30</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Open map</string>
+        </property>
+       </widget>
       </widget>
       <widget class="QWidget" name="tab_com">
        <property name="enabled">
@@ -5161,7 +5174,7 @@
          <rect>
           <x>10</x>
           <y>30</y>
-          <width>671</width>
+          <width>661</width>
           <height>30</height>
          </rect>
         </property>
@@ -5189,7 +5202,7 @@
          <rect>
           <x>0</x>
           <y>70</y>
-          <width>691</width>
+          <width>671</width>
           <height>16</height>
          </rect>
         </property>
@@ -5202,7 +5215,7 @@
          <rect>
           <x>0</x>
           <y>90</y>
-          <width>691</width>
+          <width>671</width>
           <height>181</height>
          </rect>
         </property>
@@ -5473,7 +5486,7 @@
          <rect>
           <x>10</x>
           <y>0</y>
-          <width>681</width>
+          <width>651</width>
           <height>451</height>
          </rect>
         </property>
@@ -5721,7 +5734,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>795</width>
+     <width>790</width>
      <height>21</height>
     </rect>
    </property>
