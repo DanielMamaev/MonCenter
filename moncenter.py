@@ -1,5 +1,10 @@
 import sys
+import time 
+import os
+
 from re import S
+
+from PyQt5.QtGui import QPixmap
 from modules.str2str import Str2Str
 from modules.convbin import ConvBin
 from modules.rnx2rtkp import Rnx2Rtkp
@@ -10,10 +15,14 @@ from modules.config_ini import ConfigIni
 from modules.filter_sdf import FilterSDF
 from modules.map import OpenMap
 
+import forms.main_form as main_form
+import forms.about as about
+import forms.auto_mode
 
 from PyQt5 import QtWidgets, QtCore
-import design
-import about
+from PyQt5.QtCore import QThread
+from datetime import datetime
+
 
 
 class TabBar(QtWidgets.QTabBar):
@@ -53,7 +62,7 @@ class About(QtWidgets.QMainWindow, about.Ui_Form):
         
 
 # ******************************************* MAIN *******************************************
-class MainWindow(QtWidgets.QMainWindow, design.Ui_MainWindow):
+class MainWindow(QtWidgets.QMainWindow, main_form.Ui_MainWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
@@ -199,19 +208,58 @@ class MainWindow(QtWidgets.QMainWindow, design.Ui_MainWindow):
         
 
 
-        
-        
 
 
-        
-        
+class StartAutoMode(QtWidgets.QMainWindow, forms.auto_mode.Ui_Form):
+    def __init__(self):
+        super().__init__()
+        self.setupUi(self)
 
+        self.buttonBox.accepted.connect(self.accept)
+        self.buttonBox.rejected.connect(self.reject)
+        
+        pixmap = QPixmap('icon/attention.png')
+        self.label_2.setPixmap(pixmap)
 
+        self.flag = False
+        from threading import Thread
+        self.thread1 = Thread(target=self.go_timer)
+        self.thread1.start()
+
+    def accept(self):
+        self.flag = True
+        window = MainWindow()
+        window.db_tab.start_str2str()
+        self.close()
+        
+    
+    def reject(self):
+        self.flag = True
+        self.close()
+
+    def go_timer(self):
+        sec = list(range(0, 11))
+        sec.reverse()
+        
+        for i in sec:
+                self.label_time.setText(str(i)+'s')
+                time.sleep(1)
+
+                if self.flag:
+                    break
+                if i == 0:
+                    self.accept()     
+                
+                
 
 def main():
     app = QtWidgets.QApplication(sys.argv)
     window = MainWindow()
     window.show()
+    
+    start_autoMode = StartAutoMode()
+    start_autoMode.show()
+        
     app.exec_()
 
 

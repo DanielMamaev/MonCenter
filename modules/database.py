@@ -6,9 +6,12 @@ from datetime import datetime, timedelta
 import psutil
 import time
 from PyQt5.QtCore import QThread, QUrl
+from PyQt5 import QtWidgets
 
 from modules.show_logs import ShowLogs
 from modules.settings import Settings
+
+
 
 class DataBase():
 
@@ -18,6 +21,8 @@ class DataBase():
         self.logs = ShowLogs(parent=main)
         self.settings = Settings(main=main)
 
+        
+        
         self.open_db = sqlite3.connect("")
         self.connect()
         self.post_pro_db = []
@@ -27,6 +32,8 @@ class DataBase():
         self.time_reset_str2str_Thread_instance = TimeResetStr2strThread(
             mainwindow=self, parent=main)
         self.time_reset_str2str_Thread_instance.start()
+
+        
 
     def sql_command(self):
         sql_com = self.main.lineEdit_db_sql.text()
@@ -172,6 +179,9 @@ class DataBase():
                 self.open_db.close()
             else:
                 self.logs.show_logs("Database is was connected!")
+                
+                
+                
 
     def dir_save(self):
         path = QFileDialog.getExistingDirectory(None)
@@ -607,6 +617,7 @@ class DataBase():
     def open_sqlite_browser(self):
         os.system('sqlitebrowser ' + self.main.lineEdit_db_con_path.text().replace(" ", '\\ '))
     
+
 
 
 

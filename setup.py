@@ -4,8 +4,6 @@ import os
 rtklib_v = "RTKLIB-2.4.3-b33"
 ver = "v2.4.3-b33"
 
-
-
 os.system("sudo apt install python3-pip -y")
 os.system("sudo apt install python3-pyqt5 -y")
 os.system("sudo apt install xterm -y")

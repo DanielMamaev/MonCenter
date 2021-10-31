@@ -1,11 +1,11 @@
 import os
 import time
 from datetime import datetime, timedelta
-import design
+import forms.main_form as main_form
 from PyQt5.QtWidgets import QFileDialog
 import pathlib
 
-class FilterSDF(design.Ui_MainWindow):
+class FilterSDF(main_form.Ui_MainWindow):
 
     def __init__(self, main):
         super().__init__()

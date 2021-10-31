@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'design.ui'
+# Form implementation generated from reading ui file 'main_form.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.5
 #
@@ -67,7 +67,7 @@ class Ui_MainWindow(object):
         self.label.setFont(font)
         self.label.setObjectName("label")
         self.label_2 = QtWidgets.QLabel(self.tab_str2str)
-        self.label_2.setGeometry(QtCore.QRect(10, 210, 61, 22))
+        self.label_2.setGeometry(QtCore.QRect(10, 210, 71, 22))
         font = QtGui.QFont()
         font.setPointSize(14)
         font.setBold(True)

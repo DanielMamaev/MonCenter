@@ -1,7 +1,7 @@
 from datetime import datetime
-import design
+import forms.main_form as main_form
 
-class ShowLogs(design.Ui_MainWindow):
+class ShowLogs(main_form.Ui_MainWindow):
     def __init__(self, parent):
         super().__init__()
         self.parent = parent
