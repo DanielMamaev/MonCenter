@@ -24,6 +24,6 @@ os.system("cd " + rtklib_v + "/lib/iers/gcc; make")
 os.system("cd " + rtklib_v + "/app/convbin/gcc; make")
 os.system("cd " + rtklib_v + "/app/rnx2rtkp/gcc; make")
 os.system("cd " + rtklib_v + "/app/str2str/gcc; make")
-os.system("cp '" + os.getcwd() + "/" + rtklib_v + "/app/str2str/gcc/str2str " + os.getcwd() + "/" + rtklib_v + "/app/str2str/gcc/str2str_auto'")
+os.system("cp '" + os.getcwd() + "/" + rtklib_v + "/app/str2str/gcc/str2str' '" + os.getcwd() + "/" + rtklib_v + "/app/str2str/gcc/str2str_auto'")
 
 print("\nDONE!")
