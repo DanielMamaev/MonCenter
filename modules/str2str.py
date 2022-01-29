@@ -55,7 +55,7 @@ class Str2Str():
         self.main.lineEdit_str2str_in_file.setText(path + ".log")
 
     def start(self):
-        command_str2str = "xterm -e \"/bin/bash -c '" + os.getcwd() + "/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str -in "
+        command_str2str = "xterm -e /bin/bash -c \"'" + os.getcwd() + "/RTKLIB-2.4.3-b33/app/str2str/gcc/str2str' -in "
         if self.main.tabWidget_str2str_in.currentIndex() == 0:
             command_str2str += "serial://"
             command_str2str += self.main.comboBox_str2str_in_ser_port.currentText().replace('/dev/', '')
@@ -199,7 +199,7 @@ class Str2Str():
                 command_str2str += "file://"
                 command_str2str += self.main.lineEdit_str2str_out_file_3.text().replace(" ", '\\ ')
 
-        command_str2str += "'\"&"
+        command_str2str += "\"&"
         self.logs.show_logs(command_str2str)
         os.system(command_str2str)
 
