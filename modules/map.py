@@ -48,7 +48,15 @@ class OpenMap(QWidget):
         folium.LayerControl().add_to(m)
 
         for i in coordinate.keys():
-            folium.Marker(location=coordinate[i], tooltip=i, popup=i).add_to(m)
+            folium.Marker(location=coordinate[i], tooltip=i, popup=i, icon=folium.Icon(icon_color='blue', color = 'green')).add_to(m)
+        
+        line_list = []
+        for i in coordinate.keys():
+            line_list.append(coordinate[i])
+        print(line_list)
+        folium.PolyLine(locations=line_list, color="red", weight=2.5, opacity=1).add_to(m)
+                
+
         data = io.BytesIO()
         m.save(data, close_file=False)
 

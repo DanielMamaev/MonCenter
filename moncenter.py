@@ -19,6 +19,8 @@ import forms.main_form as main_form
 import forms.about as about
 import forms.auto_mode
 
+from modules.bim import BIM
+
 from PyQt5 import QtWidgets, QtCore
 from PyQt5.QtCore import QThread
 from datetime import datetime
@@ -74,10 +76,11 @@ class MainWindow(QtWidgets.QMainWindow, main_form.Ui_MainWindow):
         self.tabWidget.insertTab(2, self.tab, "CONVBIN")
         self.tabWidget.insertTab(3, self.tab, "RNX2RTKP")
         self.tabWidget.insertTab(4, self.tab, "Database")
-        self.tabWidget.insertTab(5, self.tab, "COM")
-        self.tabWidget.insertTab(6, self.tab, "Settings")
-        self.tabWidget.insertTab(7, self.tab, "Logs")
-        self.tabWidget.insertTab(8, self.tab, "Fileter SDF")
+        self.tabWidget.insertTab(5, self.tab, "BIM")
+        self.tabWidget.insertTab(6, self.tab, "COM")
+        self.tabWidget.insertTab(7, self.tab, "Settings")
+        self.tabWidget.insertTab(8, self.tab, "Logs")
+        self.tabWidget.insertTab(9, self.tab, "Fileter SDF")
 
         # ------------- .INI
         self.config_ini = ConfigIni(main=self)
@@ -195,6 +198,17 @@ class MainWindow(QtWidgets.QMainWindow, main_form.Ui_MainWindow):
         # ------------- About
         self.ab = None
         self.action_About.triggered.connect(self.showAbout)
+
+
+        # ------------- BIM
+        self.bim = BIM(main=self)
+        self.Button_bim_inputBilding.clicked.connect(self.bim.open_bilding)
+        self.Button_bim_inputSensor.clicked.connect(self.bim.open_sensor)
+        self.Button_bim_out.clicked.connect(self.bim.out)
+        self.Button_bim_start.clicked.connect(self.bim.start)
+        
+
+
     
     def showMap(self):
         if self.map is None:
