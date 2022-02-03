@@ -206,6 +206,7 @@ class MainWindow(QtWidgets.QMainWindow, main_form.Ui_MainWindow):
         self.Button_bim_inputSensor.clicked.connect(self.bim.open_sensor)
         self.Button_bim_out.clicked.connect(self.bim.out)
         self.Button_bim_start.clicked.connect(self.bim.start)
+        self.Button_bim_open.clicked.connect(self.bim.open_blender)
         
 
 
