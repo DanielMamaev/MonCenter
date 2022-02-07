@@ -35,4 +35,6 @@ Karpik A. P. - rektorat@ssga.ru, Mamaev D.S. – mamaev.s.d@gmail.com, Mareev A.
 
 Distributed under the BSD 2-Clause License license. See ``LICENSE`` for more information.
 
+Project BuzzLiner [https://github.com/DanielMamaev/BuzzLiner](https://github.com/DanielMamaev/BuzzLiner)
+
 [https://github.com/DanielMamaev](https://github.com/DanielMamaev)
