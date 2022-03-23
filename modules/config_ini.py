@@ -357,7 +357,10 @@ ya_autoconnect = False
 google_json = 
 google_id = 
 google_autoconnect = False
-output_str_active = False       
+output_str_active = False 
+
+[BIM]
+path_out_ifc = 
 '''
         )
         f.close()
