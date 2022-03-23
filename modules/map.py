@@ -46,17 +46,22 @@ class OpenMap(QWidget):
         folium.raster_layers.TileLayer('CartoDB Positron').add_to(m)
         folium.raster_layers.TileLayer('CartoDB Dark_Matter').add_to(m)
         folium.LayerControl().add_to(m)
-
-        for i in coordinate.keys():
-            folium.Marker(location=coordinate[i], tooltip=i, popup=i, icon=folium.Icon(icon_color='blue', color = 'green')).add_to(m)
         
-        line_list = []
-        for i in coordinate.keys():
-            line_list.append(coordinate[i])
-        print(line_list)
-        folium.PolyLine(locations=line_list, color="red", weight=2.5, opacity=1).add_to(m)
+        sql = 'SELECT name_r_base, name_r_rover FROM BASELINES WHERE enable = 1'
+        cursor.execute(sql)
+        out = cursor.fetchall()
+        #print(out)
+        #print(coordinate)
+        for item in out:
+            info = f'{item[0]} , {coordinate[item[0]]}'
+            folium.Marker(location=coordinate[item[0]], tooltip=item[0], popup=info, icon=folium.Icon(color = 'red')).add_to(m)
+            
+            info = f'{item[1]} , {coordinate[item[1]]}'
+            folium.Marker(location=coordinate[item[1]], tooltip=item[1], popup=info, icon=folium.Icon(color = 'green')).add_to(m)
+            
+            loc = (coordinate[item[0]], coordinate[item[1]])
+            folium.PolyLine(locations=loc, color="blue", weight=3, opacity=1, tooltip=f'{item[0]} -> {item[1]}').add_to(m)
                 
-
         data = io.BytesIO()
         m.save(data, close_file=False)
 

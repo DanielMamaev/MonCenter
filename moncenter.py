@@ -208,9 +208,7 @@ class MainWindow(QtWidgets.QMainWindow, main_form.Ui_MainWindow):
         self.Button_bim_start.clicked.connect(self.bim.start)
         self.Button_bim_open.clicked.connect(self.bim.open_blender)
         
-
-
-    
+   
     def showMap(self):
         if self.map is None:
             self.map = OpenMap(main=self)
