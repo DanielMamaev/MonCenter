@@ -6,6 +6,7 @@ ver = "v2.4.3-b33"
 
 os.system("sudo apt install python3-pip -y")
 os.system("sudo apt install python3-pyqt5 -y")
+os.system('sudo apt install python3-pyqt5.qtwebengine -y')
 os.system("sudo apt install xterm -y")
 os.system("sudo apt install gfortran -y")
 os.system("sudo apt-get install sqlitebrowser -y")
@@ -17,7 +18,6 @@ os.system("pip3 install ftputil")
 os.system("pip3 install psutil")
 os.system('pip3 install folium')
 #os.system('pip3 install PyQtWebEngine')
-os.system('sudo apt install python3-pyqt5.qtwebengine')
 if not os.path.exists(os.getcwd() + "/" + ver + ".zip") and not os.path.exists(os.getcwd() + "/" + rtklib_v):
     os.system("wget https://github.com/tomojitakasu/RTKLIB/archive/refs/tags/" + ver +".zip")
     os.system("unzip "+ ver +".zip")
