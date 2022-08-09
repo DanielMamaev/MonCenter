@@ -2,7 +2,6 @@ import sys
 import time 
 import os
 
-from re import S
 
 from PyQt5.QtGui import QPixmap
 from modules.str2str import Str2Str
